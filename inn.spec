@@ -6,7 +6,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	8
+Release:	9
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -22,8 +22,8 @@ Source7:	%{name}.init
 Source8:	%{name}-cnfsstat.cron
 Source9:	%{name}.logrotate
 Source10:	%{name}-etc-readers.conf
-#Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/inn-2.3.0-v6-20001011.diff.gz
-Patch0:		inn-2.3.1-v6-20010203.patch.gz
+#Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/%{name}-2.3.0-v6-20001011.diff.gz
+Patch0:		%{name}-2.3.1-v6-20010203.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
@@ -34,7 +34,7 @@ Patch7:		%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
-Prereq:			rc-scripts
+Prereq:		rc-scripts
 Prereq:		sed
 Prereq:		fileutils
 Prereq:		%{name}-libs = %{version}
@@ -108,8 +108,7 @@ Requires:	%{name}-libs = %{version}
 Requires:	db3-devel
 
 %description devel
-This library is needed by several programs that interface to INN, such
-as newsgate or tin.
+Header files and developer documentations for INN libraries.
 
 %description -l de devel
 Diese Library wird von mehreren Programmen benötigt, die mit INN
@@ -120,8 +119,7 @@ Cette bibliothèque est nécessaire à plusieurs programmes qui
 s'interfacent avec INN, comme newsgate ou tin.
 
 %description -l pl devel
-Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z
-INN-em, takich jak newsgate czy tin.
+Pliki nag³ówkowe i dokumentacja programisty do bibliotek INN-a.
 
 %description -l tr devel
 INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken
