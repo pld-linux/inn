@@ -1,0 +1,16 @@
+diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
+--- old/samples/cycbuff.conf	2004-01-07 22:47:19.000000000 +0000
++++ new/samples/cycbuff.conf	2004-08-06 12:33:41.000000000 +0000
+@@ -10,9 +10,9 @@
+ # "cycbuff" (literally) : symbolic buffer name : path to buffer file : 
+ #       length of symbolic buffer in kilobytes in decimal (1KB = 1024 bytes)
+ 
+-cycbuff:ONE:/export/cycbuffs/one:512000
+-cycbuff:TWO:/export/cycbuffs/two:512000
+-cycbuff:THREE:/export/cycbuffs/three:512000
++cycbuff:ONE:/var/spool/news/cycbuffs/one:512000
++cycbuff:TWO:/var/spool/news/cycbuffs/two:512000
++cycbuff:THREE:/var/spool/news/cycbuffs/three:512000
+ 
+ # 2. Meta-cyclic buffers
+ # Format:
