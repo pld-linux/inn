@@ -248,7 +248,7 @@ touch innfeed/*.[ly]
 
 rm -f config.cache
 %{__autoconf}
-libtoolize --copy --force
+%{__libtoolize}
 %configure \
         --with-news-user=news \
         --with-news-group=news \
