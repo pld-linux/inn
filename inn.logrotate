@@ -1,0 +1,6 @@
+/var/log/news/news.* {
+	olddir /var/log/archiv/news
+	postrotate
+		/usr/bin/killall -HUP innd
+	endrotate
+}
