@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.1
-Release:	0.2
+Release:	0.3
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -34,9 +34,10 @@ Patch5:		%{name}-setgid.patch
 Patch6:		%{name}-db4.patch
 Patch7:		%{name}-timecaf_oversized_art.patch
 Patch8:		%{name}-lib_install_modes.patch
-#Patch9:	%{name}-setreuid.patch
-#Patch10:	%{name}-sec.patch
-#Patch11:	%{name}-frsize.patch
+Patch9:		%{name}-kill_warnings.patch
+#Patch10:	%{name}-setreuid.patch
+#Patch11:	%{name}-sec.patch
+#Patch12:	%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -252,9 +253,10 @@ sunucuya makaleyi yollar.
 %patch6
 %patch7 -p1
 %patch8 -p1
-#%patch9 -p1	-- obsolete? (no setreuid test)
-#%patch10 -p1	-- obsolete? (pathrun not used in inndstart)
-#%patch11 -p1	-- obsolete? (?)
+%patch9 -p1
+#%patch10 -p1	-- obsolete? (no setreuid test)
+#%patch11 -p1	-- obsolete? (pathrun not used in inndstart)
+#%patch12 -p1	-- obsolete? (?)
 
 touch innfeed/*.[ly]
 
@@ -263,6 +265,7 @@ touch innfeed/*.[ly]
 %{__aclocal}
 %{__autoconf}
 %configure \
+	CFLAGS="%{rpmcflags} -D_GNU_SOURCE" \
 	--with-news-user=news \
 	--with-news-group=news \
 	--with-news-master=news \
