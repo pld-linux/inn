@@ -67,9 +67,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_includedir	%{_prefix}/include/inn
 
 # /usr/bin/pullnews doesn't provide perl(Net::NNTP) - perl-libnet does.
-%define		_noautoprov	"perl(Net::NNTP)"
+%define		_noautoprov	'perl(Net::NNTP)'
 # it's necessary only for sample nnrpd_auth.pl hook
-%define		_noautoreq	"perl(CDB_File)"
+%define		_noautoreq	'perl(CDB_File)'
 
 %description
 INN is a news server, which can be set up to handle USENET news, as
