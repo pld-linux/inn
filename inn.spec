@@ -337,7 +337,7 @@ fi
 %attr(664,news,news) %ghost /var/state/news/.news.daily
 
 # LOGS
-%attr(640,news,news) /etc/logrotate.d/inn
+%attr(640,root,root) /etc/logrotate.d/inn
 %attr(750,news,news) %dir /var/log/news
 %attr(750,news,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
