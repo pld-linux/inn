@@ -8,6 +8,7 @@
 
 /var/log/news/news {
 	olddir /var/log/archiv/news
+	create 640 news news
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files"
 	endscript
@@ -18,6 +19,7 @@
 
 /var/log/news/*log {
 	olddir /var/log/archiv/news
+	create 640 news news
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files"
 	endscript
