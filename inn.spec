@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.0
-Release:	0.2
+Release:	0.3
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -41,7 +41,7 @@ BuildRequires:	db-devel
 BuildRequires:	flex
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7c
-BuildRequires:	perl-devel >= 5.8.0
+BuildRequires:	perl-devel >= 0:5.8.0
 PreReq:		%{name}-libs = %{version}
 PreReq:		rc-scripts
 Requires(post):	/bin/kill
