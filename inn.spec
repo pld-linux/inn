@@ -43,6 +43,14 @@ BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl-devel >= 5.6.1
+PreReq:		%{name}-libs = %{version}
+PreReq:		rc-scripts
+Requires(post):	/bin/kill
+Requires(post):	/bin/su
+Requires(post,preun):	/sbin/chkconfig
+Requires(post):	sed
+Requires(post):	fileutils
+Requires(post):	/usr/sbin/usermod
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
@@ -51,12 +59,6 @@ Requires:	util-linux
 Requires:	procps
 Requires:	textutils
 Requires:	awk
-PreReq:		%{name}-libs = %{version}
-PreReq:		rc-scripts
-Requires(post,preun):	/sbin/chkconfig
-Requires(post):	sed
-Requires(post):	fileutils
-Requires(post):	/usr/sbin/usermod
 Provides:	nntpserver
 Obsoletes:	leafnode
 Obsoletes:	leafnode+
@@ -345,6 +347,7 @@ rm -rf $RPM_BUILD_ROOT
 if [ "`su - news -s /bin/sh -c pwd 2>/dev/null`" = "/var/spool/news" ]; then
 	/usr/sbin/usermod -d /home/services/news news
 fi
+umask 022
 if [ -f /var/lib/news/history ]; then
 	cd /var/lib/news
 	%{_bindir}/makedbz -s `wc -l <history` -f history
@@ -393,6 +396,7 @@ fi
 	chmod 664 /var/lib/news/.news.daily
 }
 
+umask 027
 if [ -f /etc/syslog.conf ]; then
   if ! grep -q INN /etc/syslog.conf; then
     sed 's/mail.none;/mail.none;news.none;/' < /etc/syslog.conf > /etc/syslog.conf.inn
