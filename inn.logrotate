@@ -2,7 +2,11 @@
 	olddir /var/log/archiv/news
 	create 640 news news
 	postrotate
-    	        /usr/bin/killall -HUP syslogd
+		if [ -e /etc/rc.d/init.d/syslog-ng ] ; then
+			/etc/rc.d/init.d/syslog-ng reload >/dev/null 2>&1
+		elif [ -e /etc/rc.d/init.d/syslog ] ; then
+			/etc/rc.d/init.d/syslog reload >/dev/null 2>&1
+		fi
 	endscript
 }
 
