@@ -298,7 +298,7 @@ fi
 
 # LOGS
 %attr(750,news,news) %dir /var/log/news
-%attr(770,news,news) %dir /var/log/archiv/news
+%attr(750,news,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.notice
 %attr(660,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.crit
@@ -348,7 +348,7 @@ fi
 %config %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
 %config %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
 
-%attr(750,root,news) %dir %{_datadir}/news
+%attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
 %attr(755,root,root) %dir %{_datadir}/news/filter
 %attr(755,root,root) %dir %{_datadir}/news/auth
