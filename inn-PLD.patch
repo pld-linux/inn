@@ -6,7 +6,7 @@ diff -Nur inn-2.4.0.orig/doc/man/rnews.1 inn-2.4.0/doc/man/rnews.1
  .I rnews
  will try to execute a program with that name in the directory
 -.IR <pathbin\ in\ inn.conf>/bin/rnews.libexec .
-+.IR /usr/lib/news/rnews .
++.IR /usr/lib*/news/rnews .
  
  The batch will be fed into the program's standard input, and the
  standard output will be read back as input into
@@ -18,13 +18,13 @@ diff -Nur inn-2.4.0.orig/include/paths.h.in inn-2.4.0/include/paths.h.in
  #define _PATH_NNRPD		"nnrpd"
  #define _PATH_NNTPD		"nnrpd"
 -#define _PATH_AUTHDIR		"auth"
-+#define _PATH_AUTHDIR		"/usr/lib/news/auth"
++#define _PATH_AUTHDIR		"@libdir@/news/auth"
  #define _PATH_AUTHDIR_GENERIC	"generic"
  #define _PATH_AUTHDIR_NOPASS	"resolv"
  #define _PATH_AUTHDIR_PASSWD	"passwd"
  #define _PATH_CTLINND		"ctlinnd"
 -#define _PATH_RNEWSPROGS	"rnews.libexec"
-+#define _PATH_RNEWSPROGS	"/usr/lib/news/rnews"
++#define _PATH_RNEWSPROGS	"@libdir@/news/rnews"
  
  /* Default prefix path is pathfilter. */
  #define _PATH_TCL_STARTUP	"startup.tcl"
@@ -52,8 +52,17 @@ diff -Nur inn-2.4.0.orig/Makefile inn-2.4.0/Makefile
  
  update: 
  	@chmod +x support/install-sh
---- inn-2.4.1.orig/Makefile.global.in	2003-05-09 06:25:27.000000000 +0200
-+++ inn-2.4.1/Makefile.global.in	2003-06-29 12:59:13.000000000 +0200
+--- inn-2.4.2.orig/Makefile.global.in	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.2/Makefile.global.in	2003-06-29 12:59:13.000000000 +0200
+@@ -213,7 +213,7 @@
+ PATHAUTH        = $(PATHBIN)/auth
+ PATHAUTHRESOLV  = $(PATHAUTH)/resolv
+ PATHAUTHPASSWD  = $(PATHAUTH)/passwd
+-PATHRNEWS       = $(PATHBIN)/rnews.libexec
++PATHRNEWS       = @libdir@/news/rnews
+ PATHARCHIVE     = $(PATHSPOOL)/archive
+ PATHARTICLES    = $(PATHSPOOL)/articles
+ PATHINCOMING    = $(PATHSPOOL)/incoming
 @@ -234,16 +234,7 @@
  ##  configure; inews and rnews are special and have configure flags to
  ##  control how they're installed.  See INSTALL for more information.
@@ -83,3 +92,31 @@ diff -Nur inn-2.4.0.orig/scripts/scanlogs.in inn-2.4.0/scripts/scanlogs.in
  ##  If you want to archive the active file, enable this line.
  ACTIVEFILE=${ACTIVE}
  ##  Number of lines of error in each category to report.
+--- inn-2.4.2/scripts/inncheck.in.orig	2004-12-22 05:21:19.000000000 +0100
++++ inn-2.4.2/scripts/inncheck.in	2004-12-28 20:36:22.804969760 +0100
+@@ -43,7 +43,7 @@
+     'passwd.nntp',	"$inn::pathetc/passwd.nntp",
+     'readers.conf',	"$inn::pathetc/readers.conf",
+     'rnews',		"$inn::pathbin/rnews",
+-    'rnewsprogs',	"$inn::pathbin/rnews.libexec",
++    'rnewsprogs',	"@libdir@/news/rnews",
+     'spooltemp',	"$inn::pathtmp",
+     'spool',		"$inn::patharticles",
+     'spoolnews',	"$inn::pathincoming"
+--- inn-2.4.2/frontends/Makefile.orig	2004-12-22 05:21:19.000000000 +0100
++++ inn-2.4.2/frontends/Makefile	2004-12-28 20:37:09.988796728 +0100
+@@ -32,10 +32,10 @@
+ 	for F in getlist innconfval sm ; do \
+ 	    $(LI_XPUB) $$F $D$(PATHBIN)/$$F ; \
+ 	done
+-	$(CP_XPUB) c7unbatch $D$(PATHBIN)/rnews.libexec/c7unbatch
+-	$(LI_XPUB) decode $D$(PATHBIN)/rnews.libexec/decode
+-	$(LI_XPUB) encode $D$(PATHBIN)/rnews.libexec/encode
+-	$(CP_XPUB) gunbatch $D$(PATHBIN)/rnews.libexec/gunbatch
++	$(CP_XPUB) c7unbatch $D$(PATHRNEWS)/c7unbatch
++	$(LI_XPUB) decode $D$(PATHRNEWS)/decode
++	$(LI_XPUB) encode $D$(PATHRNEWS)/encode
++	$(CP_XPUB) gunbatch $D$(PATHRNEWS)/gunbatch
+ 
+ clean:
+ 	rm -f *.o $(ALL)
