@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2.2
-Release: 	7
+Release: 	8
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -144,7 +144,7 @@ LDFLAGS="-s"; export LDFLAGS
         --with-news-user=news \
         --with-news-group=news \
         --with-news-master=news \
-        --with-db-dir=/var/state/news \
+        --with-db-dir=/var/lib/news \
         --with-etc-dir=%{_sysconfdir} \
         --with-log-dir=/var/log/news \
         --with-run-dir=/var/run/news \
@@ -172,7 +172,7 @@ install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn} \
 	install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
 	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
-	$RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/{news,archiv/news}} \
+	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
 make install \
@@ -181,9 +181,9 @@ make install \
 	PATHCONTROL=%{_datadir}/news/control \
 	RNEWSPROGS=%{_bindir}
 
-install %{SOURCE1} $RPM_BUILD_ROOT/var/state/news/active
-install %{SOURCE2} $RPM_BUILD_ROOT/var/state/news/distributions
-install %{SOURCE3} $RPM_BUILD_ROOT/var/state/news/newsgroups
+install %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
+install %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
+install %{SOURCE3} $RPM_BUILD_ROOT/var/lib/news/newsgroups
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/inn.conf
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/newsfeeds
 install %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/nnrp.access
@@ -195,13 +195,13 @@ install %{SOURCE10} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 mv $RPM_BUILD_ROOT%{_bindir}/c7unbatch.sh $RPM_BUILD_ROOT%{_bindir}/c7unbatch
 mv $RPM_BUILD_ROOT%{_bindir}/gunbatch.sh $RPM_BUILD_ROOT%{_bindir}/gunbatch
 
-rm -f $RPM_BUILD_ROOT/var/state/news/history
+rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
 umask 002
-touch $RPM_BUILD_ROOT/var/state/news/subscriptions
-touch $RPM_BUILD_ROOT/var/state/news/history
-touch $RPM_BUILD_ROOT/var/state/news/.news.daily
-touch $RPM_BUILD_ROOT/var/state/news/active.times
+touch $RPM_BUILD_ROOT/var/lib/news/subscriptions
+touch $RPM_BUILD_ROOT/var/lib/news/history
+touch $RPM_BUILD_ROOT/var/lib/news/.news.daily
+touch $RPM_BUILD_ROOT/var/lib/news/active.times
 touch $RPM_BUILD_ROOT/var/log/news/news.notice
 touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
@@ -215,8 +215,8 @@ install include/storage.h	$RPM_BUILD_ROOT%{_includedir}/inn
 mv $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
 
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
-	-a $RPM_BUILD_ROOT/var/state/news/active \
-	-i -r -f $RPM_BUILD_ROOT/var/state/news/history || :
+	-a $RPM_BUILD_ROOT/var/lib/news/active \
+	-i -r -f $RPM_BUILD_ROOT/var/lib/news/history || :
 
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
@@ -231,8 +231,8 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/ldconfig 
 
-if [ -f /var/state/news/history ]; then
-	cd /var/state/news
+if [ -f /var/lib/news/history ]; then
+	cd /var/lib/news
 	%{_bindir}/makehistory -i -r
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
@@ -240,7 +240,7 @@ if [ -f /var/state/news/history ]; then
 	chown news.news history.*
 	chmod 644 history.*
 else
-	cd /var/state/news
+	cd /var/lib/news
 	cp /dev/null history
 	%{_bindir}/makehistory -i
 	for i in dir hash index pag; do
@@ -249,9 +249,9 @@ else
 	chown news.news history history.*
 	chmod 644 history history.*
 fi
-[ -f /var/state/news/active.times ] || {
-	touch /var/state/news/active.times
-	chown news.news /var/state/news/active.times
+[ -f /var/lib/news/active.times ] || {
+	touch /var/lib/news/active.times
+	chown news.news /var/lib/news/active.times
 }
 
 [ -f /var/log/news/news.notice ] || {
@@ -272,10 +272,10 @@ fi
 	chmod 660 /var/log/news/news.err
 }
 
-[ -f /var/state/news/.news.daily ] || {
-	touch /var/state/news/.news.daily
-	chown news.news /var/state/.news.daily
-	chmod 664 /var/state/news/.news.daily
+[ -f /var/lib/news/.news.daily ] || {
+	touch /var/lib/news/.news.daily
+	chown news.news /var/lib/.news.daily
+	chmod 664 /var/lib/news/.news.daily
 }
 
 if [ -f /etc/syslog.conf ]; then
@@ -327,14 +327,14 @@ fi
 %doc {INSTALL,ChangeLog,COPYRIGHT}.gz
 
 # DB
-%attr(750,news,news) %dir /var/state/news
-%attr(750,news,news) %dir /var/state/news/backoff
-%attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/active
-%attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/distributions
-%attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/newsgroups
-%attr(644,news,root) %config(noreplace) %verify(not size mtime md5) /var/state/news/subscriptions
-%attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/active.times
-%attr(664,news,news) %ghost /var/state/news/.news.daily
+%attr(750,news,news) %dir /var/lib/news
+%attr(750,news,news) %dir /var/lib/news/backoff
+%attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active
+%attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/distributions
+%attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/newsgroups
+%attr(644,news,root) %config(noreplace) %verify(not size mtime md5) /var/lib/news/subscriptions
+%attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active.times
+%attr(664,news,news) %ghost /var/lib/news/.news.daily
 
 # LOGS
 %attr(640,root,root) /etc/logrotate.d/inn
