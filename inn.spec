@@ -23,12 +23,11 @@ Source8:	%{name}-cnfsstat.cron
 Source9:	%{name}.logrotate
 Source10:	%{name}-etc-readers.conf
 #Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/inn-2.3.0-v6-20001011.diff.gz
-Patch0:		inn-2.3.1-v6-20010123.patch.gz
+Patch0:		inn-2.3.1-v6-20010127.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
 Patch4:		%{name}-setreuid.patch
-Patch5:		%{name}-brokenipv6patch.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
