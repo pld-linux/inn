@@ -304,13 +304,18 @@ else
 fi
 
 /sbin/chkconfig --add inn
+if [ -f /var/lock/subsys/inn ]; then
+	/etc/rc.d/init.d/inn restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/xfs start\" to start inn news server." >&2
+fi
 
 %preun
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/news ]; then
-	/etc/rc.d/init.d/inn stop
-    fi
-    /sbin/chkconfig --del inn
+	if [ -f /var/lock/subsys/news ]; then
+		/etc/rc.d/init.d/inn stop
+	fi
+	/sbin/chkconfig --del inn
 fi
 
 %postun
