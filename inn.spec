@@ -6,7 +6,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	9
+Release:	10
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -47,7 +47,7 @@ Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
 Requires:	%{perl_archlib}
 %requires_eq	perl
-Requires:	perl-GD
+#Requires:	perl-GD
 Provides:	nntpserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -58,11 +58,16 @@ INN is a news server, which can be set up to handle USENET news, as
 well as private "newsfeeds". There is a *LOT* of information about
 setting up INN in /usr/share/doc -- read it.
 
+If you want innreport to generate graphs you need perl-GD package.
+
 %description -l pl
 INN jest serwerem news, który mo¿na skonfigurowaæ do obs³ugi USENET-u,
 jak równie¿ do obs³ugi ,,prywatnych'' grup w sieciach intranetowych.
 Ca³e mnóstwo po¿ytecznych informacji o konfigurowaniu INN-a znajdziesz
 w katalogu /usr/share/doc/inn-*.
+
+Je¶li chcesz ¿eby innreport generowa³ wykresy musisz zainstalowaæ
+pakiet perl-GD.
 
 %package libs
 Summary:	INN libraries
