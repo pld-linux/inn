@@ -1,3 +1,6 @@
+# TODO:
+# - update default inn.conf (it still contains some options for
+#   old inn, not understood by 2.4.0)
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
 Summary(de):	das InterNet News System (News-Server)
