@@ -35,12 +35,13 @@ Patch6:		%{name}-frsize.patch
 Patch7:		%{name}-ac25x.patch
 Patch8:		%{name}-ac253.patch
 Patch9:		%{name}-db4.patch
+Patch10:	%{name}-nolibs.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
-BuildRequires:	libtool
-BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	db-devel
+BuildRequires:	flex
+BuildRequires:	libtool
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl-devel >= 5.6.1
 PreReq:		%{name}-libs = %{version}
@@ -248,13 +249,15 @@ sunucuya makaleyi yollar.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 touch innfeed/*.[ly]
 
 rm -f config.cache
-%{__autoconf}
 %{__libtoolize}
+%{__aclocal}
+%{__autoconf}
 %configure \
 	--with-news-user=news \
 	--with-news-group=news \
@@ -312,14 +315,14 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE7} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE8} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/logrotate.d/inn
-install %{SOURCE10} $RPM_BUILD_ROOT/%{_sysconfdir}/readers.conf
-install %{SOURCE11} $RPM_BUILD_ROOT/%{_mandir}/pl/man1/getlist.1
-install %{SOURCE12} $RPM_BUILD_ROOT/%{_mandir}/pl/man8/innd.8
+install %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
+install %{SOURCE11} $RPM_BUILD_ROOT%{_mandir}/pl/man1/getlist.1
+install %{SOURCE12} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
 umask 002
-touch $RPM_BUILD_ROOT/var/lib/news/subscriptions
+> $RPM_BUILD_ROOT%{_sysconfdir}/subscriptions
 touch $RPM_BUILD_ROOT/var/lib/news/history
 touch $RPM_BUILD_ROOT/var/lib/news/.news.daily
 touch $RPM_BUILD_ROOT/var/lib/news/active.times
@@ -450,7 +453,6 @@ fi
 %attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active
 %attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/distributions
 %attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/newsgroups
-%attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/subscriptions
 %attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active.times
 %attr(664,news,news) %ghost /var/lib/news/.news.daily
 %attr(664,news,news) %ghost /var/lib/news/history
@@ -510,6 +512,7 @@ fi
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/readers.conf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sasl.conf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/storage.conf
+%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/subscriptions
 
 %attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
@@ -585,6 +588,7 @@ fi
 %attr(755,root,root) %{_bindir}/fastrm
 %attr(755,root,root) %{_bindir}/filechan
 %attr(755,root,root) %{_bindir}/getlist
+%attr(755,root,root) %{_bindir}/gpgverify
 %attr(755,root,root) %{_bindir}/grephistory
 %attr(755,root,root) %{_bindir}/inncheck
 %attr(755,root,root) %{_bindir}/innconfval
@@ -632,10 +636,12 @@ fi
 # MAN
 %{_mandir}/man1/ckpasswd.1*
 %{_mandir}/man1/convdate.1*
+%{_mandir}/man1/fastrm.1*
 %{_mandir}/man1/getlist.1*
 %{_mandir}/man1/grephistory.1*
 %{_mandir}/man1/innconfval.1*
 %{_mandir}/man1/innfeed.1*
+%{_mandir}/man1/innmail.1*
 %{_mandir}/man1/nntpget.1*
 %{_mandir}/man1/rnews.1*
 %{_mandir}/man1/shlock.1*

@@ -1,0 +1,20 @@
+--- inn-2.3.3/configure.in.orig	Sun Jan  5 03:19:55 2003
++++ inn-2.3.3/configure.in	Sun Jan  5 03:57:21 2003
+@@ -725,7 +725,7 @@
+ dnl includes gethostbyname in libsocket but needs libnsl for socket().
+ dnl Always link with libresolv if it's found.
+ AC_SEARCH_LIBS(gethostbyname, nsl)
+-AC_CHECK_LIB(resolv, gethostbyname, LIBS="-lresolv $LIBS")
++AC_SEARCH_LIBS(gethostbyname, resolv)
+ AC_CHECK_FUNC(socket, , [
+     AC_CHECK_LIB(socket, socket, LIBS="$LIBS -lsocket", [
+         AC_CHECK_LIB(nsl, socket, LIBS="$LIBS -lsocket -lnsl", , -lsocket)
+@@ -755,7 +755,7 @@
+ AC_CHECK_LIB(shadow, getspnam)
+ 
+ dnl FIXME: This should be combined with AC_FUNC_GETLOADAVG
+-AC_CHECK_LIB(elf, nlist)
++dnl  AC_CHECK_LIB(elf, nlist) -- not used on Linux
+ 
+ dnl FIXME: This is only used by the keywords code in innd/art.c and
+ dnl shouldn't be in the global LIBS variable.
