@@ -6,7 +6,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	14
+Release:	15
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -45,6 +45,7 @@ BuildRequires:	perl
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
+Requires:	psmisc >= 20.1
 #Requires:	perl-GD
 Provides:	nntpserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
