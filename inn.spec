@@ -1,12 +1,14 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
 Summary(de):	das InterNet News System (News-Server)
+Summary(es):	INN, InterNet News System (servidor news)
 Summary(fr):	INN, le système InterNet News (serveur de news)
 Summary(pl):	INN, serwer nowinek 
+Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.2
-Release:	2
+Release:	6
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -67,6 +69,11 @@ setting up INN in /usr/share/doc -- read it.
 
 If you want innreport to generate graphs you need perl-GD package.
 
+%description -l es
+INN es un servidor de news, que puede ser configurado para manipular
+USENET news bien como newsfeeds privadas. Existe un *Montón* de
+información sobre la configuración del INN en /usr/doc -- léela.
+
 %description -l pl
 INN jest serwerem news, który mo¿na skonfigurowaæ do obs³ugi USENET-u,
 jak równie¿ do obs³ugi ,,prywatnych'' grup w sieciach intranetowych.
@@ -75,6 +82,11 @@ w katalogu /usr/share/doc/inn-*.
 
 Je¶li chcesz ¿eby innreport generowa³ wykresy musisz zainstalowaæ
 pakiet perl-GD.
+
+%description -l pt_BR
+INN é um servidor de news, que pode ser configurado para manipular
+USENET news bem como newsfeeds privadas. Existe um *MONTE* de
+informações sobre a configuração do INN em /usr/doc -- leia.
 
 %package libs
 Summary:	INN libraries
@@ -113,8 +125,10 @@ bir kitaplýktýr.
 %package devel
 Summary:	INN header files and development documentations
 Summary(de):	INN-Library
+Summary(es):	Biblioteca INN
 Summary(fr):	Bibliothèque INN
 Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty do inn-a
+Summary(pt_BR):	Biblioteca INN
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
@@ -134,6 +148,10 @@ Header files and developer documentations for INN libraries.
 Diese Library wird von mehreren Programmen benötigt, die mit INN
 kommunizieren, etwa newsgate oder tin.
 
+%description -l es devel
+Esta biblioteca es requerida por varios programas que tienen interface
+con INN, como el newsgate o tin.
+
 %description -l fr devel
 Cette bibliothèque est nécessaire à plusieurs programmes qui
 s'interfacent avec INN, comme newsgate ou tin.
@@ -141,13 +159,19 @@ s'interfacent avec INN, comme newsgate ou tin.
 %description -l pl devel
 Pliki nag³ówkowe i dokumentacja programisty do bibliotek INN-a.
 
+%description -l pt_BR devel
+Esta biblioteca é requerida por vários programas que tem interface com
+o INN, como o newsgate ou tin.
+
 %description -l tr devel
 INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken
 bir kitaplýktýr.
 
 %package static
 Summary:	Static INN libraries
+Summary(es):	Static libraries for inn development
 Summary(pl):	Biblioteki statyczne do INN
+Summary(pt_BR):	Bibliotecas estáticas para desenvolvimento com inn
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
 Group(es):	Desarrollo/Bibliotecas
@@ -161,14 +185,26 @@ Requires:	%{name}-devel = %{version}
 %description static
 Static INN libraries.
 
+%description -l es static
+Static libraries for inn development
+
 %description -l pl static
 Biblioteki statyczne do INN.
+
+%description -l pt_BR static
+INN é um servidor de news, que pode ser configurado para manipular
+USENET news bem como newsfeeds privadas. Existe um *MONTE* de
+informações sobre a configuração do INN em /usr/doc -- leia.
+
+Bibliotecas estáticas para desenvolvimento com inn
 
 %package -n inews
 Summary:	Inews program (used for posting by inn and trn)
 Summary(de):	Inews-Programm (für die Zustellung mit inn und trn) 
+Summary(es):	Programa Inews (usado para franqueo por inn y trn)
 Summary(fr):	Programme inews (utilisé par inn et trn pour poster)
 Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
+Summary(pt_BR):	Programa Inews (usado para postagem pelo inn e trn)
 Summary(tr):	Haber biçimlendirme programý
 Group:		Networking/News
 Group(de):	Netzwerkwesen/News
@@ -185,6 +221,12 @@ Nachrichten verwendet. Es führt eine Konsistenzprüfung und Header-Neuf
 ormatierung aus und leitet die Nachricht an den in 'inn.conf'
 angegebenen News-Server weiter.
 
+%description -l es -n inews
+El programa inews se usa por algunos lectores de news para postar
+mensajes. Hace alguna consistencia chequeando y reformateando headers,
+y enviando el artículo para el servidor de news especificado en el
+inn.conf.
+
 %description -l fr -n inews
 Le programme inews est utilisé par certains lecteurs de news pour
 poster les articles. Il effectue des vérifications et un reformatage
@@ -195,6 +237,12 @@ inn.conf.
 Inews jest u¿ywany przez niektóre czytniki news do wysy³ania
 artyku³ów. Sprawdza budowê artyku³u, przepisuje nag³ówek i wysy³a do
 serwera news wyszczególnionego w inn.conf.
+
+%description -l pt_BR -n inews
+O programa inews é usado por alguns leitores de news para postar
+mensagens. Ele faz alguma consistência checando e reformatando
+headers, e enviando o artigo para o servidor de news especificado no
+inn.conf.
 
 %description -l tr -n inews
 inews programý bazý haber okuyucular tarafýndan haber yollamak
