@@ -30,10 +30,11 @@ Patch1:		%{name}-install.patch
 Patch2:		%{name}-db.patch
 Patch3:		%{name}-ac25x.patch
 Patch4:		%{name}-ac253.patch
-#Patch5:		%{name}-setreuid.patch
-#Patch6:		%{name}-sec.patch
-#Patch7:		%{name}-frsize.patch
-Patch8:		%{name}-db4.patch
+Patch5:		%{name}-setgid.patch
+Patch6:		%{name}-db4.patch
+#Patch7:	%{name}-setreuid.patch
+#Patch8:	%{name}-sec.patch
+#Patch9:	%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -245,10 +246,11 @@ sunucuya makaleyi yollar.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-#%patch5 -p1	-- obsolete? (no setreuid test)
-#%patch6 -p1	-- obsolete? (pathrun not used in inndstart)
-#%patch7 -p1	-- obsolete? (?)
-%patch8
+%patch5 -p1
+%patch6
+#%patch7 -p1	-- obsolete? (no setreuid test)
+#%patch8 -p1	-- obsolete? (pathrun not used in inndstart)
+#%patch9 -p1	-- obsolete? (?)
 
 touch innfeed/*.[ly]
 
