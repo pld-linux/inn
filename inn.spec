@@ -16,19 +16,16 @@ Source3:	%{name}-default-newsgroups
 Source4:	%{name}-etc-nnrp.access
 Source5:	%{name}.crontab
 Source6:	%{name}.initd
-Source7:	%{name}-cron
+Source7:	ftp://ftp.exit109.com/users/jeremy/cleanfeed-latest.tar.gz
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-makefile.patch
 URL: 		http://www.isc.org/inn.html
-Prereq:		/sbin/chkconfig
-Prereq:		/sbin/ldconfig
-Prereq:		sed
-Prereq:		fileutils
 Requires: 	cleanfeed
 Requires:	perl
 Requires:	rc-scripts
 Requires:	/etc/cron.d
 BuildRoot:	/tmp/%{name}-%{version}-root
+Prereq: 	/sbin/chkconfig
 
 %description
 INN is a news server, which can be set up to handle USENET news, as well
@@ -164,7 +161,6 @@ install %{SOURCE3} $RPM_BUILD_ROOT/var/state/news/newsgroups
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/news/nnrp.access
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
-install %{SOURCE7} $RPM_BUILD_ROOT%{_bindir}/news.cron
 
 rm -f $RPM_BUILD_ROOT/var/state/news/history
 
@@ -201,7 +197,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ -f /var/state/news/history ]; then
 	cd /var/state/news
-	%{_bindir}/makehistory -i -r
+	%{_libdir}/news/bin/makehistory -i -r
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -210,7 +206,7 @@ if [ -f /var/state/news/history ]; then
 else
 	cd /var/state/news
 	cp /dev/null history
-	%{_bindir}/makehistory -i
+	%{_libdir}/news/bin/makehistory -i
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -422,7 +418,6 @@ fi
 %attr(755,root,root) %{_bindir}/makehistory
 %attr(755,root,root) %{_bindir}/mod-active
 %attr(755,root,root) %{_bindir}/news2mail
-%attr(755,root,root) %{_bindir}/news.cron
 %attr(755,root,root) %{_bindir}/news.daily
 %attr(755,root,root) %{_bindir}/newsrequeue
 %attr(755,root,root) %{_bindir}/nnrpd
