@@ -1,0 +1,11 @@
+--- inn-2.3.1/configure.in~	Mon Jan 22 21:32:07 2001
++++ inn-2.3.1/configure.in	Mon Jan 22 22:08:57 2001
+@@ -1228,7 +1228,7 @@
+                symlink waitpid inet_ntoa)
+ 
+ dnl We only care if we have setreuid() if we don't have seteuid().
+-AC_CHECK_FUNCS(seteuid setreuid, break)
++AC_CHECK_FUNCS(setreuid seteuid, break)
+ 
+ dnl We need both *rlimit functions.
+ dnl
