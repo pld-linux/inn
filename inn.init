@@ -18,9 +18,13 @@
 . /usr/share/news/innshellvars
 
 # Check that networking is up.
-if is_no "${NETWORKING}"; then
-	msg_network_down "INN"
-	exit 1
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down "INN"
+		exit 1
+	fi
+else
+	exit 0
 fi
 			
 
@@ -63,7 +67,7 @@ case "$1" in
 		if [ -f /var/run/news/innwatch.pid ]; then
 			msg_stopping "INN Watch"
 			busy
-	        	if killall -9 innwatch; then
+			if killall -9 innwatch; then
 				deltext;ok
 			else
 				deltext;died
@@ -97,11 +101,9 @@ case "$1" in
 	if [ -f /var/lock/subsys/inn ]; then
 		msg_reloading "INN"
 		busy
-		if ctlinnd reload all "Reloading" >/dev/null 2>&1; then
-			deltext;ok
-		else
-			deltext;fail
-		fi
+		ctlinnd reload all "Reloading" >/dev/null 2>&1;
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && ok || died
 	else
 		msg_not_running INN
 		exit 1
@@ -113,7 +115,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-	msg_usage "$0 {start|stop|status|restart|reload}"
+	msg_usage "$0 {start|stop|restart|reload|status}"
 	exit 1
 	;;
 esac
