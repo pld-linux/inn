@@ -23,7 +23,7 @@ Source8:	%{name}-cnfsstat.cron
 Source9:	%{name}.logrotate
 Source10:	%{name}-etc-readers.conf
 #Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/%{name}-2.3.0-v6-20001011.diff.gz
-Patch0:		%{name}-2.3.1-v6-20010311.patch.gz
+Patch0:		%{name}-ipv6.patch
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
