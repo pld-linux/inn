@@ -111,7 +111,7 @@ yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 touch innfeed/*.[ly]
 
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
-./configure \
+./configure %{_target} \
         --prefix=/usr/lib/news \
         --mandir=/usr/man \
         --with-news-user=news \
