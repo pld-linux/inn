@@ -18,6 +18,7 @@ Source5:	%{name}.crontab
 Source6:	%{name}.initd
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-makefile.patch
+Patch2:		%{name}-authdir.patch
 URL: 		http://www.isc.org/inn.html
 Prereq: 	/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -110,6 +111,7 @@ yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -147,7 +149,7 @@ rm -fr $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d}
 install -d $RPM_BUILD_ROOT%{_bindir}/auth
 install -d $RPM_BUILD_ROOT%{_libdir}/news
-install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter}
+install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth}
 install -d $RPM_BUILD_ROOT%{_includedir}/inn
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
 install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/news/OLD}
@@ -315,6 +317,7 @@ fi
 %attr(755,news,news) %dir %{_datadir}/news
 %attr(755,news,news) %dir %{_datadir}/news/control
 %attr(755,news,news) %dir %{_datadir}/news/filter
+%attr(755,news,news) %dir %{_datadir}/news/auth
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/actsync.cfg
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/actsync.ign
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/control.ctl
