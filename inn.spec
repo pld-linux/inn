@@ -4,24 +4,25 @@ Summary(fr):	INN, le système InterNet News (serveur de news)
 Summary(pl):	INN, serwer nowinek 
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
-Version:	2.2.1
+Version:	2.2.2
 Release: 	2
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Source:		ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-Source1:	inn-default-active
-Source2:	inn-default-distributions
-Source3:	inn-default-newsgroups
-Source4:	inn-etc-nnrp.access
-Source5:	inn.crontab
-Source6:	inn.init
-Source7:	inn-cnfsstat.cron
+Source1:	%{name}-default-active
+Source2:	%{name}-default-distributions
+Source3:	%{name}-default-newsgroups
+Source4:	%{name}-etc-inn.conf
+Source5:	%{name}-etc-newsfeeds
+Source6:	%{name}-etc-nnrp.access
+Source7:	%{name}.crontab
+Source8:	%{name}.init
+Source9:	%{name}-cnfsstat.cron
+Source10:	%{name}.logrotate
 Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/inn-2.2.1-v6-19991121.diff.gz
-Patch1:		inn-config.patch
-Patch2:		inn-makefile.patch
-Patch3:		inn-authdir.patch
-Patch4:		inn-libinn.so.patch
+Patch1:		%{name}-PLD.patch
+Patch2:		%{name}-libinn.so.patch
 URL: 		http://www.isc.org/inn.html
 Prereq: 	/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -33,7 +34,6 @@ Requires:	rc-scripts
 Requires:	/etc/cron.d
 BuildRoot:	/tmp/%{name}-%{version}-root
 
-%define		_prefix		/usr
 %define		_sysconfdir	/etc/news
 
 %description
@@ -115,11 +115,9 @@ yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+#%patch2 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -145,9 +143,9 @@ LDFLAGS="-s"; export LDFLAGS
         --enable-merge-to-groups \
         --enable-pgp-verify \
 	--enable-shared \
-	--enable-static \
-	--enable-ipv6 \
-	--enable-dual-socket
+	--enable-static
+#	--enable-ipv6 \
+#	--enable-dual-socket
 
 make all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
@@ -155,7 +153,7 @@ make all PATHFILTER=%{_datadir}/news/filter \
 
 %install 
 rm -fr $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,cron.daily}
+install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d}
 install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{_libdir}/news
 install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth}
@@ -173,10 +171,13 @@ make install \
 install %{SOURCE1} $RPM_BUILD_ROOT/var/state/news/active
 install %{SOURCE2} $RPM_BUILD_ROOT/var/state/news/distributions
 install %{SOURCE3} $RPM_BUILD_ROOT/var/state/news/newsgroups
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/nnrp.access
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.d/inn
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
-install %{SOURCE7} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/inn.conf
+install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/newsfeeds
+install %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/nnrp.access
+install %{SOURCE7} $RPM_BUILD_ROOT/etc/cron.d/inn
+install %{SOURCE8} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
+install %{SOURCE9} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
+install %{SOURCE10} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 
 rm -f $RPM_BUILD_ROOT/var/state/news/history
 
@@ -189,10 +190,6 @@ touch $RPM_BUILD_ROOT/var/log/news/news.notice
 touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
 
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory\
-	-a $RPM_BUILD_ROOT/var/state/news/active \
-	-i -r -f $RPM_BUILD_ROOT/var/state/news/history || :
-
 install include/clibrary.h	$RPM_BUILD_ROOT%{_includedir}/inn
 install include/configdata.h	$RPM_BUILD_ROOT%{_includedir}/inn
 install include/dbz.h		$RPM_BUILD_ROOT%{_includedir}/inn
@@ -201,10 +198,14 @@ install include/storage.h	$RPM_BUILD_ROOT%{_includedir}/inn
 
 mv $RPM_BUILD_ROOT%{_datadir}/news/*.a	$RPM_BUILD_ROOT%{_libdir}
 
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
+	-a $RPM_BUILD_ROOT/var/state/news/active \
+	-i -r -f $RPM_BUILD_ROOT/var/state/news/history || :
+
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}/* \
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man[1358]/* \
 	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
 	INSTALL ChangeLog COPYRIGHT
 
@@ -234,42 +235,54 @@ fi
 	touch /var/state/news/active.times
 	chown news.news /var/state/news/active.times
 }
-chown -R news.news /var/log/news*
+
+[ -f /var/log/news/news.notice ] || {
+	touch /var/log/news/news.notice
+	chown news.news /var/log/news/news.notice
+	chmod 664 /var/log/news/news.notice
+}
+
+[ -f /var/log/news/news.crit ] || {
+	touch /var/log/news/news.crit
+	chown news.news /var/log/news/news.crit
+	chmod 660 /var/log/news/news.crit
+}
+
+[ -f /var/log/news/news.err ] || {
+	touch /var/log/news/news.err
+	chown news.news /var/log/news/news.err
+	chmod 660 /var/log/news/news.err
+}
+
+[ -f /var/state/news/.news.daily ] || {
+	touch /var/state/news/.news.daily
+	chown news.news /var/state/.news.daily
+	chmod 664 /var/state/news/.news.daily
+}
+
 if [ -f /etc/syslog.conf ]; then
   if ! grep -q INN /etc/syslog.conf; then
     sed 's/mail.none;/mail.none;news.none;/' < /etc/syslog.conf > /etc/syslog.conf.inn
     mv /etc/syslog.conf.inn /etc/syslog.conf
-
-    echo '' \
-       >> /etc/syslog.conf
-    echo '#' \
-       >> /etc/syslog.conf
-    echo '# INN' \
-       >> /etc/syslog.conf
-    echo '#' \
-       >> /etc/syslog.conf
-    echo 'news.=crit                                        /var/log/news/news.crit'   >> /etc/syslog.conf
-    echo 'news.=err                                         /var/log/news/news.err'    >> /etc/syslog.conf
-    echo 'news.notice                                       /var/log/news/news.notice' >> /etc/syslog.conf
+    echo ''										>> /etc/syslog.conf
+    echo '#'										>> /etc/syslog.conf
+    echo '# INN'									>> /etc/syslog.conf
+    echo '#' 										>> /etc/syslog.conf
+    echo 'news.=crit                                        /var/log/news/news.crit'	>> /etc/syslog.conf
+    echo 'news.=err                                         /var/log/news/news.err'	>> /etc/syslog.conf
+    echo 'news.notice                                       /var/log/news/news.notice'	>> /etc/syslog.conf
     fi
   if [ -f /var/run/syslog.pid ]; then
     kill -HUP `cat /var/run/syslog.pid` 2> /dev/null ||:
   fi
 else
-  # syslog.conf does not exist
-
-  echo "mail.none /var/log/messages" \
-     >  /etc/syslog.conf.inn
-  echo "" \
-     >> /etc/syslog.conf.inn
-  echo "# INN" \
-     >> /etc/syslog.conf.inn
-  echo "news.=crit                                      /var/log/news/news.crit"     >> /etc/syslog.conf.inn
-  echo "news.=err                                       /var/log/news/news.err"      >> /etc/syslog.conf.inn
-  echo "news.notice                                     /var/log/news/news.notice"   >> /etc/syslog.conf.inn
-fi
-if [ `cat %{_sysconfdir}/inn.conf | grep '^server:' | wc -l` -lt 1 ]; then
-  echo "server: `hostname -f`" >> %{_sysconfdir}/inn.conf
+    # syslog.conf does not exist
+    echo "mail.none /var/log/messages" 							> /etc/syslog.conf.inn
+    echo "" 										>> /etc/syslog.conf.inn
+    echo "# INN" 									>> /etc/syslog.conf.inn
+    echo "news.=crit                                      /var/log/news/news.crit"	>> /etc/syslog.conf.inn
+    echo "news.=err                                       /var/log/news/news.err"	>> /etc/syslog.conf.inn
+    echo "news.notice                                     /var/log/news/news.notice"	>> /etc/syslog.conf.inn
 fi
 
 /sbin/chkconfig --add inn
@@ -277,10 +290,10 @@ fi
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/news ]; then
-		/etc/rc.d/init.d/inn stop
-	fi
-	/sbin/chkconfig --del inn
+    if [ -f /var/lock/subsys/news ]; then
+	/etc/rc.d/init.d/inn stop
+    fi
+    /sbin/chkconfig --del inn
 fi
 
 %files
@@ -296,15 +309,16 @@ fi
 %attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/newsgroups
 %attr(644,news,root) %config(noreplace) %verify(not size mtime md5) /var/state/news/subscriptions
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/active.times
-%attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/state/news/.news.daily
+%attr(664,news,news) %ghost /var/state/news/.news.daily
 
 # LOGS
+%attr(640,news,news) /etc/logrotate.d/inn
 %attr(750,news,news) %dir /var/log/news
 %attr(750,news,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
-%attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.notice
-%attr(660,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.crit
-%attr(660,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.err
+%attr(664,news,news) %ghost /var/log/news/news.notice
+%attr(660,news,news) %ghost /var/log/news/news.crit
+%attr(660,news,news) %ghost /var/log/news/news.err
 
 # SPOOL
 %attr(750,news,news) %dir /var/spool/news
@@ -320,10 +334,10 @@ fi
 %attr(770,news,news) %dir /var/spool/news/articles
 
 # CRON PARTS
-%attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/*
+%attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/inn
 
 # RC-SCRIPT
-%attr(754,root,root) %config /etc/rc.d/init.d/inn
+%attr(754,root,root) /etc/rc.d/init.d/inn
 
 # CONFIGS (INN is a one big config ;-)
 %attr(755,root,root) %dir %{_sysconfdir}
@@ -360,34 +374,33 @@ fi
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
 
-#%config %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
 
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/checkgroups
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/checkgroups.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/default
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/ihave
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/ihave.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/newgroup
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/newgroup.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/rmgroup
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/rmgroup.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendme
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendme.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendsys
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendsys.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/senduuname
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/senduuname.pl
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/version
-%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/version.pl
+%attr(755,root,root) %{_datadir}/news/control/checkgroups
+%attr(755,root,root) %{_datadir}/news/control/checkgroups.pl
+%attr(755,root,root) %{_datadir}/news/control/default
+%attr(755,root,root) %{_datadir}/news/control/ihave
+%attr(755,root,root) %{_datadir}/news/control/ihave.pl
+%attr(755,root,root) %{_datadir}/news/control/newgroup
+%attr(755,root,root) %{_datadir}/news/control/newgroup.pl
+%attr(755,root,root) %{_datadir}/news/control/rmgroup
+%attr(755,root,root) %{_datadir}/news/control/rmgroup.pl
+%attr(755,root,root) %{_datadir}/news/control/sendme
+%attr(755,root,root) %{_datadir}/news/control/sendme.pl
+%attr(755,root,root) %{_datadir}/news/control/sendsys
+%attr(755,root,root) %{_datadir}/news/control/sendsys.pl
+%attr(755,root,root) %{_datadir}/news/control/senduuname
+%attr(755,root,root) %{_datadir}/news/control/senduuname.pl
+%attr(755,root,root) %{_datadir}/news/control/version
+%attr(755,root,root) %{_datadir}/news/control/version.pl
 
 # SUID
-%attr(4754,root,news) %config %{_bindir}/startinnfeed
-%attr(4754,root,uucp) %config %{_bindir}/rnews
+%attr(4754,root,news) %{_bindir}/startinnfeed
+%attr(4754,root,uucp) %{_bindir}/rnews
 
 # SGID
 %attr(2755,root,news) %{_bindir}/inews
@@ -463,30 +476,27 @@ fi
 %attr(755,root,root) %{_bindir}/tally.control
 %attr(755,root,root) %{_bindir}/writelog
 
-
 # MAN
-%{_mandir}/man1/convdate.1*
-%{_mandir}/man1/getlist.1*
-%{_mandir}/man1/grephistory.1*
-%{_mandir}/man1/innconfval.1*
-%{_mandir}/man1/innfeed.1*
-%{_mandir}/man1/installit.1*
-%{_mandir}/man1/nntpget.1*
-%{_mandir}/man1/rnews.1*
-%{_mandir}/man1/shlock.1*
-%{_mandir}/man1/shrinkfile.1*
-%{_mandir}/man1/startinnfeed.1*
-%{_mandir}/man1/subst.1*
-%{_mandir}/man[58]/*
+%{_mandir}/man1/convdate.1.gz
+%{_mandir}/man1/getlist.1.gz
+%{_mandir}/man1/grephistory.1.gz
+%{_mandir}/man1/innconfval.1.gz
+%{_mandir}/man1/innfeed.1.gz
+%{_mandir}/man1/installit.1.gz
+%{_mandir}/man1/nntpget.1.gz
+%{_mandir}/man1/rnews.1.gz
+%{_mandir}/man1/shlock.1.gz
+%{_mandir}/man1/shrinkfile.1.gz
+%{_mandir}/man1/startinnfeed.1.gz
+%{_mandir}/man1/subst.1.gz
+%{_mandir}/man[58]/*.gz
 
-##############################################################################
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/inn/*
 %{_libdir}/*.a
 %{_mandir}/man3/*
 
-##############################################################################
 %files -n inews
 %defattr(644,root,root,755)
 %attr(2755,root,news) %{_bindir}/inews
