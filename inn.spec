@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	1
+Release:	2
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -268,7 +268,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ -f /var/lib/news/history ]; then
 	cd /var/lib/news
-	%{_bindir}/makehistory -i -r
+	%{_bindir}/makedbz -s `wc -l <history` -f history
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -277,7 +277,8 @@ if [ -f /var/lib/news/history ]; then
 else
 	cd /var/lib/news
 	cp /dev/null history
-	%{_bindir}/makehistory -i
+	%{_bindir}/makehistory
+	%{_bindir}/makedbz -s `wc -l <history` -f history
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -475,6 +476,7 @@ fi
 %attr(755,root,root) %{_libdir}/news/rnews/*
 
 # SUID
+%attr(4754,root,root) %{_bindir}/inndstart
 %attr(4754,root,news) %{_bindir}/startinnfeed
 %attr(4754,root,uucp) %{_bindir}/rnews
 
@@ -505,7 +507,6 @@ fi
 %attr(755,root,root) %{_bindir}/innconfval
 %attr(755,root,root) %{_bindir}/innd
 %attr(755,root,root) %{_bindir}/inndf
-%attr(755,root,root) %{_bindir}/inndstart
 %attr(755,root,root) %{_bindir}/innfeed
 %attr(755,root,root) %{_bindir}/innmail
 %attr(755,root,root) %{_bindir}/innreport
