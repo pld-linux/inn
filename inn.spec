@@ -6,7 +6,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	7
+Release:	8
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -392,7 +392,7 @@ fi
 %attr(664,news,news) %ghost /var/lib/news/history
 
 # LOGS
-%attr(640,root,root) /etc/logrotate.d/inn
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/inn
 %attr(770,root,news) %dir /var/log/news
 %attr(770,root,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
