@@ -34,7 +34,7 @@ Patch7:		%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
-Prereq:		rc-scripts
+Prereq:			rc-scripts
 Prereq:		sed
 Prereq:		fileutils
 Prereq:		%{name}-libs = %{version}
