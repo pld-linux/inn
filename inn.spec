@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.1
-Release:	0.5
+Release:	0.9
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -16,15 +16,12 @@ Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
-Source4:	%{name}-etc-%{name}.conf
-Source5:	%{name}-etc-newsfeeds
-Source6:	%{name}.crontab
-Source7:	%{name}.init
-Source8:	%{name}-cnfsstat.cron
-Source9:	%{name}.logrotate
-Source10:	%{name}-etc-readers.conf
-Source11:	getlist.1.pl
-Source12:	%{name}d.8.pl
+Source4:	%{name}.crontab
+Source5:	%{name}.init
+Source6:	%{name}-cnfsstat.cron
+Source7:	%{name}.logrotate
+Source8:	getlist.1.pl
+Source9:	%{name}d.8.pl
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-install.patch
 Patch2:		%{name}-db.patch
@@ -268,15 +265,17 @@ touch innfeed/*.[ly]
 	--with-news-user=news \
 	--with-news-group=news \
 	--with-news-master=news \
+	--with-control-dir=%{_datadir}/news/control \
 	--with-db-dir=/var/lib/news \
 	--with-etc-dir=%{_sysconfdir} \
+	--with-filter-dir=%{_datadir}/news/filter \
 	--with-log-dir=/var/log/news \
 	--with-run-dir=/var/run/news \
 	--with-spool-dir=/var/spool/news \
 	--with-lib-dir=%{_datadir}/news \
-	--with-tmp-path=/var/spool/news/incoming/tmp \
+	--with-tmp-dir=/var/spool/news/incoming/tmp \
 	--with-perl \
-	--with-sendmail=%{_libdir}/sendmail \
+	--with-sendmail=/usr/lib/sendmail \
 	--with-openssl=%{_prefix} \
 	--with-berkeleydb=%{_prefix} \
 	%{?_with_largefiles:--enable-largefiles} \
@@ -316,15 +315,12 @@ install samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
 install %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
 install %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
 install %{SOURCE3} $RPM_BUILD_ROOT/var/lib/news/newsgroups
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/inn.conf
-install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/newsfeeds
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.d/inn
-install %{SOURCE7} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
-install %{SOURCE8} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
-install %{SOURCE9} $RPM_BUILD_ROOT/etc/logrotate.d/inn
-install %{SOURCE10} $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
-install %{SOURCE11} $RPM_BUILD_ROOT%{_mandir}/pl/man1/getlist.1
-install %{SOURCE12} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/cron.d/inn
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
+install %{SOURCE6} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
+install %{SOURCE7} $RPM_BUILD_ROOT/etc/logrotate.d/inn
+install %{SOURCE8} $RPM_BUILD_ROOT%{_mandir}/pl/man1/getlist.1
+install %{SOURCE9} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
@@ -535,6 +531,8 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/INN.py
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.py
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.py
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
