@@ -10,17 +10,17 @@ Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Source:		ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-Source1:	%{name}-default-active
-Source2:	%{name}-default-distributions
-Source3:	%{name}-default-newsgroups
-Source4:	%{name}-etc-nnrp.access
-Source5:	%{name}.crontab
-Source6:	%{name}.initd
-Source7:	%{name}-cnfsstat.cron
+Source1:	inn-default-active
+Source2:	inn-default-distributions
+Source3:	inn-default-newsgroups
+Source4:	inn-etc-nnrp.access
+Source5:	inn.crontab
+Source6:	inn.init
+Source7:	inn-cnfsstat.cron
 Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/inn-2.2.1-v6-19991121.diff.gz
-Patch1:		%{name}-config.patch
-Patch2:		%{name}-makefile.patch
-Patch3:		%{name}-authdir.patch
+Patch1:		inn-config.patch
+Patch2:		inn-makefile.patch
+Patch3:		inn-authdir.patch
 URL: 		http://www.isc.org/inn.html
 Prereq: 	/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -158,7 +158,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/news
 install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth}
 install -d $RPM_BUILD_ROOT%{_includedir}/inn
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
-install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/news/OLD}
+install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/news/archiv/news}
 install -d $RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
 make install \
@@ -170,7 +170,7 @@ make install \
 install %{SOURCE1} $RPM_BUILD_ROOT/var/state/news/active
 install %{SOURCE2} $RPM_BUILD_ROOT/var/state/news/distributions
 install %{SOURCE3} $RPM_BUILD_ROOT/var/state/news/newsgroups
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/news/nnrp.access
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/nnrp.access
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE7} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
@@ -228,8 +228,8 @@ else
 	chmod 644 history history.*
 fi
 [ -f /var/state/news/active.times ] || {
-    touch /var/state/news/active.times
-    chown news.news /var/state/news/active.times
+	touch /var/state/news/active.times
+	chown news.news /var/state/news/active.times
 }
 chown -R news.news /var/log/news*
 if [ -f /etc/syslog.conf ]; then
@@ -265,8 +265,8 @@ else
   echo "news.=err                                       /var/log/news/news.err"      >> /etc/syslog.conf.inn
   echo "news.notice                                     /var/log/news/news.notice"   >> /etc/syslog.conf.inn
 fi
-if [ `cat /etc/news/inn.conf | grep '^server:' | wc -l` -lt 1 ]; then
-  echo "server: `hostname -f`" >> /etc/news/inn.conf
+if [ `cat %{_sysconfdir}/inn.conf | grep '^server:' | wc -l` -lt 1 ]; then
+  echo "server: `hostname -f`" >> %{_sysconfdir}/inn.conf
 fi
 
 /sbin/chkconfig --add inn
@@ -297,7 +297,7 @@ fi
 
 # LOGS
 %attr(750,news,news) %dir /var/log/news
-%attr(770,news,news) %dir /var/log/news/OLD
+%attr(770,news,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.notice
 %attr(660,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.crit
@@ -323,34 +323,34 @@ fi
 %attr(754,root,root) %config /etc/rc.d/init.d/inn
 
 # CONFIGS (INN is a one big config ;-)
-%attr(755,root,root) %dir /etc/news
-%attr(755,root,root) %dir %{_datadir}/news
+%attr(755,root,root) %dir %{_sysconfdir}
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/actsync.cfg
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/actsync.ign
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/control.ctl
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/cycbuff.conf
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/expire.ctl
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/incoming.conf
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/inn.conf
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/innfeed.conf
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/innreport.conf
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/innwatch.ctl
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/motd.news
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/news2mail.cf
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/nnrp.access
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/nnrpd.track
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/nntpsend.ctl
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/overview.ctl
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/passwd.nntp
+%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/storage.conf
+%config %verify(not size mtime md5) %{_sysconfdir}/moderators
+%config %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
+%config %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
+%config %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
+
+%attr(750,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
 %attr(755,root,root) %dir %{_datadir}/news/filter
 %attr(755,root,root) %dir %{_datadir}/news/auth
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/actsync.cfg
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/actsync.ign
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/control.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/cycbuff.conf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/expire.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/incoming.conf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/inn.conf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/innfeed.conf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/innreport.conf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/innwatch.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/motd.news
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/news2mail.cf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/nnrp.access
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/nnrpd.track
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/nntpsend.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/overview.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/passwd.nntp
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/storage.conf
-
-%config %verify(not size mtime md5) /etc/news/moderators
-%config %verify(not size mtime md5) /etc/news/distrib.pats
-%config %verify(not size mtime md5) /etc/news/newsfeeds
-%config %verify(not size mtime md5) /etc/news/overview.fmt
 
 %config %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars
@@ -383,8 +383,8 @@ fi
 %attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/version.pl
 
 # SUID
-%attr(4750,root,news) %config %{_bindir}/startinnfeed
-%attr(4750,root,uucp) %config %{_bindir}/rnews
+%attr(4754,root,news) %config %{_bindir}/startinnfeed
+%attr(4754,root,uucp) %config %{_bindir}/rnews
 
 # SGID
 %attr(2755,root,news) %{_bindir}/inews
