@@ -1,60 +1,53 @@
-diff -Nur inn-2.3.4.orig/authprogs/ckpasswd.c inn-2.3.4/authprogs/ckpasswd.c
---- inn-2.3.4.orig/authprogs/ckpasswd.c	Mon Dec 23 00:00:38 2002
-+++ inn-2.3.4/authprogs/ckpasswd.c	Tue Jan 14 22:01:31 2003
-@@ -14,19 +14,8 @@
- # include <fcntl.h>
- #endif
+diff -Nur inn-2.4.0.orig/authprogs/ckpasswd.c inn-2.4.0/authprogs/ckpasswd.c
+--- inn-2.4.0.orig/authprogs/ckpasswd.c	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/authprogs/ckpasswd.c	2003-06-29 13:03:12.000000000 +0200
+@@ -26,13 +26,8 @@
+ #include <grp.h>
  
--#if HAVE_DBM
--# ifdef HAVE_NDBM_H
+ #if HAVE_DBM
+-# if HAVE_NDBM_H
 -#  include <ndbm.h>
--# else
--#  ifdef HAVE_GDBM_NDBM_H
--#   include <gdbm-ndbm.h>
--#  else
--#   ifdef HAVE_DB1_NDBM_H
--#    include <db1/ndbm.h>
--#   endif
--#  endif
+-# elif HAVE_GDBM_NDBM_H
+-#  include <gdbm-ndbm.h>
+-# elif HAVE_DB1_NDBM_H
+-#  include <db1/ndbm.h>
 -# endif
--#endif
-+#define DB_DBM_HSEARCH1
-+#include <db.h>
- 
- #ifdef HAVE_GETSPNAM
- # include <shadow.h>
-diff -Nur inn-2.3.4.orig/configure.in inn-2.3.4/configure.in
---- inn-2.3.4.orig/configure.in	Tue Jan 14 22:00:39 2003
-+++ inn-2.3.4/configure.in	Tue Jan 14 22:03:08 2003
-@@ -762,12 +762,7 @@
- AC_CHECK_LIB(regex, regexec)
- 
- dnl Some of the authentication programs want to be able to open dbm files.
--inn_save_LIBS=$LIBS
--LIBS=
--AC_SEARCH_LIBS(dbm_open, ndbm dbm,
--               [DBM_LIB=$LIBS
--	        AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])])
--LIBS=$inn_save_LIBS
++# define DB_DBM_HSEARCH 1
++# include <db.h>
+ # define OPT_DBM "d:"
+ #else
+ # define OPT_DBM ""
+diff -Nur inn-2.4.0.orig/configure.in inn-2.4.0/configure.in
+--- inn-2.4.0.orig/configure.in	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/configure.in	2003-06-29 13:04:52.000000000 +0200
+@@ -824,8 +824,9 @@
+ dnl Search for various additional libraries used by portions of INN.
+ INN_SEARCH_AUX_LIBS(crypt, crypt, CRYPT_LIB)
+ INN_SEARCH_AUX_LIBS(getspnam, shadow, SHADOW_LIB)
+-INN_SEARCH_AUX_LIBS(dbm_open, ndbm dbm, DBM_LIB,
+-    [AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])])
 +DBM_LIB="-ldb"
- AC_SUBST(DBM_LIB)
++AC_SUBST(DBM_LIB)
++AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])
+ INN_SEARCH_AUX_LIBS(pam_start, pam, PAM_LIB,
+     [AC_DEFINE(HAVE_PAM, 1, [Define if you have PAM.])])
  
- dnl Libraries and flags for embedded Perl.  Some distributions of Linux have
-@@ -1001,16 +996,10 @@
+@@ -1008,17 +1009,11 @@
+ AC_HEADER_SYS_WAIT
  
  dnl Generic checks for header files.
- dnl NOTUSED: sys/file.h sys/ioctl.h
--AC_CHECK_HEADERS(crypt.h fcntl.h limits.h ndbm.h stddef.h stdint.h \
-+AC_CHECK_HEADERS(crypt.h fcntl.h limits.h stddef.h stdint.h \
-                  sys/bitypes.h sys/file.h sys/filio.h sys/ioctl.h \
-                  sys/select.h sys/sysinfo.h sys/time.h unistd.h)
+-AC_CHECK_HEADERS(crypt.h inttypes.h limits.h ndbm.h pam/pam_appl.h stdbool.h \
++AC_CHECK_HEADERS(crypt.h inttypes.h limits.h pam/pam_appl.h stdbool.h \
+                  stddef.h stdint.h string.h sys/bitypes.h sys/filio.h \
+                  sys/loadavg.h sys/param.h sys/select.h sys/sysinfo.h \
+                  sys/time.h unistd.h)
  
 -dnl Some Linux systems have db1/ndbm.h instead of ndbm.h.  Others have
--dnl gdbm-ndbm.h instead.
+-dnl gdbm-ndbm.h.
 -if test x"$ac_cv_header_ndbm_h" = xno ; then
 -    AC_CHECK_HEADERS(db1/ndbm.h gdbm-ndbm.h)
 -fi
 -
- dnl Checks for typedefs, structures, and compiler characteristics.
- AC_STRUCT_ST_BLKSIZE
- AC_STRUCT_TM
+ dnl Check to see if herrno is declared.
+ AC_DEFUN([INN_NEED_HERRNO_DECLARATION],
+ [AC_CACHE_CHECK([whether h_errno must be declared], inn_cv_herrno_need_decl,

@@ -1,20 +1,30 @@
---- inn-2.3.3/configure.in.orig	Thu May  9 22:30:20 2002
-+++ inn-2.3.3/configure.in	Thu May  9 22:31:32 2002
-@@ -1263,7 +1263,7 @@
- dnl We need both *rlimit functions.
- dnl
- dnl FIXME: Better to use the standard #defines.
--AC_CHECK_FUNC(getrlimit, AC_CHECK_FUNC(setrlimit, AC_DEFINE(HAVE_RLIMIT)))
-+AC_CHECK_FUNC(getrlimit, [AC_CHECK_FUNC(setrlimit, AC_DEFINE(HAVE_RLIMIT))])
+diff -Nur inn-2.4.0.orig/configure.in inn-2.4.0/configure.in
+--- inn-2.4.0.orig/configure.in	2003-06-29 13:20:49.000000000 +0200
++++ inn-2.4.0/configure.in	2003-06-29 13:22:13.000000000 +0200
+@@ -803,7 +803,7 @@
+ AC_SEARCH_LIBS(setproctitle, util,
+     [AC_DEFINE(HAVE_SETPROCTITLE, 1,
+         [Define if you have the setproctitle function.])],
+-    [LIBOBJS="$LIBOBJS setproctitle.o"
++    [AC_LIBOBJ([setproctitle])
+      AC_CHECK_FUNCS(pstat)])
  
- dnl Check for sysconf, getdtablesize, and then ulimit in that order; we'll
- dnl use them to figure out our current file descriptor limit.
-@@ -1297,7 +1297,7 @@
-    INN_TYPE_FPOS_T_LARGE
- fi
+ dnl The rat's nest of networking libraries.  The common cases are not to
+@@ -1406,7 +1406,7 @@
+     AC_DEFINE([HAVE_INET_NTOA], 1,
+               [Define if your system has a working inet_ntoa function.])
+ else
+-    LIBOBJS="$LIBOBJS inet_ntoa.${ac_objext}"
++    AC_LIBOBJ([inet_ntoa])
+ fi])
+ INN_FUNC_INET_NTOA
  
--MISSING_OBJ="$LIBOBJS"
-+MISSING_OBJ="$LIB@&t@OBJS"
- MISSING_SRC=`echo "$MISSING_OBJ" | sed 's/\.o/.c/g'`
+@@ -1554,7 +1554,7 @@
+     AC_DEFINE([HAVE_SNPRINTF], 1,
+         [Define if your system has a working snprintf function.])
+ else
+-    LIBOBJS="$LIBOBJS snprintf.${ac_objext}"
++    AC_LIBOBJ([snprintf])
+ fi])
+ INN_FUNC_SNPRINTF
  
- if test "$ac_cv_func_strcasecmp" = no ; then

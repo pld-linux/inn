@@ -7,12 +7,12 @@ Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.3.5
-Release:	1
+Version:	2.4.0
+Release:	0.1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	97223e05d37e568f2ba95793b8133246
+# Source0-md5:	629c445b7c7fe2a01257b883abb7bddf
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -25,18 +25,14 @@ Source9:	%{name}.logrotate
 Source10:	%{name}-etc-readers.conf
 Source11:	getlist.1.pl
 Source12:	%{name}d.8.pl
-#Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/%{name}-2.3.0-v6-20001011.diff.gz
-Patch0:		%{name}-ipv6.patch
-Patch1:		%{name}-PLD.patch
-Patch2:		%{name}-install.patch
-Patch3:		%{name}-db.patch
-Patch4:		%{name}-setreuid.patch
-Patch5:		%{name}-sec.patch
-Patch6:		%{name}-frsize.patch
-Patch7:		%{name}-ac25x.patch
-Patch8:		%{name}-ac253.patch
-Patch9:		%{name}-nolibs.patch
-Patch10:	%{name}-link.patch
+Patch0:		%{name}-PLD.patch
+Patch1:		%{name}-install.patch
+Patch2:		%{name}-db.patch
+Patch3:		%{name}-ac25x.patch
+Patch4:		%{name}-ac253.patch
+#Patch5:		%{name}-setreuid.patch
+#Patch6:		%{name}-sec.patch
+#Patch7:		%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	bison
@@ -68,6 +64,7 @@ Obsoletes:	leafnode+
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
+%define		_includedir	%{_prefix}/include/inn
 
 # /usr/bin/pullnews doesn't provide perl(Net::NNTP) - perl-libnet does.
 %define		_noautoprov	"perl(Net::NNTP)"
@@ -246,12 +243,9 @@ sunucuya makaleyi yollar.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
+#%patch5 -p1	-- obsolete? (no setreuid test)
+#%patch6 -p1	-- obsolete? (pathrun not used in inndstart)
+#%patch7 -p1	-- obsolete? (?)
 
 %build
 touch innfeed/*.[ly]
@@ -275,7 +269,7 @@ rm -f config.cache
 	--with-sendmail=%{_libdir}/sendmail \
 	--with-openssl=%{_prefix} \
 	--with-berkeleydb=%{_prefix} \
-	%{?_with_largefiles:--with-largefiles} \
+	%{?_with_largefiles:--enable-largefiles} \
 	%{!?_with_largefiles:--enable-tagged-hash} \
 	--enable-merge-to-groups \
 	--enable-pgp-verify \
@@ -291,7 +285,7 @@ rm -f config.cache
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}/inn} \
+	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
 	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
@@ -332,13 +326,12 @@ touch $RPM_BUILD_ROOT/var/log/news/news.notice
 touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
 
-touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h
-install include/{clibrary,dbz,libinn,nntp,ov,qio,ppport,rwlock,storage}.h \
-	$RPM_BUILD_ROOT%{_includedir}/inn
+# obsolete?
+#touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h
 
 mv -f $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
 
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
 	-i -r -f $RPM_BUILD_ROOT/var/lib/news/history || :
 
@@ -442,12 +435,17 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del inn
 fi
 
+%triggerpostun -- inn < 2.4.0
+cp -af %{_sysconfdir}/inn.conf{,.rpmorig}
+sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6address/sourceaddress6/' \
+	%{_sysconfdir}/inn.conf.rpmorig > %{_sysconfdir}/inn.conf
+
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
-%doc CONTRIBUTORS INSTALL HISTORY README* ChangeLog LICENSE NEWS
+%doc CONTRIBUTORS ChangeLog INSTALL LICENSE NEWS README TODO doc/[Icehs]*
 
 # DB
 %attr(770,root,news) %dir /var/lib/news
@@ -520,7 +518,6 @@ fi
 %attr(755,root,root) %dir %{_datadir}/news/control
 %attr(755,root,root) %dir %{_datadir}/news/filter
 
-%attr(755,root,root) %{_datadir}/news/docheckgroups
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
@@ -534,22 +531,13 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
 
-%attr(755,root,root) %{_datadir}/news/control/checkgroups
 %attr(755,root,root) %{_datadir}/news/control/checkgroups.pl
-%attr(755,root,root) %{_datadir}/news/control/default
-%attr(755,root,root) %{_datadir}/news/control/ihave
 %attr(755,root,root) %{_datadir}/news/control/ihave.pl
-%attr(755,root,root) %{_datadir}/news/control/newgroup
 %attr(755,root,root) %{_datadir}/news/control/newgroup.pl
-%attr(755,root,root) %{_datadir}/news/control/rmgroup
 %attr(755,root,root) %{_datadir}/news/control/rmgroup.pl
-%attr(755,root,root) %{_datadir}/news/control/sendme
 %attr(755,root,root) %{_datadir}/news/control/sendme.pl
-%attr(755,root,root) %{_datadir}/news/control/sendsys
 %attr(755,root,root) %{_datadir}/news/control/sendsys.pl
-%attr(755,root,root) %{_datadir}/news/control/senduuname
 %attr(755,root,root) %{_datadir}/news/control/senduuname.pl
-%attr(755,root,root) %{_datadir}/news/control/version
 %attr(755,root,root) %{_datadir}/news/control/version.pl
 
 %attr(755,root,news) %dir %{_libdir}/news
@@ -583,7 +571,7 @@ fi
 %attr(755,root,root) %{_bindir}/convdate
 %attr(755,root,root) %{_bindir}/ctlinnd
 %attr(755,root,root) %{_bindir}/cvtbatch
-%attr(755,root,root) %{_bindir}/dbprocs
+%attr(755,root,root) %{_bindir}/docheckgroups
 %attr(755,root,root) %{_bindir}/expire
 %attr(755,root,root) %{_bindir}/expireover
 %attr(755,root,root) %{_bindir}/expirerm
@@ -592,6 +580,7 @@ fi
 %attr(755,root,root) %{_bindir}/getlist
 %attr(755,root,root) %{_bindir}/gpgverify
 %attr(755,root,root) %{_bindir}/grephistory
+%attr(755,root,root) %{_bindir}/imapfeed
 %attr(755,root,root) %{_bindir}/inncheck
 %attr(755,root,root) %{_bindir}/innconfval
 %attr(755,root,root) %{_bindir}/innd
@@ -600,6 +589,7 @@ fi
 %attr(755,root,root) %{_bindir}/innmail
 %attr(755,root,root) %{_bindir}/innreport
 %attr(755,root,root) %{_bindir}/innstat
+%attr(755,root,root) %{_bindir}/innupgrade
 %attr(755,root,root) %{_bindir}/innwatch
 %attr(755,root,root) %{_bindir}/innxbatch
 %attr(755,root,root) %{_bindir}/innxmit
@@ -609,23 +599,23 @@ fi
 %attr(755,root,root) %{_bindir}/mod-active
 %attr(755,root,root) %{_bindir}/news.daily
 %attr(755,root,root) %{_bindir}/news2mail
-%attr(755,root,root) %{_bindir}/newsrequeue
+%attr(755,root,root) %{_bindir}/ninpaths
 %attr(755,root,root) %{_bindir}/nnrpd
 %attr(755,root,root) %{_bindir}/nntpget
 %attr(755,root,root) %{_bindir}/nntpsend
 %attr(755,root,root) %{_bindir}/ovdb_*
 %attr(755,root,root) %{_bindir}/overchan
-%attr(755,root,root) %{_bindir}/parsecontrol
+%attr(755,root,root) %{_bindir}/perl-nocem
 %attr(755,root,root) %{_bindir}/pgpverify
 %attr(755,root,root) %{_bindir}/procbatch
 %attr(755,root,root) %{_bindir}/prunehistory
 %attr(755,root,root) %{_bindir}/pullnews
 %attr(755,root,root) %{_bindir}/scanlogs
 %attr(755,root,root) %{_bindir}/scanspool
-%attr(755,root,root) %{_bindir}/sendbatch
 %attr(755,root,root) %{_bindir}/send-ihave
 %attr(755,root,root) %{_bindir}/send-nntp
 %attr(755,root,root) %{_bindir}/send-uucp
+%attr(755,root,root) %{_bindir}/sendinpaths
 %attr(755,root,root) %{_bindir}/sendxbatches
 %attr(755,root,root) %{_bindir}/shlock
 %attr(755,root,root) %{_bindir}/shrinkfile
@@ -633,10 +623,10 @@ fi
 %attr(755,root,root) %{_bindir}/simpleftp
 %attr(755,root,root) %{_bindir}/sm
 %attr(755,root,root) %{_bindir}/tally.control
+%attr(755,root,root) %{_bindir}/tdx-util
 %attr(755,root,root) %{_bindir}/writelog
 
 # MAN
-%{_mandir}/man1/ckpasswd.1*
 %{_mandir}/man1/convdate.1*
 %{_mandir}/man1/fastrm.1*
 %{_mandir}/man1/getlist.1*
@@ -645,10 +635,12 @@ fi
 %{_mandir}/man1/innfeed.1*
 %{_mandir}/man1/innmail.1*
 %{_mandir}/man1/nntpget.1*
+%{_mandir}/man1/pgpverify.1*
 %{_mandir}/man1/rnews.1*
 %{_mandir}/man1/shlock.1*
 %{_mandir}/man1/shrinkfile.1*
 %{_mandir}/man1/simpleftp.1*
+%{_mandir}/man1/sm.1*
 %{_mandir}/man1/startinnfeed.1*
 %{_mandir}/man[58]/*
 %lang(pl) %{_mandir}/pl/man1/getlist.1*
@@ -660,7 +652,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/inn
+%{_includedir}
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
 %{_mandir}/man3/*

@@ -1,28 +1,19 @@
-diff -ur inn-2.3.1.orig/Makefile inn-2.3.1/Makefile
---- inn-2.3.1.orig/Makefile	Thu Jan 11 09:55:23 2001
-+++ inn-2.3.1/Makefile	Sun Jan 21 02:42:15 2001
-@@ -65,7 +65,7 @@
- ##  Installation rules.  make install installs everything; make update only
- ##  updates the binaries, scripts, and documentation and leaves config
- ##  files alone.
--install: directories
-+install:
- 	@for D in $(ALLDIRS) ; do \
- 	    echo '' ; \
- 	    cd $$D && $(MAKE) install || exit 1 ; cd .. ; \
-@@ -81,7 +81,7 @@
- directories:
- 	@chmod +x support/install-sh
- 	for D in $(INSTDIRS) ; do \
--	    support/install-sh $(OWNER) -m 0755 -d $$D ; \
-+	    support/install-sh -m 0755 -d $(DESTDIR)$$D ; \
- 	done
- 	support/install-sh $(OWNER) -m 0750 -d $(PATHRUN)
+diff -Nur inn-2.4.0.orig/doc/man/rnews.1 inn-2.4.0/doc/man/rnews.1
+--- inn-2.4.0.orig/doc/man/rnews.1	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/doc/man/rnews.1	2003-06-29 12:58:27.000000000 +0200
+@@ -67,7 +67,7 @@
+ is defined and the command is any other word, then
+ .I rnews
+ will try to execute a program with that name in the directory
+-.IR <pathbin\ in\ inn.conf>/bin/rnews.libexec .
++.IR /usr/lib/news/rnews .
  
-diff -ur inn-2.3.1.orig/include/paths.h.in inn-2.3.1/include/paths.h.in
---- inn-2.3.1.orig/include/paths.h.in	Thu Jan 11 09:55:23 2001
-+++ inn-2.3.1/include/paths.h.in	Sun Jan 21 02:41:21 2001
-@@ -15,12 +15,12 @@
+ The batch will be fed into the program's standard input, and the
+ standard output will be read back as input into
+diff -Nur inn-2.4.0.orig/include/paths.h.in inn-2.4.0/include/paths.h.in
+--- inn-2.4.0.orig/include/paths.h.in	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/include/paths.h.in	2003-06-29 12:57:56.000000000 +0200
+@@ -19,12 +19,12 @@
  /* Default prefix path is pathbin. */
  #define _PATH_NNRPD		"nnrpd"
  #define _PATH_NNTPD		"nnrpd"
@@ -37,34 +28,34 @@ diff -ur inn-2.3.1.orig/include/paths.h.in inn-2.3.1/include/paths.h.in
  
  /* Default prefix path is pathfilter. */
  #define _PATH_TCL_STARTUP	"startup.tcl"
-diff -ur inn-2.3.1.orig/doc/man/rnews.1~ inn-2.3.1/doc/man/rnews.1
---- inn-2.3.1/doc/man/rnews.1~	Thu Jan 11 09:55:23 2001
-+++ inn-2.3.1/doc/man/rnews.1	Sun Jan 21 06:10:42 2001
-@@ -67,7 +67,7 @@
- is defined and the command is any other word, then
- .I rnews
- will try to execute a program with that name in the directory
--.IR <pathbin\ in\ inn.conf>/bin/rnews.libexec .
-+.IR /usr/lib/news/rnews .
+diff -Nur inn-2.4.0.orig/Makefile inn-2.4.0/Makefile
+--- inn-2.4.0.orig/Makefile	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/Makefile	2003-06-29 12:57:10.000000000 +0200
+@@ -75,7 +75,7 @@
+ ##  Installation rules.  make install installs everything; make update only
+ ##  updates the binaries, scripts, and documentation and leaves config
+ ##  files alone.
+-install: directories
++install:
+ 	@for D in $(ALLDIRS) ; do \
+ 	    echo '' ; \
+ 	    cd $$D && $(MAKE) install || exit 1 ; cd .. ; \
+@@ -91,9 +91,9 @@
+ directories:
+ 	@chmod +x support/install-sh
+ 	for D in $(INSTDIRS) ; do \
+-	    support/install-sh $(OWNER) -m 0755 -d $(D)$$D ; \
++	    support/install-sh -m 0755 -d $(D)$$D ; \
+ 	done
+-	support/install-sh $(OWNER) -m 0750 -d $(D)$(PATHRUN)
++	support/install-sh -m 0750 -d $(D)$(PATHRUN)
  
- The batch will be fed into the program's standard input, and the
- standard output will be read back as input into
-diff -ur inn-2.3.1.orig/scripts/scanlogs.in inn-2.3.1/scripts/scanlogs.in
---- inn-2.3.1.orig/scripts/scanlogs.in	Thu Jan 11 09:55:23 2001
-+++ inn-2.3.1/scripts/scanlogs.in	Sun Jan 21 02:42:37 2001
-@@ -11,7 +11,7 @@
- ##  then get a better egrep, like the FSF one.
- 
- ##  Directory where old log files are kept.
--OLD=${MOST_LOGS}/OLD
-+OLD=/var/log/archiv/news
- ##  If you want to archive the active file, enable this line.
- ACTIVEFILE=${ACTIVE}
- ##  Number of lines of error in each category to report.
-diff -ur inn-2.3.1.orig/Makefile.global.in~ inn-2.3.1/scripts/Makefile.global.in
---- inn-2.3.1/Makefile.global.in~	Thu Jan 11 09:55:23 2001
-+++ inn-2.3.1/Makefile.global.in	Sun Jan 21 05:08:12 2001
-@@ -179,15 +179,6 @@
+ update: 
+ 	@chmod +x support/install-sh
+diff -Nur inn-2.4.0.orig/Makefile.global.in inn-2.4.0/Makefile.global.in
+--- inn-2.4.0.orig/Makefile.global.in	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/Makefile.global.in	2003-06-29 12:59:13.000000000 +0200
+@@ -234,15 +234,6 @@
  ##  configure; inews and rnews are special and have configure flags to
  ##  control how they're installed.  See INSTALL for more information.
  
@@ -77,6 +68,18 @@ diff -ur inn-2.3.1.orig/Makefile.global.in~ inn-2.3.1/scripts/Makefile.global.in
 -OWNER           = -o $(NEWSUSER) -g $(NEWSGROUP)
 -ROWNER          = -o $(NEWSUSER) -g @RNEWSGRP@
 -
- INSTALL         = ../support/install-sh -c
-
+ INSTALL         = $(top)/support/install-sh -c
+ 
  ##  Installation commands.  These commands are used by the installation
+diff -Nur inn-2.4.0.orig/scripts/scanlogs.in inn-2.4.0/scripts/scanlogs.in
+--- inn-2.4.0.orig/scripts/scanlogs.in	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.0/scripts/scanlogs.in	2003-06-29 12:58:56.000000000 +0200
+@@ -11,7 +11,7 @@
+ ##  then get a better egrep, like the FSF one.
+ 
+ ##  Directory where old log files are kept.
+-OLD=${MOST_LOGS}/OLD
++OLD=/var/log/archiv/news
+ ##  If you want to archive the active file, enable this line.
+ ACTIVEFILE=${ACTIVE}
+ ##  Number of lines of error in each category to report.
