@@ -16,6 +16,7 @@ Source3:	%{name}-default-newsgroups
 Source4:	%{name}-etc-nnrp.access
 Source5:	%{name}.crontab
 Source6:	%{name}.initd
+Source7:	%{name}-cnfsstat.cron
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-makefile.patch
 Patch2:		%{name}-authdir.patch
@@ -147,7 +148,7 @@ make all PATHFILTER=%{_datadir}/news/filter \
 %install 
 rm -fr $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d}
-install -d $RPM_BUILD_ROOT%{_bindir}/auth
+install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{_libdir}/news
 install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth}
 install -d $RPM_BUILD_ROOT%{_includedir}/inn
@@ -165,6 +166,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT/var/state/news/newsgroups
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/news/nnrp.access
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
+install %{SOURCE7} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 
 rm -f $RPM_BUILD_ROOT/var/state/news/history
 
@@ -307,7 +309,7 @@ fi
 %attr(770,news,news) %dir /var/spool/news/articles
 
 # CRON PARTS
-%attr(750,root,root) %config %verify(not size mtime md5) /etc/cron.d/*
+%attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/*
 
 # RC-SCRIPT
 %attr(754,root,root) %config /etc/rc.d/init.d/inn
@@ -347,7 +349,7 @@ fi
 %attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
 %attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
 
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
+#%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
 %attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
 %attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
 %attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
@@ -373,7 +375,6 @@ fi
 %attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/version.pl
 
 # SUID
-%attr(4750,root,news) %{_bindir}/inndstart
 %attr(4750,root,news) %config %{_bindir}/startinnfeed
 %attr(4750,root,uucp) %config %{_bindir}/rnews
 
@@ -390,6 +391,7 @@ fi
 %attr(755,root,root) %{_bindir}/buffchan
 %attr(755,root,root) %{_bindir}/c7unbatch
 %attr(755,root,root) %{_bindir}/cnfsstat
+%attr(755,root,root) %{_bindir}/cnfsstat.cron
 %attr(755,root,root) %{_bindir}/controlbatch
 %attr(755,root,root) %{_bindir}/controlchan
 %attr(755,root,root) %{_bindir}/convdate
@@ -411,6 +413,7 @@ fi
 %attr(755,root,root) %{_bindir}/innconfval
 %attr(755,root,root) %{_bindir}/innd
 %attr(755,root,root) %{_bindir}/inndf
+%attr(755,root,news) %{_bindir}/inndstart
 %attr(755,root,root) %{_bindir}/innfeed
 %attr(755,root,root) %{_bindir}/innfeed-convcfg
 %attr(755,root,root) %{_bindir}/innmail
