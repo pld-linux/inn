@@ -5,8 +5,8 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.2.3
-Release:	7
-Copyright:	distributable
+Release:	8
+License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
@@ -14,7 +14,7 @@ Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
-Source4:	%{name}-etc-inn.conf
+Source4:	%{name}-etc-%{name}.conf
 Source5:	%{name}-etc-newsfeeds
 Source6:	%{name}-etc-nnrp.access
 Source7:	%{name}.crontab
@@ -178,7 +178,6 @@ touch innfeed/*.[ly]
 rm -f config.cache
 autoconf
 libtoolize --copy --force
-LDFLAGS="-s"; export LDFLAGS
 %configure \
         --with-news-user=news \
         --with-news-group=news \
@@ -208,8 +207,8 @@ LDFLAGS="-s"; export LDFLAGS
 %install 
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn}
-install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
+	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn} \
+	$RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
 	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
@@ -260,8 +259,7 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man[1358]/* \
-	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
+gzip -9nf CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
 	INSTALL ChangeLog COPYRIGHT
 
 %clean
