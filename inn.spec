@@ -328,7 +328,7 @@ fi
 
 %attr(755,root,root) %{_bindir}/rnews
 %attr(755,root,root) %{_bindir}/inews
-%attr(755,root,root) /usr/sbin/ctlinnd
+%attr(755,root,root) %{_sbindir}/ctlinnd
 %attr(755,root,root) %{_bindir}/actived
 %attr(755,root,root) %{_bindir}/actmerge
 %attr(755,root,root) %{_bindir}/actsync
@@ -428,7 +428,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-/usr/include/*
+%{_includedir}/*
 %{_libdir}/*.a
 %{_mandir}/man3/*
 
