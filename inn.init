@@ -36,6 +36,7 @@ case "$1" in
 			su news -c "umask 002 ; /usr/bin/setsid /usr/bin/innwatch &" </dev/null >&0 2>&0
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
+			ps -C innwatch >/dev/null 2>&1 || usleep 500000
 			if ps -C innwatch >/dev/null 2>&1; then
 				deltext;ok
 			else

@@ -1,0 +1,11 @@
+--- inn-2.3.3/configure.in.orig	Thu May  9 22:30:20 2002
++++ inn-2.3.3/configure.in	Thu May  9 22:31:32 2002
+@@ -1297,7 +1297,7 @@
+    INN_TYPE_FPOS_T_LARGE
+ fi
+ 
+-MISSING_OBJ="$LIBOBJS"
++MISSING_OBJ="$LIB@&t@OBJS"
+ MISSING_SRC=`echo "$MISSING_OBJ" | sed 's/\.o/.c/g'`
+ 
+ if test "$ac_cv_func_strcasecmp" = no ; then

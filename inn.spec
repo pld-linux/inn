@@ -7,8 +7,8 @@ Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.3.2
-Release:	10
+Version:	2.3.3
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -33,6 +33,7 @@ Patch4:		%{name}-setreuid.patch
 Patch5:		%{name}-sec.patch
 Patch6:		%{name}-frsize.patch
 Patch7:		%{name}-ac25x.patch
+Patch8:		%{name}-ac253.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	libtool
@@ -49,12 +50,12 @@ Requires:	util-linux
 Requires:	procps
 Requires:	textutils
 Requires:	awk
-Prereq:		/sbin/chkconfig
-Prereq:		/sbin/ldconfig
-Prereq:		rc-scripts
-Prereq:		sed
-Prereq:		fileutils
-Prereq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+Requires(post):	sed
+Requires(post):	fileutils
+Requires(post):	/usr/sbin/usermod
 Provides:	nntpserver
 Obsoletes:	leafnode
 Obsoletes:	leafnode+
@@ -242,6 +243,7 @@ sunucuya makaleyi yollar.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -284,7 +286,8 @@ install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
 	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
-	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
+	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs} \
+	$RPM_BUILD_ROOT/home/services/news
 
 %{__make} install \
 	DESTDIR="$RPM_BUILD_ROOT" \
@@ -339,6 +342,9 @@ gzip -9nf CONTRIBUTORS INSTALL HISTORY README* ChangeLog LICENSE NEWS
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if [ "`su - news -s /bin/sh -c pwd 2>/dev/null`" = "/var/spool/news" ]; then
+	/usr/sbin/usermod -d /home/services/news news
+fi
 if [ -f /var/lib/news/history ]; then
 	cd /var/lib/news
 	%{_bindir}/makedbz -s `wc -l <history` -f history
@@ -427,8 +433,8 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del inn
 fi
 
-%post libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
