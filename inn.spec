@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2
-Release: 	1d
+Release: 	3
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -19,6 +19,7 @@ Source6:	news.init
 Patch0: 	inn-all.patch
 Url: 		http://www.isc.org/inn.html
 Requires: 	cleanfeed
+%requires_pkg	perl
 Buildroot: 	/tmp/%{name}-%{version}-root
 Prereq: 	/sbin/chkconfig
 
@@ -41,6 +42,8 @@ Summary(pl):	INN-biblioteka i pliki nag³ówkowe dla inn-a
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
 Group(pl):	Programowanie/Biblioteki
+Requires:	%{name} = %{version}
+
 
 %description devel
 This library is needed by several programs that interface to INN, such as
@@ -436,11 +439,25 @@ fi
 /usr/man/man3/*
 
 %files -n inews
-/usr/bin/inews
+%defattr(644,root,root,755)
+
+%attr(755,root,root) /usr/bin/inews
 %attr(4555,news,news) %config /usr/lib/news/bin/inews
-%attr(644,root,root) /usr/man/man1/inews.1.gz
+/usr/man/man1/inews.1.gz
 
 %changelog
+* Thu Apr 15 1999 Piotr Czerwiñski <pius@pld.org.pl>
+  [2.2-3]
+- fixed Group(pl),
+- changed Buildroot to /tmp/%{name}-%{version}-root,
+- removed man group from man pages,
+- removed INSTALL and COPYRIGHT from %doc (copyright statment is in the
+  Copyright field),
+- added full %defattr description in %files,
+- added Requires: %%{name} = %%{version} to devel subpackage,
+- added some %requires_pkg macros,
+- cosmetic changes for common l&f.
+
 * Fri Jan 29 1999 Maciej Paliwoda <maciejp@uci.agh.edu.p>
   [2.2-1d]
 - special thanks for Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
