@@ -376,7 +376,7 @@ fi
 %attr(640,root,root) /etc/logrotate.d/inn
 %attr(770,root,news) %dir /var/log/news
 %attr(770,root,news) %dir /var/log/archiv/news
-%attr(770,root,news) %dir /var/run/news
+%attr(770,news,news) %dir /var/run/news
 %attr(664,news,news) %ghost /var/log/news/news.notice
 %attr(660,news,news) %ghost /var/log/news/news.crit
 %attr(660,news,news) %ghost /var/log/news/news.err
