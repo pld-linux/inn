@@ -3,13 +3,13 @@ Summary(de):	das InterNet News System (News-Server)
 Summary(fr):	INN, le système InterNet News (serveur de news)
 Summary(pl):	INN, serwer nowinek 
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
-Name: 		inn
+Name:		inn
 Version:	2.2.2
-Release: 	8
+Release:	8
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
-Source:		ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -23,12 +23,12 @@ Source10:	%{name}.logrotate
 Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/inn-2.2.1-v6-19991121.diff.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		inn-install.patch
-URL: 		http://www.isc.org/inn.html
-Prereq: 	/sbin/chkconfig
+URL:		http://www.isc.org/inn.html
+Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
-Requires: 	cleanfeed
+Requires:	cleanfeed
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
 Provides:	nntpserver
@@ -38,9 +38,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	/etc/news
 
 %description
-INN is a news server, which can be set up to handle USENET news, as well
-as private "newsfeeds".  There is a *LOT* of information about setting
-up INN in /usr/share/doc -- read it.
+INN is a news server, which can be set up to handle USENET news, as
+well as private "newsfeeds". There is a *LOT* of information about
+setting up INN in /usr/share/doc -- read it.
 
 %description -l pl
 INN jest serwerem news, który mo¿na skonfigurowaæ do obs³ugi USENET-u,
@@ -55,33 +55,35 @@ Summary(fr):	Bibliothèque INN
 Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty do inn-a
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
 %description devel
-This library is needed by several programs that interface to INN, such as
-newsgate or tin.
+This library is needed by several programs that interface to INN, such
+as newsgate or tin.
 
 %description -l de devel
 Diese Library wird von mehreren Programmen benötigt, die mit INN
 kommunizieren, etwa newsgate oder tin.
 
 %description -l fr devel
-Cette bibliothèque est nécessaire à plusieurs programmes qui s'interfacent
-avec INN, comme newsgate ou tin.
+Cette bibliothèque est nécessaire à plusieurs programmes qui
+s'interfacent avec INN, comme newsgate ou tin.
 
 %description -l pl devel
-Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z INN-em,
-takich jak newsgate czy tin.
+Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z
+INN-em, takich jak newsgate czy tin.
 
 %description -l tr devel
-INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken bir
-kitaplýktýr.
+INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken
+bir kitaplýktýr.
 
 %package static
 Summary:	Static INN libraries
 Summary(pl):	Biblioteki statyczne do INN
 Group:		Development/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
 
@@ -101,31 +103,32 @@ Group:		Networking/News
 Group(pl):	Sieciowe/News
 
 %description -n inews
-The inews program is used by some news readers to post news.
-It does some consistency checking and header reformatting,
-and forwards the article on to the news server specified in
-inn.conf.
+The inews program is used by some news readers to post news. It does
+some consistency checking and header reformatting, and forwards the
+article on to the news server specified in inn.conf.
 
 %description -l de -n inews
-Das Programm 'inews' wird von manchen Newsreadern zum Senden
-von Nachrichten verwendet. Es führt eine Konsistenzprüfung und Header-Neuf
-ormatierung aus und leitet die Nachricht an den in 'inn.conf' 
-angegebenen News-Server weiter. 
+Das Programm 'inews' wird von manchen Newsreadern zum Senden von
+Nachrichten verwendet. Es führt eine Konsistenzprüfung und Header-Neuf
+ormatierung aus und leitet die Nachricht an den in 'inn.conf'
+angegebenen News-Server weiter.
 
 %description -l fr -n inews
 Le programme inews est utilisé par certains lecteurs de news pour
 poster les articles. Il effectue des vérifications et un reformatage
-des en-têtes et fait suivre l'article au serveur de news spécifié dans inn.conf.
+des en-têtes et fait suivre l'article au serveur de news spécifié dans
+inn.conf.
 
 %description -l pl -n inews
 Inews jest u¿ywany przez niektóre czytniki news do wysy³ania
-artyku³ów. Sprawdza budowê artyku³u, przepisuje nag³ówek i wysy³a
-do serwera news wyszczególnionego w inn.conf.
+artyku³ów. Sprawdza budowê artyku³u, przepisuje nag³ówek i wysy³a do
+serwera news wyszczególnionego w inn.conf.
 
 %description -l tr -n inews
-inews programý bazý haber okuyucular tarafýndan haber yollamak amacýyla
-kullanýlýr.  Program bazý güvenlik denetimleri ve baþlýk biçimlendirmesi
-yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
+inews programý bazý haber okuyucular tarafýndan haber yollamak
+amacýyla kullanýlýr. Program bazý güvenlik denetimleri ve baþlýk
+biçimlendirmesi yaparak ve inn.conf dosyasýnda belirtilen haber
+sunucuya makaleyi yollar.
 
 %prep
 %setup -q
@@ -167,7 +170,7 @@ make all PATHFILTER=%{_datadir}/news/filter \
 	RNEWSPROGS=%{_bindir}
 
 %install 
-rm -fr $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn}
 install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
@@ -524,7 +527,8 @@ fi
 %{_mandir}/man3/*
 
 %files static
-%attr(644,root,root) %{_libdir}/lib*.a
+%defattr(644,root,root,755)
+%{_libdir}/lib*.a
 
 %files -n inews
 %defattr(644,root,root,755)
