@@ -44,8 +44,12 @@ case "$1" in
   stop)
 	if [ -f /var/run/news/innd.pid ]; then
 	    show Stopping INN service
-	    killproc innd
-	    rm -f /var/run/news/innd.pid
+	    busy
+	    if ctlinnd shutdown "Stopping INN service"; then
+		deltext;ok
+	    else
+		deltext;died
+	    fi
 	fi
 
 	if [ -f /var/run/news/innwatch.pid ]; then
