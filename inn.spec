@@ -6,7 +6,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	12
+Release:	13
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -31,7 +31,6 @@ Patch4:		%{name}-setreuid.patch
 Patch5:		%{name}-sec.patch
 Patch6:		%{name}-gcc.patch
 Patch7:		%{name}-frsize.patch
-Patch8:		%{name}-rpm-perl-workaround.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -53,6 +52,11 @@ Provides:	nntpserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
+
+# /usr/bin/pullnews doesn't provide perl(Net::NNTP) - perl-libnet does.
+%define		_noautoprov	"perl(Net::NNTP)"
+# it's necessary only for sample nnrpd_auth.pl hook
+%define		_noautoreq	"perl(CDB_File)"
 
 %description
 INN is a news server, which can be set up to handle USENET news, as
@@ -194,7 +198,6 @@ sunucuya makaleyi yollar.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 %build
 touch innfeed/*.[ly]
