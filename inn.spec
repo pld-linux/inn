@@ -8,6 +8,7 @@ Version:	2.2.3
 Release:	6
 Copyright:	distributable
 Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
@@ -20,7 +21,7 @@ Source7:	%{name}.crontab
 Source8:	%{name}.init
 Source9:	%{name}-cnfsstat.cron
 Source10:	%{name}.logrotate
-#Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
+#Patch0:	ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
 Patch0:		%{name}-2.2.3-v6-20000907.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
@@ -56,6 +57,7 @@ Summary(de):	INN-Library
 Summary(fr):	Bibliothèque INN
 Summary(pl):	Biblioteki do INN-a
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 
@@ -86,6 +88,7 @@ Summary(fr):	Bibliothèque INN
 Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty do inn-a
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-libs = %{version}
@@ -114,6 +117,7 @@ bir kitaplýktýr.
 Summary:	Static INN libraries
 Summary(pl):	Biblioteki statyczne do INN
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
@@ -131,6 +135,7 @@ Summary(fr):	Programme inews (utilisé par inn et trn pour poster)
 Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
 Summary(tr):	Haber biçimlendirme programý
 Group:		Networking/News
+Group(de):	Netzwerkwesen/News
 Group(pl):	Sieciowe/News
 
 %description -n inews
@@ -186,7 +191,7 @@ LDFLAGS="-s"; export LDFLAGS
         --with-lib-dir=%{_datadir}/news \
         --with-tmp-path=/var/spool/news/incoming/tmp \
         --with-perl \
-        --with-sendmail=/usr/lib/sendmail \
+        --with-sendmail=%{_libdir}/sendmail \
         --enable-tagged-hash \
         --enable-merge-to-groups \
         --enable-pgp-verify \
@@ -226,8 +231,8 @@ install %{SOURCE8} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE9} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 install %{SOURCE10} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 
-mv $RPM_BUILD_ROOT%{_bindir}/c7unbatch.sh $RPM_BUILD_ROOT%{_bindir}/c7unbatch
-mv $RPM_BUILD_ROOT%{_bindir}/gunbatch.sh $RPM_BUILD_ROOT%{_bindir}/gunbatch
+mv -f $RPM_BUILD_ROOT%{_bindir}/c7unbatch.sh $RPM_BUILD_ROOT%{_bindir}/c7unbatch
+mv -f $RPM_BUILD_ROOT%{_bindir}/gunbatch.sh $RPM_BUILD_ROOT%{_bindir}/gunbatch
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
@@ -246,7 +251,7 @@ install include/dbz.h		$RPM_BUILD_ROOT%{_includedir}/inn
 install include/libinn.h	$RPM_BUILD_ROOT%{_includedir}/inn
 install include/storage.h	$RPM_BUILD_ROOT%{_includedir}/inn
 
-mv $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
+mv -f $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
 
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
@@ -315,7 +320,7 @@ fi
 if [ -f /etc/syslog.conf ]; then
   if ! grep -q INN /etc/syslog.conf; then
     sed 's/mail.none;/mail.none;news.none;/' < /etc/syslog.conf > /etc/syslog.conf.inn
-    mv /etc/syslog.conf.inn /etc/syslog.conf
+    mv -f /etc/syslog.conf.inn /etc/syslog.conf
     echo ''										>> /etc/syslog.conf
     echo '#'										>> /etc/syslog.conf
     echo '# INN'									>> /etc/syslog.conf
