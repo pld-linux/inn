@@ -589,7 +589,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/inn/*
+%{_includedir}/inn
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
 %{_mandir}/man3/*
