@@ -11,7 +11,7 @@ Version:	2.3.3
 Release:	2
 License:	distributable
 Group:		Networking/Daemons
-Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.isc.org/isc/inn/OLD/2.3/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
