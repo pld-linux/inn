@@ -1,0 +1,27 @@
+diff -dur inn-2.4.1.orig/storage/timecaf/caf.c inn-2.4.1/storage/timecaf/caf.c
+--- inn-2.4.1.orig/storage/timecaf/caf.c	2004-01-07 23:47:19.000000000 +0100
++++ inn-2.4.1/storage/timecaf/caf.c	2004-02-06 12:01:10.927721888 +0100
+@@ -550,6 +550,7 @@
+     CAFHEADER head;
+     int fd;
+     CAFTOCENT tocent;
++    struct stat st;
+ 
+     if ( (fd = open(path, O_RDONLY)) < 0) {
+ 	/* 
+@@ -595,6 +596,14 @@
+ 	return -1;
+     }
+ 
++    fstat(fd,&st);
++    if ((long)tocent.Size>((long)st.st_size-(long)tocent.Offset)) {
++	fprintf(stderr,"Oversized article detected! broken spool?\n");
++	CAFError(CAF_ERR_IO);
++	close(fd);
++	return -1;
++    }
++
+     *len = tocent.Size;
+     return fd;
+ }
+Only in inn-2.4.1/storage/timecaf: caf.c~
