@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2.2
-Release: 	5
+Release: 	6
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -307,7 +307,7 @@ fi
 if [ -f /var/lock/subsys/inn ]; then
 	/etc/rc.d/init.d/inn restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/xfs start\" to start inn news server." >&2
+	echo "Run \"/etc/rc.d/init.d/inn start\" to start inn news server." >&2
 fi
 
 %preun
