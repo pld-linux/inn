@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.2
-Release:	7
+Release:	8
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -46,6 +46,9 @@ Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
 Requires:	psmisc >= 20.1
 Requires:	util-linux
+Requires:	procps
+Requires:	textutils
+Requires:	awk
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
 Prereq:		rc-scripts
