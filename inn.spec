@@ -300,6 +300,7 @@ fi
 %attr(770,news,news) %dir /var/spool/news/archive
 %attr(770,news,news) %dir /var/spool/news/overview
 %attr(770,news,news) %dir /var/spool/news/uniover
+%attr(770,news,news) %dir /var/spool/news/articles
 
 # CRON PARTS
 %attr(750,root,root) %config %verify(not size mtime md5) /etc/cron.d/*
