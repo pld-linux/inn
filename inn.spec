@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_with	largefiles	# enable largefiles (disables tagged hash)
+#
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
 Summary(de):	das InterNet News System (News-Server)
@@ -7,12 +11,12 @@ Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.4.1
-Release:	2
+Version:	2.4.2
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	bec635b6e70188071fdb539cd374f2ba
+# Source0-md5:	4942a275c70e0256dad6f1857be6d62e
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -29,11 +33,8 @@ Patch3:		%{name}-ac25x.patch
 Patch4:		%{name}-ac253.patch
 Patch5:		%{name}-setgid.patch
 Patch6:		%{name}-db4.patch
-Patch7:		%{name}-timecaf_oversized_art.patch
-Patch8:		%{name}-lib_install_modes.patch
-Patch9:		%{name}-kill_warnings.patch
-Patch10:	%{name}-64bit_pointers.patch
-Patch11:	%{name}-config.patch
+Patch7:		%{name}-lib_install_modes.patch
+Patch8:		%{name}-config.patch
 URL:		http://www.isc.org/sw/inn/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -251,9 +252,6 @@ sunucuya makaleyi yollar.
 %patch6
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
 
 touch innfeed/*.[ly]
 
@@ -279,8 +277,8 @@ touch innfeed/*.[ly]
 	--with-sendmail=/usr/lib/sendmail \
 	--with-openssl=%{_prefix} \
 	--with-berkeleydb=%{_prefix} \
-	%{?_with_largefiles:--enable-largefiles} \
-	%{!?_with_largefiles:--enable-tagged-hash} \
+	%{?with_largefiles:--enable-largefiles} \
+	%{!?with_largefiles:--enable-tagged-hash} \
 	--enable-merge-to-groups \
 	--enable-pgp-verify \
 	--enable-shared \
