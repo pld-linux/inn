@@ -1,7 +1,8 @@
 #!/bin/sh
 
 . /usr/share/news/innshellvars
+. /etc/rc.d/init.d/functions
 
-if `echo $DOCNFSSTAT | grep -q -e "^[tTyY].*"`; then
+if is_yes $DOCNFSSTAT ; then
     /usr/bin/cnfsstat -s
 fi
