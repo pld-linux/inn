@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.3
-Release:	1
+Release:	2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -34,12 +34,13 @@ Patch5:		%{name}-sec.patch
 Patch6:		%{name}-frsize.patch
 Patch7:		%{name}-ac25x.patch
 Patch8:		%{name}-ac253.patch
+Patch9:		%{name}-db4.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	libtool
 BuildRequires:	flex
 BuildRequires:	bison
-BuildRequires:	db3-devel
+BuildRequires:	db-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl-devel >= 5.6.1
 Requires:	cleanfeed >= 0.95.7b-4
@@ -131,7 +132,7 @@ Summary(pt_BR):	Biblioteca INN
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}
-Requires:	db3-devel
+Requires:	db-devel
 
 %description devel
 Header files and developer documentations for INN libraries.
@@ -244,6 +245,7 @@ sunucuya makaleyi yollar.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %build
 touch innfeed/*.[ly]
