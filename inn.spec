@@ -17,7 +17,6 @@ Source4:	%{name}-etc-nnrp.access
 Source5:	%{name}.crontab
 Source6:	%{name}.initd
 Source7:	%{name}-cron
-Source8:	ftp://ftp.exit109.com/users/jeremy/cleanfeed-latest.tar.gz
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-makefile.patch
 URL: 		http://www.isc.org/inn.html
