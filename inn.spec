@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.2
-Release:	9
+Release:	10
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -56,6 +56,8 @@ Prereq:		sed
 Prereq:		fileutils
 Prereq:		%{name}-libs = %{version}
 Provides:	nntpserver
+Obsoletes:	leafnode
+Obsoletes:	leafnode+
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
