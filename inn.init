@@ -1,0 +1,61 @@
+#! /bin/sh
+#
+# innd		InterNet News System
+#
+# chkconfig: 345 95 05
+# description: inn is the most popular server for Usenet news. It allows \
+#              you to setup local news servers. It can be difficult to \
+#              set up properly though, so be sure to read /usr/doc/inn* \
+#              before trying.
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Daemon specific
+. /usr/share/news/innshellvars
+
+# Check that networking is up.
+[ "${NETWORKING}" = "no" ] && exit 0
+
+# See how we were called.
+case "$1" in
+  start)
+	if [ ! -f /var/lock/subsys/crond ]; then
+	    if [ ! -f ${SERVERPID} ] ; then
+		show Starting INN service
+		daemon ${INNDSTART} ${INNFLAGS}
+	    else
+		show Starting INN service
+		daemon ${INNDSTART} -r ${INNFLAGS}
+	    fi
+	else
+    	    echo 'INND is running'
+	fi
+	touch /var/lock/subsys/inn
+	;;
+  stop)
+	show Stopping INND service
+	killproc innd
+	rm -f /var/lock/subsys/inn
+	;;
+  status)
+	status innd
+	;;
+  reload)
+        show Reloading INND service
+	killproc innd -HUP
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|status|restart}"
+	exit 1
+	;;
+esac
+
+exit 0

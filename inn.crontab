@@ -1,0 +1,6 @@
+MAILTO=""
+
+01 * * * *	news	/usr/bin/nntpsend
+02 1 * * * 	news	/usr/bin/news.daily delayrm
+03/1 * * * *	news	/usr/bin/news.cron
+02 1 * * * 	root	/usr/bin/rnews -U
