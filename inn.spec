@@ -31,6 +31,7 @@ Prereq:		fileutils
 Requires: 	cleanfeed
 Requires:	rc-scripts
 Requires:	/etc/cron.d
+Requires:	/etc/rc.d/init.d/functions
 BuildRequires:	perl
 BuildRoot:	/tmp/%{name}-%{version}-root
 
