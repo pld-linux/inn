@@ -18,71 +18,94 @@
 . /usr/share/news/innshellvars
 
 # Check that networking is up.
-[ "${NETWORKING}" = "no" ] && exit 0
+if is_no "${NETWORKING}"; then
+    msg_Network_Down INN
+    exit 1
+fi
+			
 
 # See how we were called.
 case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
-	    show Starting INN service
+	    msg_starting "INN"
 	    daemon inndstart
-	    if `echo $DOINNWATCH | grep -q -e "[tTyY].*"`; then
-		show Starting INN Watch service
+	    if is_yes $DOINNWATCH ; then
+		msg_starting "INN Watch"
 		busy
 		su - news -c "/usr/bin/innwatch &"
-		if ps ax | grep -v grep | grep -q innwatch; then
+		if ps -C innwatch >/dev/null 2>&1; then
 		    deltext;ok
 		else
 		    deltext;fail
 		fi
     	    fi
+	    touch /var/lock/subsys/inn
 	else
-    	    echo 'INND is running'
+    	    msg_Already_Running "INN"
+	    exit 1
 	fi
 	touch /var/lock/subsys/inn
 	;;
   stop)
-	if [ -f /var/run/news/innd.pid ]; then
-	    show Stopping INN service
-	    busy
-	    if ctlinnd shutdown "Stopping INN service"; then
-		deltext;ok
-	    else
-		deltext;died
+	if [ -f /var/lock/subsys/inn ]; then
+
+	    if [ -f /var/run/news/innd.pid ]; then
+		msg_stopping "INN"
+		busy
+		if ctlinnd shutdown "Stopping INN service";then
+		    deltext;ok
+		else
+		    deltext;fail
+		fi
 	    fi
-	fi
 
-	if [ -f /var/run/news/innwatch.pid ]; then
-	    show Stopping INN Watch service
-	    busy
-	    if killall -9 innwatch; then
-		deltext;ok
-	    else
-		deltext;died
+	    if [ -f /var/run/news/innwatch.pid ]; then
+		msg_stopping "INN Watch"
+		busy
+        	if killall -9 innwatch; then
+            	    deltext;ok
+        	else
+            	    deltext;died
+        	fi
+		rm -f /var/run/news/innwatch.pid /var/run/news/LOCK.innwatch >/dev/null 2>&1
 	    fi
-	    rm -f /var/run/news/innwatch.pid /var/run/news/LOCK.innwatch
+
+	    if [ -f /var/run/news/infeed.pid ]; then
+		msg_stopping "INN Feed"
+		killproc innfeed -9
+		rm -f /var/run/news/innfeed.pid >/dev/null 2>&1
+	    fi
+
+	    if [ -f /var/run/news/actived.pid ]; then
+		msg_stopping "INN Actived"
+		killproc actived -9
+		rm -f /var/run/news/actived.pid >/dev/null 2>&1
+	    fi
+
+	else
+	    msg_Already_Running INN
+	    exit 1
 	fi
 
-	if [ -f /var/run/news/infeed.pid ]; then
-	    show Stopping INN Feed service
-	    killproc innfeed -9
-	    rm -f /var/run/news/innfeed.pid
-	fi
-
-	if [ -f /var/run/news/actived.pid ]; then
-	    show Stopping INN Actived service
-	    killproc actived -9
-	    rm -f /var/run/news/actived.pid
-	fi
-
-	rm -f /var/lock/subsys/inn
+	rm -f /var/lock/subsys/inn  >/dev/null 2>&1
 	;;
   status)
 	status innd
 	;;
   reload)
-        show Reloading INND service
-	killproc innd -HUP
+	if [ -f /var/lock/subsys/inn ]; then
+    	    msg_reload "INN"
+	    busy
+	    if ctlinnd reload all "Reloading";then
+		deltext;ok
+	    else
+		deltext;fail
+	    fi
+        else
+	    msg_Not_Running INN
+	    exit 1
+	fi
 	;;
   restart)
 	$0 stop
@@ -90,7 +113,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-	echo "Usage: $0 {start|stop|status|restart}"
+	msg_Usage "$0 {start|stop|status|restart|reload}"
 	exit 1
 	;;
 esac

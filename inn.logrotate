@@ -1,6 +1,25 @@
 /var/log/news/news.* {
 	olddir /var/log/archiv/news
+	create 640 news news
 	postrotate
-		/usr/bin/killall -HUP innd
-	endrotate
+    	        /usr/bin/killall -HUP syslogd
+	endscript
+}
+
+/var/log/news/news {
+	prerotate
+		ctlinnd -s pause "Flushing log and syslog files"
+	endscript
+	postrotate
+		ctlinnd -s go "Flushing log and syslog files"
+	endscript
+}
+
+/var/log/news/*log {
+	prerotate
+		ctlinnd -s pause "Flushing log and syslog files"
+	endscript
+	postrotate
+		ctlinnd -s go "Flushing log and syslog files"
+	endscript
 }
