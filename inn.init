@@ -29,7 +29,7 @@ case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
 		msg_starting "INN"
-		daemon inndstart
+		daemon su - news -c inndstart
 		if is_yes $DOINNWATCH ; then
 			msg_starting "INN Watch"
 			busy
