@@ -4,8 +4,8 @@ Summary(fr):	INN, le système InterNet News (serveur de news)
 Summary(pl):	INN, serwer nowinek 
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.2.2
-Release:	8
+Version:	2.2.3
+Release:	1
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -532,5 +532,5 @@ fi
 
 %files -n inews
 %defattr(644,root,root,755)
-%attr(2755,root,news) %{_bindir}/inews
+%attr(755,root,news) %{_bindir}/inews
 %{_mandir}/man1/inews.1*
