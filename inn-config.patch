@@ -1,3 +1,14 @@
+diff -Nur old/samples/buffindexed.conf new/samples/buffindexed.conf
+--- old/samples/buffindexed.conf	2004-01-07 22:47:19.000000000 +0000
++++ new/samples/buffindexed.conf	2004-08-07 18:36:53.000000000 +0000
+@@ -7,5 +7,5 @@
+ # index(0-65535) : path to buffer file : 
+ #       length of buffer in kilobytes in decimal (1KB = 1024 bytes)
+ 
+-0:/var/news/spool/overview/OV1:1536000
+-1:/var/news/spool/overview/OV2:1536000
++0:/var/spool/news/overview/OV1:1536000
++1:/var/spool/news/overview/OV2:1536000
 diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
 --- old/samples/cycbuff.conf	2004-01-07 22:47:19.000000000 +0000
 +++ new/samples/cycbuff.conf	2004-08-06 12:33:41.000000000 +0000
