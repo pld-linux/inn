@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	2
+Release:	3
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -20,7 +20,9 @@ Source6:	%{name}.crontab
 Source7:	%{name}.init
 Source8:	%{name}-cnfsstat.cron
 Source9:	%{name}.logrotate
-Patch0:		ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/inn-2.3.0-v6-20001011.diff.gz
+Source10:	%{name}-etc-readers.conf
+#Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/inn-2.3.0-v6-20001011.diff.gz
+Patch0:		inn-2.3.1-v6-20010123.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
@@ -237,6 +239,7 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE7} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE8} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/logrotate.d/inn
+install %{SOURCE10} $RPM_BUILD_ROOT/%{_sysconfdir}/readers.conf
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
