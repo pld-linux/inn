@@ -4,8 +4,8 @@ Summary(fr):	INN, le système InterNet News (serveur de news)
 Summary(pl):	INN, serwer nowinek 
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.2.3
-Release:	10
+Version:	2.3.1
+Release:	1
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -16,23 +16,21 @@ Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
 Source4:	%{name}-etc-%{name}.conf
 Source5:	%{name}-etc-newsfeeds
-Source6:	%{name}-etc-nnrp.access
-Source7:	%{name}.crontab
-Source8:	%{name}.init
-Source9:	%{name}-cnfsstat.cron
-Source10:	%{name}.logrotate
-#Patch0:	ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
-Patch0:		%{name}-2.2.3-v6-20000915.patch.gz
+Source6:	%{name}.crontab
+Source7:	%{name}.init
+Source8:	%{name}-cnfsstat.cron
+Source9:	%{name}.logrotate
+Patch0:		ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/inn-2.3.0-v6-20001011.diff.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
-Patch3:		inn-innreport-patch
+Patch3:		%{name}-db3.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
 Prereq:		%{name}-libs = %{version}
-Requires:	cleanfeed
+Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
 Provides:	nntpserver
@@ -194,7 +192,10 @@ libtoolize --copy --force
         --with-tmp-path=/var/spool/news/incoming/tmp \
         --with-perl \
         --with-sendmail=%{_libdir}/sendmail \
-        --enable-tagged-hash \
+	--with-openssl=%{_prefix} \
+	--with-berkeleydb=%{_prefix} \
+	%{?bcond_on_largefiles:--with-largefiles} \
+        %{!?bcond_on_largefiles:--enable-tagged-hash} \
         --enable-merge-to-groups \
         --enable-pgp-verify \
 	--enable-shared \
@@ -204,14 +205,13 @@ libtoolize --copy --force
 	--enable-dual-socket
 
 %{__make} all PATHFILTER=%{_datadir}/news/filter \
-	PATHCONTROL=%{_datadir}/news/control \
-	RNEWSPROGS=%{_bindir}
+	PATHCONTROL=%{_datadir}/news/control
 
 %install 
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn} \
-	$RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
+	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}/inn} \
+	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
 	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
@@ -220,21 +220,21 @@ install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	DESTDIR="$RPM_BUILD_ROOT" \
 	PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
-	RNEWSPROGS=%{_bindir}
+	PATHRNEWS=%{_libdir}/news/rnews \
+	PATHAUTHPASSWD=%{_libdir}/news/auth/passwd \
+	PATHAUTHRESOLV=%{_libdir}/news/auth/resolv
+
+install samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
 
 install %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
 install %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
 install %{SOURCE3} $RPM_BUILD_ROOT/var/lib/news/newsgroups
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/inn.conf
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/newsfeeds
-install %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/nnrp.access
-install %{SOURCE7} $RPM_BUILD_ROOT/etc/cron.d/inn
-install %{SOURCE8} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
-install %{SOURCE9} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
-install %{SOURCE10} $RPM_BUILD_ROOT/etc/logrotate.d/inn
-
-mv -f $RPM_BUILD_ROOT%{_bindir}/c7unbatch.sh $RPM_BUILD_ROOT%{_bindir}/c7unbatch
-mv -f $RPM_BUILD_ROOT%{_bindir}/gunbatch.sh $RPM_BUILD_ROOT%{_bindir}/gunbatch
+install %{SOURCE6} $RPM_BUILD_ROOT/etc/cron.d/inn
+install %{SOURCE7} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
+install %{SOURCE8} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
+install %{SOURCE9} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
@@ -247,11 +247,9 @@ touch $RPM_BUILD_ROOT/var/log/news/news.notice
 touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
 
-install include/clibrary.h	$RPM_BUILD_ROOT%{_includedir}/inn
-install include/configdata.h	$RPM_BUILD_ROOT%{_includedir}/inn
-install include/dbz.h		$RPM_BUILD_ROOT%{_includedir}/inn
-install include/libinn.h	$RPM_BUILD_ROOT%{_includedir}/inn
-install include/storage.h	$RPM_BUILD_ROOT%{_includedir}/inn
+touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h	
+install include/{clibrary,dbz,libinn,nntp,ov,qio,ppport,rwlock,storage}.h \
+	$RPM_BUILD_ROOT%{_includedir}/inn
 
 mv -f $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
 
@@ -262,8 +260,7 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
-gzip -9nf CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
-	INSTALL ChangeLog COPYRIGHT
+gzip -9nf CONTRIBUTORS INSTALL HISTORY README* ChangeLog LICENSE NEWS
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -361,8 +358,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc {CONTRIBUTORS,HISTORY,README,README.perl_hook,README.tcl_hook}.gz
-%doc {INSTALL,ChangeLog,COPYRIGHT}.gz
+%doc {CONTRIBUTORS,INSTALL,HISTORY,README*,ChangeLog,LICENSE,NEWS}.gz
 
 # DB
 %attr(770,root,news) %dir /var/lib/news
@@ -373,6 +369,7 @@ fi
 %attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/subscriptions
 %attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active.times
 %attr(664,news,news) %ghost /var/lib/news/.news.daily
+%attr(664,news,news) %ghost /var/lib/news/history
 
 # LOGS
 %attr(640,root,root) /etc/logrotate.d/inn
@@ -385,16 +382,16 @@ fi
 
 # SPOOL
 %attr(771,root,news) %dir /var/spool/news
+%attr(770,root,news) %dir /var/spool/news/archive
+%attr(770,root,news) %dir /var/spool/news/articles
 %attr(770,root,news) %dir /var/spool/news/cycbuffs
-%attr(770,root,news) %dir /var/spool/news/innfeed
 %attr(770,root,news) %dir /var/spool/news/incoming
 %attr(770,root,news) %dir /var/spool/news/incoming/bad
 %attr(770,root,news) %dir /var/spool/news/incoming/tmp
+%attr(770,root,news) %dir /var/spool/news/innfeed
 %attr(770,root,news) %dir /var/spool/news/outgoing
-%attr(770,root,news) %dir /var/spool/news/archive
 %attr(770,root,news) %dir /var/spool/news/overview
 %attr(770,root,news) %dir /var/spool/news/uniover
-%attr(770,root,news) %dir /var/spool/news/articles
 
 # CRON PARTS
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/inn
@@ -406,6 +403,7 @@ fi
 %attr(755,root,news) %dir %{_sysconfdir}
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.cfg
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.ign
+%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/buffindexed.conf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/control.ctl
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/cycbuff.conf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
@@ -419,27 +417,31 @@ fi
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/motd.news
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/news2mail.cf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrp.access
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrpd.track
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nntpsend.ctl
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.ctl
+%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ovdb.conf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/passwd.nntp
+%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/radius.conf
+%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/readers.conf
+%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sasl.conf
 %attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/storage.conf
 
 %attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
 %attr(755,root,root) %dir %{_datadir}/news/filter
-%attr(755,root,root) %dir %{_datadir}/news/auth
 
+%attr(755,root,root) %{_datadir}/news/docheckgroups
 %config %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
 
+%config %verify(not size mtime md5) %{_datadir}/news/filter/INN.py
 %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
+%config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.py
 %config %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
 %config %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
 
@@ -461,45 +463,50 @@ fi
 %attr(755,root,root) %{_datadir}/news/control/version
 %attr(755,root,root) %{_datadir}/news/control/version.pl
 
+%attr(755,root,news) %dir %{_libdir}/news
+%attr(755,root,root) %dir %{_libdir}/news/auth
+%attr(755,root,root) %dir %{_libdir}/news/auth/generic
+%attr(755,root,root) %dir %{_libdir}/news/auth/passwd
+%attr(755,root,root) %dir %{_libdir}/news/auth/resolv
+%attr(755,root,root) %dir %{_libdir}/news/rnews
+
+%attr(755,root,root) %{_libdir}/news/auth/passwd/*
+%attr(755,root,root) %{_libdir}/news/auth/resolv/*
+%attr(755,root,root) %{_libdir}/news/rnews/*
+
 # SUID
 %attr(4754,root,news) %{_bindir}/startinnfeed
 %attr(4754,root,uucp) %{_bindir}/rnews
 
 # BINARIES
-%attr(755,root,root) %{_bindir}/actived
 %attr(755,root,root) %{_bindir}/actmerge
 %attr(755,root,root) %{_bindir}/actsync
 %attr(755,root,root) %{_bindir}/actsyncd
 %attr(755,root,root) %{_bindir}/archive
 %attr(755,root,root) %{_bindir}/batcher
 %attr(755,root,root) %{_bindir}/buffchan
-%attr(755,root,root) %{_bindir}/c7unbatch
+%attr(755,root,root) %{_bindir}/cnfsheadconf
 %attr(755,root,root) %{_bindir}/cnfsstat
 %attr(755,root,root) %{_bindir}/cnfsstat.cron
 %attr(755,root,root) %{_bindir}/controlbatch
 %attr(755,root,root) %{_bindir}/controlchan
 %attr(755,root,root) %{_bindir}/convdate
-%attr(755,root,root) %{_bindir}/crosspost
 %attr(755,root,root) %{_bindir}/ctlinnd
 %attr(755,root,root) %{_bindir}/cvtbatch
-%attr(755,root,root) %{_bindir}/decode
-%attr(755,root,root) %{_bindir}/encode
+%attr(755,root,root) %{_bindir}/dbprocs
 %attr(755,root,root) %{_bindir}/expire
-%attr(755,root,root) %{_bindir}/expireindex
 %attr(755,root,root) %{_bindir}/expireover
 %attr(755,root,root) %{_bindir}/expirerm
 %attr(755,root,root) %{_bindir}/fastrm
 %attr(755,root,root) %{_bindir}/filechan
 %attr(755,root,root) %{_bindir}/getlist
 %attr(755,root,root) %{_bindir}/grephistory
-%attr(755,root,root) %{_bindir}/gunbatch
 %attr(755,root,root) %{_bindir}/inncheck
 %attr(755,root,root) %{_bindir}/innconfval
 %attr(755,root,root) %{_bindir}/innd
 %attr(755,root,root) %{_bindir}/inndf
 %attr(755,root,root) %{_bindir}/inndstart
 %attr(755,root,root) %{_bindir}/innfeed
-%attr(755,root,root) %{_bindir}/innfeed-convcfg
 %attr(755,root,root) %{_bindir}/innmail
 %attr(755,root,root) %{_bindir}/innreport
 %attr(755,root,root) %{_bindir}/innstat
@@ -507,15 +514,16 @@ fi
 %attr(755,root,root) %{_bindir}/innxbatch
 %attr(755,root,root) %{_bindir}/innxmit
 %attr(755,root,root) %{_bindir}/mailpost
-%attr(755,root,root) %{_bindir}/makeactive
+%attr(755,root,root) %{_bindir}/makedbz
 %attr(755,root,root) %{_bindir}/makehistory
 %attr(755,root,root) %{_bindir}/mod-active
-%attr(755,root,root) %{_bindir}/news2mail
 %attr(755,root,root) %{_bindir}/news.daily
+%attr(755,root,root) %{_bindir}/news2mail
 %attr(755,root,root) %{_bindir}/newsrequeue
 %attr(755,root,root) %{_bindir}/nnrpd
 %attr(755,root,root) %{_bindir}/nntpget
 %attr(755,root,root) %{_bindir}/nntpsend
+%attr(755,root,root) %{_bindir}/ovdb_*
 %attr(755,root,root) %{_bindir}/overchan
 %attr(755,root,root) %{_bindir}/parsecontrol
 %attr(755,root,root) %{_bindir}/pgpverify
@@ -531,24 +539,25 @@ fi
 %attr(755,root,root) %{_bindir}/sendxbatches
 %attr(755,root,root) %{_bindir}/shlock
 %attr(755,root,root) %{_bindir}/shrinkfile
+%attr(755,root,root) %{_bindir}/signcontrol
 %attr(755,root,root) %{_bindir}/simpleftp
 %attr(755,root,root) %{_bindir}/sm
 %attr(755,root,root) %{_bindir}/tally.control
 %attr(755,root,root) %{_bindir}/writelog
 
 # MAN
+%{_mandir}/man1/ckpasswd.1*
 %{_mandir}/man1/convdate.1*
 %{_mandir}/man1/getlist.1*
 %{_mandir}/man1/grephistory.1*
 %{_mandir}/man1/innconfval.1*
 %{_mandir}/man1/innfeed.1*
-%{_mandir}/man1/installit.1*
 %{_mandir}/man1/nntpget.1*
 %{_mandir}/man1/rnews.1*
 %{_mandir}/man1/shlock.1*
 %{_mandir}/man1/shrinkfile.1*
+%{_mandir}/man1/simpleftp.1*
 %{_mandir}/man1/startinnfeed.1*
-%{_mandir}/man1/subst.1*
 %{_mandir}/man[58]/**
 
 %files libs
