@@ -340,17 +340,17 @@ fi
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/innwatch.ctl
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/motd.news
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/news2mail.cf
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/newsfeeds
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/nnrp.access
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/nnrpd.track
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/nntpsend.ctl
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/overview.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) /etc/news/overview.fmt
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/passwd.nntp
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/storage.conf
 
 %config %verify(not size mtime md5) /etc/news/moderators
 %config %verify(not size mtime md5) /etc/news/distrib.pats
+%config %verify(not size mtime md5) /etc/news/newsfeeds
+%config %verify(not size mtime md5) /etc/news/overview.fmt
 
 %config %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
 %config %verify(not size mtime md5) %{_datadir}/news/innshellvars
