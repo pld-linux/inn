@@ -98,7 +98,13 @@ case "$1" in
 			rm -f /var/run/news/actived.pid >/dev/null 2>&1
 		fi
 
+		if [ -f /var/run/news/ovdb_monitor.pid ]; then
+			msg_stopping "INN ovdb_monitor"
+			killproc ovdb_monitor -15
+		fi
+
 		rm -f /var/lock/subsys/inn >/dev/null 2>&1
+
 	else
 		msg_not_running INN
 	fi
