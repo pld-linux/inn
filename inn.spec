@@ -24,6 +24,7 @@ Patch0:		ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/inn-2.3.0-v6-20001011.diff.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
+Patch4:		%{name}-setreuid.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -173,6 +174,7 @@ sunucuya makaleyi yollar.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 %build
 touch innfeed/*.[ly]
 
