@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.2
-Release:	6
+Release:	7
 License:	distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -24,6 +24,8 @@ Source7:	%{name}.init
 Source8:	%{name}-cnfsstat.cron
 Source9:	%{name}.logrotate
 Source10:	%{name}-etc-readers.conf
+Source11:	getlist.1.pl
+Source12:	innd.8.pl
 #Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/%{name}-2.3.0-v6-20001011.diff.gz
 Patch0:		%{name}-ipv6.patch
 Patch1:		%{name}-PLD.patch
@@ -300,7 +302,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}/inn} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
-	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
+	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
@@ -324,6 +326,8 @@ install %{SOURCE7} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE8} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 install %{SOURCE9} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 install %{SOURCE10} $RPM_BUILD_ROOT/%{_sysconfdir}/readers.conf
+install %{SOURCE11} $RPM_BUILD_ROOT/%{_mandir}/pl/man1/getlist.1
+install %{SOURCE12} $RPM_BUILD_ROOT/%{_mandir}/pl/man8/innd.8
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
@@ -648,7 +652,9 @@ fi
 %{_mandir}/man1/shrinkfile.1*
 %{_mandir}/man1/simpleftp.1*
 %{_mandir}/man1/startinnfeed.1*
-%{_mandir}/man[58]/**
+%{_mandir}/man[58]/*
+%lang(pl) %{_mandir}/pl/man1/getlist.1*
+%lang(pl) %{_mandir}/pl/man8/innd.8*
 
 %files libs
 %defattr(644,root,root,755)
