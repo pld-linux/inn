@@ -352,7 +352,7 @@ if [ -f /var/lib/news/history ]; then
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
-	chown news.news history.*
+	chown news:news history.*
 	chmod 644 history.*
 else
 	cd /var/lib/news
@@ -362,35 +362,35 @@ else
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
-	chown news.news history history.*
+	chown news:news history history.*
 	chmod 644 history history.*
 fi
 [ -f /var/lib/news/active.times ] || {
 	touch /var/lib/news/active.times
-	chown news.news /var/lib/news/active.times
+	chown news:news /var/lib/news/active.times
 }
 
 [ -f /var/log/news/news.notice ] || {
 	touch /var/log/news/news.notice
-	chown news.news /var/log/news/news.notice
+	chown news:news /var/log/news/news.notice
 	chmod 664 /var/log/news/news.notice
 }
 
 [ -f /var/log/news/news.crit ] || {
 	touch /var/log/news/news.crit
-	chown news.news /var/log/news/news.crit
+	chown news:news /var/log/news/news.crit
 	chmod 660 /var/log/news/news.crit
 }
 
 [ -f /var/log/news/news.err ] || {
 	touch /var/log/news/news.err
-	chown news.news /var/log/news/news.err
+	chown news:news /var/log/news/news.err
 	chmod 660 /var/log/news/news.err
 }
 
 [ -f /var/lib/news/.news.daily ] || {
 	touch /var/lib/news/.news.daily
-	chown news.news /var/lib/news/.news.daily
+	chown news:news /var/lib/news/.news.daily
 	chmod 664 /var/lib/news/.news.daily
 }
 
