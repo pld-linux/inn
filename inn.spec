@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.1
-Release:	1
+Release:	2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -52,14 +52,15 @@ Requires(post):	sed >= 4.0
 Requires(post):	fileutils
 Requires(post):	textutils
 Requires(post):	/usr/sbin/usermod
-Requires:	cleanfeed >= 0.95.7b-4
-Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
-Requires:	psmisc >= 20.1
-Requires:	util-linux
-Requires:	procps
-Requires:	textutils
 Requires:	awk
+Requires:	cleanfeed >= 0.95.7b-4
+Requires:	perl(DynaLoader) = %(%{__perl} -MDynaLoader -e 'print DynaLoader->VERSION')
+Requires:	procps
+Requires:	psmisc >= 20.1
+Requires:	rc-scripts >= 0.2.0
+Requires:	textutils
+Requires:	util-linux
 Provides:	nntpserver
 Obsoletes:	leafnode
 Obsoletes:	leafnode+
