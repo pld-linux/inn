@@ -39,7 +39,7 @@ Patch10:	%{name}-64bit_pointers.patch
 #Patch11:	%{name}-setreuid.patch
 #Patch12:	%{name}-sec.patch
 #Patch13:	%{name}-frsize.patch
-URL:		http://www.isc.org/inn.html
+URL:		http://www.isc.org/sw/inn/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
