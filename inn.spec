@@ -33,6 +33,7 @@ Patch6:		%{name}-frsize.patch
 Patch7:		%{name}-ac25x.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
+BuildRequires:	libtool
 BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	db3-devel
@@ -82,8 +83,12 @@ Summary(fr):	BibliothХque INN
 Summary(pl):	Biblioteki do INN-a
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
 
 %description libs
 This library is needed by several programs that interface to INN, such
@@ -113,8 +118,12 @@ Summary(pl):	Pliki nagЁСwkowe i dokumentacja programisty do inn-a
 Summary(tr):	INN kitaplЩПЩ
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-libs = %{version}
 Requires:	db3-devel
 
@@ -141,8 +150,12 @@ Summary:	Static INN libraries
 Summary(pl):	Biblioteki statyczne do INN
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
