@@ -202,6 +202,7 @@ Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
 Summary(pt_BR):	Programa Inews (usado para postagem pelo inn e trn)
 Summary(tr):	Haber biçimlendirme programý
 Group:		Networking/News
+Requires:	%{name}-libs = %{version}
 
 %description -n inews
 The inews program is used by some news readers to post news. It does
