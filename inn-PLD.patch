@@ -1,0 +1,36 @@
+diff -Nur inn-2.2.1.orig/include/paths.h.in inn-2.2.1/include/paths.h.in
+--- inn-2.2.1.orig/include/paths.h.in	Tue Oct 13 14:18:45 1998
++++ inn-2.2.1/include/paths.h.in	Sat Oct 23 15:40:40 1999
+@@ -14,7 +14,7 @@
+ */
+ #define _PATH_NNRPD		"nnrpd"
+ #define _PATH_NNTPD		"nnrpd"
+-#define _PATH_AUTHDIR		"auth"
++#define _PATH_AUTHDIR		"/usr/share/news/auth"
+ #define _PATH_CTLINND		"ctlinnd"
+ #define _PATH_RNEWSPROGS	"rnews.libexec"
+ /* Prefix path is pathfilter */
+diff -Nur inn-2.2.1.orig/Makefile inn-2.2.1/Makefile
+--- inn-2.2.1.orig/Makefile	Wed Aug 25 17:25:55 1999
++++ inn-2.2.1/Makefile	Mon Nov  1 14:27:31 1999
+@@ -44,7 +44,7 @@
+ ##  Directories where files get put.
+ directories:
+ 	chmod +x ./makedirs.sh
+-	DESTDIR=$(DESTDIR) ./makedirs.sh;
++	DESTDIR=$(DESTDIR) ./makedirs.sh -p;
+ 
+ ##  Other generic targets.
+ depend tags ctags profiled:
+diff -Nur inn-2.2.1.orig/Makefile inn-2.2.1/Makefile
+--- inn-2.2.1.orig/Makefile	Wed Aug 25 17:25:55 1999
++++ inn-2.2.1/Makefile	Mon Oct 18 22:37:40 1999
+@@ -34,7 +34,7 @@
+ 	$(MAKE) $(FLAGS) WHAT_TO_MAKE=all DESTDIR=$(DESTDIR) common
+ 
+ ##  Install everything.
+-install:	directories
++install:
+ 	$(MAKE) $(FLAGS) WHAT_TO_MAKE=install DESTDIR=$(DESTDIR) common
+ 	@echo "" ; echo Do not forget to update your cron entries.
+ 	@echo Also run makehistory if you have to.
