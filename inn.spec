@@ -31,6 +31,7 @@ Prereq:		fileutils
 Requires: 	cleanfeed
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
+Provides:	nntpserver
 BuildRequires:	perl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
