@@ -247,7 +247,7 @@ sunucuya makaleyi yollar.
 touch innfeed/*.[ly]
 
 rm -f config.cache
-autoconf
+%{__autoconf}
 libtoolize --copy --force
 %configure \
         --with-news-user=news \
