@@ -20,7 +20,7 @@ Patch0: 	inn-all.patch
 Patch1:		inn-install.patch
 Url: 		http://www.isc.org/inn.html
 Requires: 	cleanfeed
-%requires_eq	perl
+Requires:	perl
 Buildroot: 	/tmp/%{name}-%{version}-root
 Prereq: 	/sbin/chkconfig
 
