@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.2
-Release:	8
+Release:	9
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -549,7 +549,7 @@ fi
 # SUID
 %attr(4754,root,news) %{_bindir}/inndstart
 %attr(4754,root,news) %{_bindir}/startinnfeed
-%attr(4754,root,uucp) %{_bindir}/rnews
+%attr(4754,root,news) %{_bindir}/rnews
 
 # BINARIES
 %attr(755,root,root) %{_bindir}/actmerge
