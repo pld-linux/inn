@@ -31,6 +31,9 @@ Requires:	rc-scripts
 Requires:	/etc/cron.d
 BuildRoot:	/tmp/%{name}-%{version}-root
 
+%define		_prefix		/usr
+%define		_sysconfdir	/etc/news
+
 %description
 INN is a news server, which can be set up to handle USENET news, as well
 as private "newsfeeds".  There is a *LOT* of information about setting
@@ -120,26 +123,25 @@ touch innfeed/*.[ly]
 rm -f config.cache
 autoconf
 libtoolize --copy --force
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
-./configure %{_target_platform} \
-        --prefix=/usr \
-	--sysconfdir=/etc/news \
+LDFLAGS="-s"; export LDFLAGS
+%configure \
         --with-news-user=news \
         --with-news-group=news \
         --with-news-master=news \
         --with-db-dir=/var/state/news \
-        --with-etc-dir=/etc/news \
+        --with-etc-dir=%{_sysconfdir} \
         --with-log-dir=/var/log/news \
         --with-run-dir=/var/run/news \
         --with-spool-dir=/var/spool/news \
-        --with-lib-dir=/usr/share/news \
+        --with-lib-dir=%{_datadir}/news \
         --with-tmp-path=/var/spool/news/incoming/tmp \
         --with-perl \
         --with-sendmail=%{_libdir}/sendmail \
         --enable-tagged-hash \
         --enable-merge-to-groups \
         --enable-pgp-verify \
-	--enable-shared
+	--enable-shared \
+	--enable-static
 
 make all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
@@ -156,7 +158,9 @@ install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
 install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/news/OLD}
 install -d $RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
-make DESTDIR="$RPM_BUILD_ROOT" install PATHFILTER=%{_datadir}/news/filter \
+make install \
+	DESTDIR="$RPM_BUILD_ROOT" \
+	PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
 	RNEWSPROGS=%{_bindir}
 
@@ -316,11 +320,11 @@ fi
 %attr(754,root,root) %config /etc/rc.d/init.d/inn
 
 # CONFIGS (INN is a one big config ;-)
-%attr(755,news,news) %dir /etc/news
-%attr(755,news,news) %dir %{_datadir}/news
-%attr(755,news,news) %dir %{_datadir}/news/control
-%attr(755,news,news) %dir %{_datadir}/news/filter
-%attr(755,news,news) %dir %{_datadir}/news/auth
+%attr(755,root,root) %dir /etc/news
+%attr(755,root,root) %dir %{_datadir}/news
+%attr(755,root,root) %dir %{_datadir}/news/control
+%attr(755,root,root) %dir %{_datadir}/news/filter
+%attr(755,root,root) %dir %{_datadir}/news/auth
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/actsync.cfg
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/actsync.ign
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/control.ctl
@@ -342,38 +346,38 @@ fi
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/passwd.nntp
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/storage.conf
 
-%attr(644,news,news) %config %verify(not size mtime md5) /etc/news/moderators
-%attr(644,news,news) %config %verify(not size mtime md5) /etc/news/distrib.pats
+%config %verify(not size mtime md5) /etc/news/moderators
+%config %verify(not size mtime md5) /etc/news/distrib.pats
 
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/innshellvars
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
+%config %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
+%config %verify(not size mtime md5) %{_datadir}/news/innshellvars
+%config %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
+%config %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
 
-#%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
-%attr(644,news,news) %config %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
+#%config %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
+%config %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
+%config %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
+%config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
+%config %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
+%config %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
 
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/checkgroups
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/checkgroups.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/default
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/ihave
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/ihave.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/newgroup
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/newgroup.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/rmgroup
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/rmgroup.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/sendme
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/sendme.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/sendsys
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/sendsys.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/senduuname
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/senduuname.pl
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/version
-%attr(755,news,news) %config %verify(not size mtime md5) %{_datadir}/news/control/version.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/checkgroups
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/checkgroups.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/default
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/ihave
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/ihave.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/newgroup
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/newgroup.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/rmgroup
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/rmgroup.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendme
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendme.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendsys
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/sendsys.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/senduuname
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/senduuname.pl
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/version
+%attr(755,root,root) %config %verify(not size mtime md5) %{_datadir}/news/control/version.pl
 
 # SUID
 %attr(4750,root,news) %config %{_bindir}/startinnfeed
@@ -414,7 +418,7 @@ fi
 %attr(755,root,root) %{_bindir}/innconfval
 %attr(755,root,root) %{_bindir}/innd
 %attr(755,root,root) %{_bindir}/inndf
-%attr(755,root,news) %{_bindir}/inndstart
+%attr(755,root,root) %{_bindir}/inndstart
 %attr(755,root,root) %{_bindir}/innfeed
 %attr(755,root,root) %{_bindir}/innfeed-convcfg
 %attr(755,root,root) %{_bindir}/innmail
@@ -455,29 +459,29 @@ fi
 
 
 # MAN
-%attr(644,root,root) %{_mandir}/man1/convdate.1*
-%attr(644,root,root) %{_mandir}/man1/getlist.1*
-%attr(644,root,root) %{_mandir}/man1/grephistory.1*
-%attr(644,root,root) %{_mandir}/man1/innconfval.1*
-%attr(644,root,root) %{_mandir}/man1/innfeed.1*
-%attr(644,root,root) %{_mandir}/man1/installit.1*
-%attr(644,root,root) %{_mandir}/man1/nntpget.1*
-%attr(644,root,root) %{_mandir}/man1/rnews.1*
-%attr(644,root,root) %{_mandir}/man1/shlock.1*
-%attr(644,root,root) %{_mandir}/man1/shrinkfile.1*
-%attr(644,root,root) %{_mandir}/man1/startinnfeed.1*
-%attr(644,root,root) %{_mandir}/man1/subst.1*
-%attr(644,root,root) %{_mandir}/man[58]/*
+%{_mandir}/man1/convdate.1*
+%{_mandir}/man1/getlist.1*
+%{_mandir}/man1/grephistory.1*
+%{_mandir}/man1/innconfval.1*
+%{_mandir}/man1/innfeed.1*
+%{_mandir}/man1/installit.1*
+%{_mandir}/man1/nntpget.1*
+%{_mandir}/man1/rnews.1*
+%{_mandir}/man1/shlock.1*
+%{_mandir}/man1/shrinkfile.1*
+%{_mandir}/man1/startinnfeed.1*
+%{_mandir}/man1/subst.1*
+%{_mandir}/man[58]/*
 
 ##############################################################################
 %files devel
 %defattr(644,root,root,755)
-%attr(644,root,root) %{_includedir}/inn/*
-%attr(644,root,root) %{_libdir}/*.a
-%attr(644,root,root) %{_mandir}/man3/*
+%{_includedir}/inn/*
+%{_libdir}/*.a
+%{_mandir}/man3/*
 
 ##############################################################################
 %files -n inews
 %defattr(644,root,root,755)
 %attr(2755,root,news) %{_bindir}/inews
-%attr(644,root,root) %{_mandir}/man1/inews.1.gz
+%{_mandir}/man1/inews.1.gz
