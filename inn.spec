@@ -1,3 +1,4 @@
+%include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
 Summary(de):	das InterNet News System (News-Server)
 Summary(fr):	INN, le système InterNet News (serveur de news)
@@ -5,7 +6,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.3.1
-Release:	3
+Release:	4
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -27,19 +28,23 @@ Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
 Patch4:		%{name}-setreuid.patch
+Patch5:		%{name}-brokenipv6patch.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
 Prereq:		%{name}-libs = %{version}
+BuildRequires:	flex
+BuildRequires:	bison
+BuildRequires:	db3-devel
+BuildRequires:	perl
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
+Requires:	%{perl_archlib}
+%requires_eq	perl
 Provides:	nntpserver
-BuildRequires:	byacc
-BuildRequires:	db3-devel
-BuildRequires:	perl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
@@ -96,6 +101,7 @@ Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-libs = %{version}
+Requires:	db3-devel
 
 %description devel
 This library is needed by several programs that interface to INN, such
@@ -177,6 +183,7 @@ sunucuya makaleyi yollar.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 %build
 touch innfeed/*.[ly]
 
