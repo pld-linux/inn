@@ -152,13 +152,13 @@ make all PATHFILTER=%{_datadir}/news/filter \
 
 %install 
 rm -fr $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d}
+install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,cron.daily}
 install -d $RPM_BUILD_ROOT%{_bindir}
 install -d $RPM_BUILD_ROOT%{_libdir}/news
 install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth}
 install -d $RPM_BUILD_ROOT%{_includedir}/inn
 install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
-install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/news/archiv/news}
+install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/{news,archiv/news}}
 install -d $RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
 make install \
@@ -174,6 +174,8 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/nnrp.access
 install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE7} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
+
+mv $RPM_BUILD_ROOT%{_bindir}/news.daily $RPM_BUILD_ROOT/etc/cron.daily
 
 rm -f $RPM_BUILD_ROOT/var/state/news/history
 
@@ -318,6 +320,7 @@ fi
 
 # CRON PARTS
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/*
+%attr(750,root,root) /etc/cron.daily/news
 
 # RC-SCRIPT
 %attr(754,root,root) %config /etc/rc.d/init.d/inn
