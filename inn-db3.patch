@@ -1,0 +1,48 @@
+--- inn-2.3.1/configure.in.orig	Sun Jan 21 04:29:26 2001
++++ inn-2.3.1/configure.in	Sun Jan 21 04:40:55 2001
+@@ -750,8 +750,9 @@
+ dnl Some of the authentication programs want to be able to open dbm files.
+ dnl
+ dnl FIXME: These conflict.  What order should they really be in?
+-AC_CHECK_LIB(dbm, dbm_open, DBM_LIB="-ldbm")
+-AC_CHECK_LIB(ndbm, dbm_open, DBM_LIB="-lndbm")
++dnl AC_CHECK_LIB(dbm, dbm_open, DBM_LIB="-ldbm")
++dnl AC_CHECK_LIB(ndbm, dbm_open, DBM_LIB="-lndbm")
++DBM_LIB="-ldb"
+ AC_SUBST(DBM_LIB)
+ 
+ dnl Libraries and flags for embedded Perl.  Some distributions of Linux have
+@@ -955,14 +956,9 @@
+ 
+ dnl Generic checks for header files.
+ dnl NOTUSED: sys/file.h sys/ioctl.h
+-AC_CHECK_HEADERS(crypt.h fcntl.h limits.h ndbm.h stddef.h stdint.h \
++AC_CHECK_HEADERS(crypt.h fcntl.h limits.h stddef.h stdint.h \
+                  sys/bitypes.h sys/file.h sys/filio.h sys/ioctl.h \
+                  sys/select.h sys/sysinfo.h sys/time.h unistd.h)
+-
+-dnl Some Linux systems have db1/ndbm.h instead of ndbm.h.
+-if test x"$ac_cv_header_ndbm_h" = xno ; then
+-    AC_CHECK_HEADERS(db1/ndbm.h)
+-fi
+ 
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_STRUCT_ST_BLKSIZE
+--- inn-2.3.1/authprogs/ckpasswd.c~	Thu Jan 11 09:55:23 2001
++++ inn-2.3.1/authprogs/ckpasswd.c	Sun Jan 21 04:37:54 2001
+@@ -14,13 +14,8 @@
+ # include <fcntl.h>
+ #endif
+ 
+-#ifdef HAVE_NDBM_H
+-# include <ndbm.h>
+-#else
+-# ifdef HAVE_DB1_NDBM_H
+-#  include <db1/ndbm.h>
+-# endif
+-#endif
++#define DB_DBM_HSEARCH 1
++#include <db.h>
+ 
+ #ifdef HAVE_GETSPNAM
+ # include <shadow.h>
