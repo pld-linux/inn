@@ -20,12 +20,15 @@ Source7:	%{name}-cron
 Patch0:		%{name}-config.patch
 Patch1:		%{name}-makefile.patch
 URL: 		http://www.isc.org/inn.html
+Prereq:		/sbin/chkconfig
+Prereq:		/sbin/ldconfig
+Prereq:		sed
+Prereq:		fileutils
 Requires: 	cleanfeed
 Requires:	perl
 Requires:	rc-scripts
 Requires:	/etc/cron.d
 BuildRoot:	/tmp/%{name}-%{version}-root
-Prereq: 	/sbin/chkconfig
 
 %description
 INN is a news server, which can be set up to handle USENET news, as well
@@ -198,7 +201,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ -f /var/state/news/history ]; then
 	cd /var/state/news
-	%{_libdir}/news/bin/makehistory -i -r
+	%{_bindir}/makehistory -i -r
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -207,7 +210,7 @@ if [ -f /var/state/news/history ]; then
 else
 	cd /var/state/news
 	cp /dev/null history
-	%{_libdir}/news/bin/makehistory -i
+	%{_bindir}/makehistory -i
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
