@@ -41,7 +41,7 @@ Prereq:		%{name}-libs = %{version}
 BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	db3-devel
-BuildRequires:	perl
+BuildRequires:	perl-devel >= 5.6.1
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
