@@ -438,35 +438,3 @@ fi
 %attr(755,root,root) %{_bindir}/inews
 %attr(4555,news,news) %config %{_bindir}/inews
 %{_mandir}/man1/inews.1*
-
-%changelog
-* Fri May 14 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-- man pages moved to %{_datadir}/ma (FHS 2.0 compiliat),
-- removed not neccessary uid/gid=(news),
-- changed install prefix to /usr.
-
-* Mon Apr 19 1999 Piotr Czerwiñski <pius@pld.org.pl>
-  [2.2-3]
-- recompiled on new rpm.
-
-* Fri Apr 16 1999 Piotr Czerwiñski <pius@pld.org.pl>
-- changed install procedure to allow building package from non-root 
-  account (inn-install.patch),
-- minor fixes.
-
-* Thu Apr 15 1999 Piotr Czerwiñski <pius@pld.org.pl>
-- fixed Group(pl),
-- changed Buildroot to /tmp/%{name}-%{version}-root,
-- removed man group from man pages,
-- added full %defattr description in %files,
-- added Requires: %%{name} = %%{version} to devel subpackage,
-- added some %requires_pkg macros,
-- cosmetic changes for common l&f.
-
-* Fri Jan 29 1999 Maciej Paliwoda <maciejp@uci.agh.edu.p>
-  [2.2-1d]
-- special thanks for Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-	& Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-- new version 2.2 (stable)
-- build for Linux PLD
-- default storage CNFS
