@@ -33,7 +33,7 @@ Requires:	rc-scripts
 Requires:	/etc/cron.d
 Requires:	/etc/rc.d/init.d/functions
 BuildRequires:	perl
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
 
