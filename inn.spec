@@ -441,7 +441,7 @@ fi
 
 %changelog
 * Fri May 14 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-- man pages moved to /usr/share/ma (FHS 2.0 compiliat),
+- man pages moved to %{_datadir}/ma (FHS 2.0 compiliat),
 - removed not neccessary uid/gid=(news),
 - changed install prefix to /usr.
 
