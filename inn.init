@@ -26,14 +26,16 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/inn ]; then
 	    show Starting INN service
 	    daemon inndstart
-
-#    	    DOINNWATCH=`echo ${DOINNWATCH} | tr A-Z a-z`
-#	    if [ -z "${DOINNWATCH}" -o "${DOINNWATCH}" = "on" -o "${DOINNWATCH}" = "true" -o "${DOINNWATCH}" = "yes" ]; then
-#		show Starting INN Watch service
-#		busy
-#		/usr/bin/innwatch &
-#		deltext;ok
-#    	    fi
+	    if `echo $DOINNWATCH | grep -q -e "[tTyY].*"`; then
+		show Starting INN Watch service
+		busy
+		su - news -c "/usr/bin/innwatch &"
+		if ps ax | grep -v grep | grep -q innwatch; then
+		    deltext;ok
+		else
+		    deltext;fail
+		fi
+    	    fi
 	else
     	    echo 'INND is running'
 	fi
@@ -46,11 +48,16 @@ case "$1" in
 	    rm -f /var/run/news/innd.pid
 	fi
 
-#	if [ -f /var/run/news/innwatch.pid ]; then
-#	    show Stopping INN Watch service
-#	    killproc innwatch -9
-#	    rm -f /var/run/news/innwatch.pid /var/run/news/LOCK.innwatch
-#	fi
+	if [ -f /var/run/news/innwatch.pid ]; then
+	    show Stopping INN Watch service
+	    busy
+	    if killall -9 innwatch; then
+		deltext;ok
+	    else
+		deltext;died
+	    fi
+	    rm -f /var/run/news/innwatch.pid /var/run/news/LOCK.innwatch
+	fi
 
 	if [ -f /var/run/news/infeed.pid ]; then
 	    show Stopping INN Feed service

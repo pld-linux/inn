@@ -2,8 +2,6 @@
 
 . /usr/share/news/innshellvars
 
-DOCNFSSTAT=`echo ${DOCNFSSTAT} | tr A-Z a-z`
-
-if [ -z "${DOCNFSSTAT}" -o "${DOCNFSSTAT}" = "on" -o "${DOCNFSSTAT}" = "true" -o "${DOCNFSSTAT}" = "yes" ]; then
-/usr/bin/cnfsstat -s
+if `echo $DOCNFSSTAT | grep -q -e "^[tTyY].*"`; then
+    /usr/bin/cnfsstat -s
 fi
