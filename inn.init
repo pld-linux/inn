@@ -92,9 +92,9 @@ case "$1" in
 	;;
   reload)
 	if [ -f /var/lock/subsys/inn ]; then
-		msg_reload "INN"
+		msg_reloading "INN"
 		busy
-		if ctlinnd reload all "Reloading";then
+		if ctlinnd reload all "Reloading" >/dev/null 2>&1; then
 			deltext;ok
 		else
 			deltext;fail
