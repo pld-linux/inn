@@ -187,6 +187,7 @@ install include/clibrary.h	$RPM_BUILD_ROOT%{_includedir}/inn
 install include/configdata.h	$RPM_BUILD_ROOT%{_includedir}/inn
 install include/dbz.h		$RPM_BUILD_ROOT%{_includedir}/inn
 install include/libinn.h	$RPM_BUILD_ROOT%{_includedir}/inn
+install include/storage.h	$RPM_BUILD_ROOT%{_includedir}/inn
 
 mv $RPM_BUILD_ROOT%{_datadir}/news/*.a	$RPM_BUILD_ROOT%{_libdir}
 
