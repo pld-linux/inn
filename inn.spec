@@ -126,10 +126,10 @@ CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
         --with-log-dir=/var/log/news \
         --with-run-dir=/var/run/news \
         --with-spool-dir=/var/spool/news \
-        --with-lib-dir=/usr/lib/news/lib \
+        --with-lib-dir=%{_libdir}/news/lib \
         --with-tmp-path=/var/spool/news/in.coming/tmp \
         --with-perl \
-        --with-sendmail=/usr/lib/sendmail \
+        --with-sendmail=%{_libdir}/sendmail \
         --enable-tagged-hash \
         --enable-merge-to-groups \
         --enable-pgp-verify \
@@ -168,7 +168,7 @@ touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
 touch $RPM_BUILD_ROOT/var/lib/news/active.times
 
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT/usr/lib $RPM_BUILD_ROOT/usr/bin/makehistory\
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT/usr/bin/makehistory\
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
 	-i -r -f $RPM_BUILD_ROOT/var/lib/news/history || :
 
@@ -185,7 +185,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 if [ -f /var/lib/news/history ]; then
 	cd /var/lib/news
-	/usr/lib/news/bin/makehistory -i -r
+	%{_libdir}/news/bin/makehistory -i -r
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -194,7 +194,7 @@ if [ -f /var/lib/news/history ]; then
 else
 	cd /var/lib/news
 	cp /dev/null history
-	/usr/lib/news/bin/makehistory -i
+	%{_libdir}/news/bin/makehistory -i
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
 	done
@@ -243,8 +243,8 @@ if [ `cat /etc/news/inn.conf | grep '^server:' | wc -l` -lt 1 ]; then
   echo "server: `hostname -f`" >> /etc/news/inn.conf
 fi
 
-if [ `cat /etc/ld.so.conf | grep '^/usr/lib/news/lib' | wc -l` -lt 0 ]; then
-  echo '/usr/lib/news/lib' >> /etc/ld.so.conf
+if [ `cat /etc/ld.so.conf | grep '^%{_libdir}/news/lib' | wc -l` -lt 0 ]; then
+  echo '%{_libdir}/news/lib' >> /etc/ld.so.conf
 fi
 /sbin/chkconfig --add news
 /sbin/ldconfig 
@@ -264,13 +264,13 @@ fi
 %doc {INSTALL,ChangeLog,COPYRIGHT}.gz
 
 %attr(775,news,news) %dir /etc/news
-%dir /usr/lib/news
+%dir %{_libdir}/news
 %dir /usr/bin
 %dir /usr/bin/auth
 %dir /usr/bin/control
 %dir /usr/bin/filter
 %dir /usr/bin/rnews.libexec
-%dir /usr/lib/news/lib
+%dir %{_libdir}/news/lib
 %dir /var/lib/news
 %dir /var/lib/news/backoff
 %attr(750,news,news) %dir /var/log/news
@@ -398,10 +398,10 @@ fi
 %attr(755,root,root) /usr/bin/tally.control
 %attr(755,root,root) /usr/bin/writelog
 
-%config(missingok) /usr/lib/news/lib/innreport_inn.pm
-%config(missingok) /usr/lib/news/lib/innshellvars
-%config(missingok) /usr/lib/news/lib/innshellvars.pl
-%config(missingok) /usr/lib/news/lib/innshellvars.tcl
+%config(missingok) %{_libdir}/news/lib/innreport_inn.pm
+%config(missingok) %{_libdir}/news/lib/innshellvars
+%config(missingok) %{_libdir}/news/lib/innshellvars.pl
+%config(missingok) %{_libdir}/news/lib/innshellvars.tcl
 
 %{_mandir}/man1/convdate.1*
 %{_mandir}/man1/getlist.1*
@@ -429,7 +429,7 @@ fi
 %files devel
 %defattr(644,root,root,755)
 /usr/include/*
-/usr/lib/*.a
+%{_libdir}/*.a
 %{_mandir}/man3/*
 
 %files -n inews
