@@ -47,10 +47,11 @@ BuildRequires:	perl-devel >= 5.6.1
 PreReq:		%{name}-libs = %{version}
 PreReq:		rc-scripts
 Requires(post):	/bin/kill
-Requires(post):	/bin/su
+Requires(post):	/usr/bin/getent
 Requires(post,preun):	/sbin/chkconfig
 Requires(post):	sed
 Requires(post):	fileutils
+Requires(post):	textutils
 Requires(post):	/usr/sbin/usermod
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
@@ -347,7 +348,7 @@ find samples -name "*.in" -exec chmod a-x {} \;
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ "`su - news -s /bin/sh -c pwd 2>/dev/null`" = "/var/spool/news" ]; then
+if [ "`getent passwd http | cut -d: -f6`" = "/var/spool/news" ]; then
 	/usr/sbin/usermod -d /home/services/news news
 fi
 umask 022
