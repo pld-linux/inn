@@ -1,0 +1,55 @@
+diff -urN inn-2.2/installit.sh inn-2.2.new/installit.sh
+--- inn-2.2/installit.sh	Mon Aug  4 06:03:44 1997
++++ inn-2.2.new/installit.sh	Fri Apr 16 20:16:57 1999
+@@ -185,12 +185,12 @@
+     if [ ! -d "${DEST}" ] ; then
+ 	${MKDIR} "${DEST}" || exit 1
+     fi
+-    if ${CHOWNIT} ; then
+-	${CHOWN} "${OWNER}" "${DEST}" || exit 1
+-    fi
+-    if ${CHGROUPIT} ; then
+-	${CHGRP} "${GROUP}" "${DEST}" || exit 1
+-    fi
++#    if ${CHOWNIT} ; then
++#	${CHOWN} "${OWNER}" "${DEST}" || exit 1
++#   fi
++#    if ${CHGROUPIT} ; then
++#	${CHGRP} "${GROUP}" "${DEST}" || exit 1
++#    fi
+     if ${CHMODIT} ; then
+ 	umask 0
+ 	${CHMOD} "${MODE}"  "${DEST}" || exit 1
+@@ -234,12 +234,12 @@
+ if ${STRIPIT} ; then
+     ${STRIP} "${DEST}" || exit 1
+ fi
+-if ${CHOWNIT} ; then
+-    ${CHOWN} "${OWNER}" "${DEST}" || exit 1
+-fi
+-if ${CHGROUPIT} ; then
+-    ${CHGRP} "${GROUP}" "${DEST}" || exit 1
+-fi
++#if ${CHOWNIT} ; then
++#    ${CHOWN} "${OWNER}" "${DEST}" || exit 1
++#fi
++#if ${CHGROUPIT} ; then
++#    ${CHGRP} "${GROUP}" "${DEST}" || exit 1
++#fi
+ if ${CHMODIT} ; then
+     umask 0
+     ${CHMOD} "${MODE}"  "${DEST}" || exit 1
+diff -urN inn-2.2/makedirs.sh.in inn-2.2.new/makedirs.sh.in
+--- inn-2.2/makedirs.sh.in	Fri Jul 31 01:45:11 1998
++++ inn-2.2.new/makedirs.sh.in	Fri Apr 16 20:12:23 1999
+@@ -62,8 +62,8 @@
+ 	${PATHLOG} ${PATHLOG}/OLD ${PATHBIN}/rnews.libexec ${PATHBIN}/auth ; do
+     if [ ! -d ${DESTDIR}${F} ] ; then
+ 	mkdir ${PFLAG} ${DESTDIR}${F} || exit 1
+-	${CHOWN} ${NEWSUSER} ${DESTDIR}${F} || exit 1
+-	chgrp ${NEWSGROUP} ${DESTDIR}${F} || exit 1
++#	${CHOWN} ${NEWSUSER} ${DESTDIR}${F} || exit 1
++#	chgrp ${NEWSGROUP} ${DESTDIR}${F} || exit 1
+ 	case ${F} in
+ 	${PATHRUN})
+ 	    chmod 0770 ${DESTDIR}${F} || exit 1
