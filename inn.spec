@@ -371,7 +371,6 @@ if [ -f /var/lib/news/history ]; then
 	chmod 644 history.*
 else
 	cd /var/lib/news
-	cp /dev/null history
 	%{_bindir}/makehistory
 	%{_bindir}/makedbz -s `wc -l <history` -f history
 	for i in dir hash index pag; do
@@ -412,8 +411,7 @@ fi
 umask 027
 if [ -f /etc/syslog.conf ]; then
   if ! grep -q INN /etc/syslog.conf; then
-    sed 's/mail.none;/mail.none;news.none;/' < /etc/syslog.conf > /etc/syslog.conf.inn
-    mv -f /etc/syslog.conf.inn /etc/syslog.conf
+    sed -i 's/mail.none;/mail.none;news.none;/' /etc/syslog.conf
     echo ''										>> /etc/syslog.conf
     echo '#'										>> /etc/syslog.conf
     echo '# INN'									>> /etc/syslog.conf
