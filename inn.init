@@ -33,7 +33,7 @@ case "$1" in
 		if is_yes $DOINNWATCH ; then
 			msg_starting "INN Watch"
 			busy
-			su - news -c "/usr/bin/innwatch &"
+			su - news -c "umask 002 ; /usr/bin/innwatch &"
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
 			if ps -C innwatch >/dev/null 2>&1; then
