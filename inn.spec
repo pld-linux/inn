@@ -33,6 +33,7 @@ Patch4:		%{name}-ac253.patch
 #Patch5:		%{name}-setreuid.patch
 #Patch6:		%{name}-sec.patch
 #Patch7:		%{name}-frsize.patch
+Patch8:		%{name}-db4.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -247,6 +248,7 @@ sunucuya makaleyi yollar.
 #%patch5 -p1	-- obsolete? (no setreuid test)
 #%patch6 -p1	-- obsolete? (pathrun not used in inndstart)
 #%patch7 -p1	-- obsolete? (?)
+%patch8
 
 touch innfeed/*.[ly]
 
