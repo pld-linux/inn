@@ -34,3 +34,15 @@ diff -Nur inn-2.2.1.orig/Makefile inn-2.2.1/Makefile
  	$(MAKE) $(FLAGS) WHAT_TO_MAKE=install DESTDIR=$(DESTDIR) common
  	@echo "" ; echo Do not forget to update your cron entries.
  	@echo Also run makehistory if you have to.
+diff -ur inn-2.2.2.orig/samples/scanlogs.in inn-2.2.2/samples/scanlogs.in
+--- inn-2.2.2.orig/samples/scanlogs.in	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/samples/scanlogs.in	Sun Jan 30 01:12:20 2000
+@@ -10,7 +10,7 @@
+ ##  then get a better egrep, like the FSF one.
+ 
+ ##  Directory where old log files are kept.
+-OLD=${MOST_LOGS}/OLD
++OLD=/var/log/archiv/news
+ ##  If you want to archive the active file, enable this line.
+ ACTIVEFILE=${ACTIVE}
+ ##  Number of lines of error in each category to report.

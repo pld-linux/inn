@@ -1,55 +1,216 @@
-diff -urN inn-2.2/installit.sh inn-2.2.new/installit.sh
---- inn-2.2/installit.sh	Mon Aug  4 06:03:44 1997
-+++ inn-2.2.new/installit.sh	Fri Apr 16 20:16:57 1999
-@@ -185,12 +185,12 @@
-     if [ ! -d "${DEST}" ] ; then
- 	${MKDIR} "${DEST}" || exit 1
-     fi
--    if ${CHOWNIT} ; then
--	${CHOWN} "${OWNER}" "${DEST}" || exit 1
--    fi
--    if ${CHGROUPIT} ; then
--	${CHGRP} "${GROUP}" "${DEST}" || exit 1
--    fi
-+#    if ${CHOWNIT} ; then
-+#	${CHOWN} "${OWNER}" "${DEST}" || exit 1
-+#   fi
-+#    if ${CHGROUPIT} ; then
-+#	${CHGRP} "${GROUP}" "${DEST}" || exit 1
-+#    fi
-     if ${CHMODIT} ; then
- 	umask 0
- 	${CHMOD} "${MODE}"  "${DEST}" || exit 1
-@@ -234,12 +234,12 @@
- if ${STRIPIT} ; then
-     ${STRIP} "${DEST}" || exit 1
- fi
--if ${CHOWNIT} ; then
--    ${CHOWN} "${OWNER}" "${DEST}" || exit 1
--fi
--if ${CHGROUPIT} ; then
--    ${CHGRP} "${GROUP}" "${DEST}" || exit 1
--fi
-+#if ${CHOWNIT} ; then
-+#    ${CHOWN} "${OWNER}" "${DEST}" || exit 1
-+#fi
-+#if ${CHGROUPIT} ; then
-+#    ${CHGRP} "${GROUP}" "${DEST}" || exit 1
-+#fi
- if ${CHMODIT} ; then
-     umask 0
-     ${CHMOD} "${MODE}"  "${DEST}" || exit 1
-diff -urN inn-2.2/makedirs.sh.in inn-2.2.new/makedirs.sh.in
---- inn-2.2/makedirs.sh.in	Fri Jul 31 01:45:11 1998
-+++ inn-2.2.new/makedirs.sh.in	Fri Apr 16 20:12:23 1999
-@@ -62,8 +62,8 @@
- 	${PATHLOG} ${PATHLOG}/OLD ${PATHBIN}/rnews.libexec ${PATHBIN}/auth ; do
-     if [ ! -d ${DESTDIR}${F} ] ; then
- 	mkdir ${PFLAG} ${DESTDIR}${F} || exit 1
--	${CHOWN} ${NEWSUSER} ${DESTDIR}${F} || exit 1
--	chgrp ${NEWSGROUP} ${DESTDIR}${F} || exit 1
-+#	${CHOWN} ${NEWSUSER} ${DESTDIR}${F} || exit 1
-+#	chgrp ${NEWSGROUP} ${DESTDIR}${F} || exit 1
- 	case ${F} in
- 	${PATHRUN})
- 	    chmod 0770 ${DESTDIR}${F} || exit 1
+diff -ur inn-2.2.2.orig/Makefile.global.in inn-2.2.2/Makefile.global.in
+--- inn-2.2.2.orig/Makefile.global.in	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/Makefile.global.in	Sat Jan 29 22:56:17 2000
+@@ -38,6 +38,7 @@
+ TCLLIB	= @TCL_LIB@
+ TCLINC	= @TCL_INC@
+ EXTRA_SRC = @EXTRA_SRC@
++INSTALL = @INSTALL@
+ 
+ OWNER		= -O @NEWSUSER@ -G @NEWSGRP@
+ ROWNER		= -O @NEWSUSER@ -G uucp
+Only in inn-2.2.2: Makefile.global.in~
+diff -ur inn-2.2.2.orig/backends/Makefile inn-2.2.2/backends/Makefile
+--- inn-2.2.2.orig/backends/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/backends/Makefile	Sat Jan 29 22:46:54 2000
+@@ -17,8 +17,8 @@
+ 
+ install:	all
+ 	for i in ${ALL}; \
+-		do $(LIBTOOL) ../installit.sh $(OWNER) -m 0555 \
+-			-b .OLD $${i} $D${PATHBIN}/$${i}; \
++		do $(LIBTOOL) --mode=install $(INSTALL) -m 0555 \
++			$${i} $D${PATHBIN}; \
+ 	done
+ 
+ clobber clean:
+Only in inn-2.2.2/backends: Makefile~
+diff -ur inn-2.2.2.orig/configure.in inn-2.2.2/configure.in
+--- inn-2.2.2.orig/configure.in	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/configure.in	Sat Jan 29 22:57:07 2000
+@@ -129,6 +129,7 @@
+ AC_PROG_YACC
+ AC_PROG_LEX
+ AC_PROG_RANLIB
++AC_PROG_INSTALL
+ 
+ dnl System specific
+ AC_AIX
+Only in inn-2.2.2: configure.in~
+diff -ur inn-2.2.2.orig/expire/Makefile inn-2.2.2/expire/Makefile
+--- inn-2.2.2.orig/expire/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/expire/Makefile	Sat Jan 29 22:49:09 2000
+@@ -85,25 +85,25 @@
+ 
+ ##  Low-level install actions.
+ $D$(PATHBIN)/convdate:		convdate
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/expire:		expire
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/expireover:		expireover
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/expireindex:		expireindex
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/fastrm:		fastrm
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/grephistory:	grephistory
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/makeactive:	makeactive
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/makehistory:	makehistory
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/newsrequeue:	newsrequeue
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/prunehistory:	prunehistory
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ ##  Dependencies.  Default list, below, is probably good enough.
+ depend:		Makefile $(SOURCES)
+Only in inn-2.2.2/expire: Makefile~
+diff -ur inn-2.2.2.orig/frontends/Makefile inn-2.2.2/frontends/Makefile
+--- inn-2.2.2.orig/frontends/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/frontends/Makefile	Sat Jan 29 22:50:56 2000
+@@ -64,25 +64,25 @@
+ 
+ ##  Low-level install actions.
+ $D$(PATHBIN)/inews:		inews
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 02555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/rnews:		rnews
+-	$(LIBTOOL) ../installit.sh $(ROWNER) -m 04550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/ctlinnd:	ctlinnd
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/sm:	sm
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/getlist:	getlist
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(PATHBIN)/innconfval:	innconfval
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(RNEWSPROGS)/c7unbatch:	c7unbatch.sh
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(RNEWSPROGS)/gunbatch:	gunbatch.sh
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(RNEWSPROGS)/decode:		decode
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ $D$(RNEWSPROGS)/encode:		encode
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m  0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ ##  Dependencies.  Default list, below, is probably good enough.
+ depend:		Makefile $(SOURCES)
+Only in inn-2.2.2/frontends: Makefile~
+diff -ur inn-2.2.2.orig/innd/Makefile inn-2.2.2/innd/Makefile
+--- inn-2.2.2.orig/innd/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/innd/Makefile	Sat Jan 29 22:51:57 2000
+@@ -18,10 +18,10 @@
+ install: $D${PATHBIN}/innd $D${PATHBIN}/inndstart
+ 
+ $D${PATHBIN}/innd: innd
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0550 -b .OLD innd $D${PATHBIN}/innd
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ $D${PATHBIN}/inndstart: inndstart
+-	-$(LIBTOOL) ../installit.sh -O root -G $(NEWSGROUP) -m 4550 -b .OLD inndstart $D${PATHBIN}/inndstart
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 	@ME=`(whoami || /usr/ucb/whoami) 2> /dev/null` ;\
+ 	if [ "X$$ME" = Xroot ]; then \
+ 		echo $@ has been installed setuid root. ;\
+Only in inn-2.2.2/innd: Makefile~
+diff -ur inn-2.2.2.orig/innfeed/Makefile inn-2.2.2/innfeed/Makefile
+--- inn-2.2.2.orig/innfeed/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/innfeed/Makefile	Sat Jan 29 22:55:52 2000
+@@ -89,7 +89,6 @@
+ MV		= mv
+ TAG		= etags
+ CHMOD		= chmod
+-INSTALL		= $(LIBTOOL) install -c 
+ 
+ MAKEDEPEND	= ./makedepend
+ DEPENDFLAGS	= -s -c '$(CC) -E'
+@@ -111,19 +110,19 @@
+ 	$(LINK.c) -o $@ $(OBJS) version.o $(LIBNEWS) $(LIBNEWS) $(LIBS)
+ 
+ $D$(PATHBIN)/innfeed: innfeed
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ $D$(PATHBIN)/procbatch: procbatch
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ 
+ $D$(PATHBIN)/innfeed-convcfg: innfeed-convcfg
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 	$(SAVEOLD)
+ 	$(COPYFILE)
+ 
+ $D$(PATHBIN)/startinnfeed: startinnfeed
+-	-$(LIBTOOL) ../installit.sh -O root -G $(NEWSGROUP) -m 4550 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 	@ME=`(whoami || /usr/ucb/whoami) 2> /dev/null` ;\
+ 	if [ "X$$ME" = Xroot ]; then \
+ 		echo $@ has been installed setuid root. ;\
+Only in inn-2.2.2/innfeed: Makefile~
+diff -ur inn-2.2.2.orig/lib/Makefile inn-2.2.2/lib/Makefile
+--- inn-2.2.2.orig/lib/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/lib/Makefile	Sat Jan 29 22:53:01 2000
+@@ -103,7 +103,7 @@
+ ##  Low-level install actions.
+ $(D)$(PATHLIB)/libinn.$(EXTLIB):		libinn.$(EXTLIB)
+ 	@rm -f $@
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD libinn.$(EXTLIB) $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHLIB)
+ 
+ ##  Dependencies.  Default list, below, is probably good enough.
+ depend:		Makefile $(SOURCES) ../include/dbz.h
+Only in inn-2.2.2/lib: Makefile~
+diff -ur inn-2.2.2.orig/nnrpd/Makefile inn-2.2.2/nnrpd/Makefile
+--- inn-2.2.2.orig/nnrpd/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/nnrpd/Makefile	Sat Jan 29 22:53:30 2000
+@@ -22,11 +22,11 @@
+ 
+ ##  Low-level install actions.
+ $D$(NNRPD):	nnrpd
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ ##  Low-level install actions.
+ $D$(ACTIVED):	actived
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD $? $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
+ 
+ clobber clean:
+ 	rm -f *.o $(ALL)
+Only in inn-2.2.2/nnrpd: Makefile~
+diff -ur inn-2.2.2.orig/storage/Makefile inn-2.2.2/storage/Makefile
+--- inn-2.2.2.orig/storage/Makefile	Mon Dec 13 14:18:37 1999
++++ inn-2.2.2/storage/Makefile	Sat Jan 29 22:54:07 2000
+@@ -68,7 +68,7 @@
+ ##  Low-level install actions.
+ $(D)$(PATHLIB)/libstorage.$(EXTLIB):	libstorage.$(EXTLIB)
+ 	@rm -f $@
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m 0555 -b .OLD libstorage.$(EXTLIB) $@
++	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHLIB)
+ 
+ ##  Dependencies.  Default list, below, is probably good enough.
+ depend:		Makefile $(SOURCES)
+Only in inn-2.2.2/storage: Makefile~
