@@ -1,2 +1,13 @@
-world     Use no distribution rather than world
-na        North America
+pl        Polska
+pl-news   Polska, wylacznie news, bez list dyskusyjnych
+krakow    Krakow
+cyfronet  Krakow
+torun     Torun
+warszawa  Warszawa
+umk       UMK w Toruniu
+pwr       Politechnika Wroclawska
+wroc      Wroclaw
+world     Caly swiat
+inet      Internet
+mimuw     Wydz. Matematyki Informatyki i Mech. Uniw. Warszawskiego
+local     lokalny serwer news
