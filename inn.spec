@@ -144,7 +144,8 @@ LDFLAGS="-s"; export LDFLAGS
         --enable-pgp-verify \
 	--enable-shared \
 	--enable-static \
-	--enable-ipv6
+	--enable-ipv6 \
+	--enable-dual-socket
 
 make all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
