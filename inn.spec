@@ -175,8 +175,6 @@ install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.d/inn
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE7} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 
-mv $RPM_BUILD_ROOT%{_bindir}/news.daily $RPM_BUILD_ROOT/etc/cron.daily
-
 rm -f $RPM_BUILD_ROOT/var/state/news/history
 
 umask 002
@@ -320,7 +318,6 @@ fi
 
 # CRON PARTS
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/*
-%attr(750,root,root) /etc/cron.daily/news
 
 # RC-SCRIPT
 %attr(754,root,root) %config /etc/rc.d/init.d/inn
