@@ -3,3 +3,201 @@ control.cancel   Usenet control messages - DO NOT REMOVE
 junk      Articles for missing newsgroups - DO NOT REMOVE
 test      A place for test posts - DO NOT REMOVE
 to        Special Group for INN use - DO NOT REMOVE
+pl.announce.newgroups	Ogloszenia o nowych grupach. (Moderated)
+pl.answers		Odpowiedzi na pytania, o ktorych wam sie nie snilo. (Moderated)
+pl.biznes	Jak zarobic, jak nie stracic.
+pl.biznes.banki		Funkcjonowanie bankow w Polsce i za granica.
+pl.biznes.wgpw	Warszawska Gielda Papierow Wartosciowych, rynek kapitalowy w Polsce.
+pl.comp.bazy-danych	Wszystko o bazach danych.
+pl.comp.bazy-danych.msaccess	Visual Basic i MS Access.
+pl.comp.cad	Komputerowe wspomaganie projektowania.
+pl.comp.demoscena	Polska scena komputerowa.
+pl.comp.dtp	Szeroko rozumiana poligrafia.
+pl.comp.dtp.tex	Jezyk TeX - zastosowania i porady.
+pl.comp.dtp.tex.gust	Jezyk TeX - zastosowania i porady - lista GUST-L. (Moderated)
+pl.comp.gis	Wymiana informacji na temat Systemow Informacji.
+pl.comp.grafika	Forum dyskusji milosnikow grafiki komputerowej.
+pl.comp.grafika.grafika3d	Grafika 3d, modelowanie i animacja komputerowa.
+pl.comp.intranet	Sieci firm oparte o technologie internetowe.
+pl.comp.lang.c	C i C++ - kruczki, sztuczki, programowanie.
+pl.comp.lang.delphi	Delphi i Pascal - kruczki, sztuczki, programowanie.
+pl.comp.lang.delphi.bazy-danych	Programowanie baz danych w Delphi.
+pl.comp.lang.java	Programowanie w jezyku Java.
+pl.comp.lang.pascal	Programowanie w jezyku Pascal.
+pl.comp.lang.perl	Perl - zastosowania, porady.
+pl.comp.lang.vbasic	Programowanie w Visual Basic.
+pl.comp.mail	Poczta elektroniczna na co dzien.
+pl.comp.mail.mta	Mail Transfer Agents - konfigurowanie i administracja.
+pl.comp.networking	Sieci w Polsce dla poczatkujacych i zaawansowanych.
+pl.comp.nowe-programy	Tutaj pochwal sie nowym programem.
+pl.comp.objects		Obiektowa technologia tworzenia oprogramowania i C++.
+pl.comp.ogonki		O polskich literkach w komputerach.
+pl.comp.os.advocacy	Dyskusje o wyzszosci jednych systemow nad innymi.
+pl.comp.os.freebsd	Dyskusje o darmowym UNIXie - FreeBSD.
+pl.comp.os.hp-ux	HP-UX: problemy, sztuczki, konfiguracja.
+pl.comp.os.linux	Linux - system operacyjny dla kazdego.
+pl.comp.os.linux.programowanie	Programowanie w systemie Linux.
+pl.comp.os.linux.sieci	Sieci - konfiguracja i uzytkowanie w systemie Linux.
+pl.comp.os.linux.sprzet	Sprzet dzialajacy pod Linuxem.
+pl.comp.os.os2	OS/2 z zewnatrz i od srodka.
+pl.comp.os.unix		Unix w bardzo roznych systemach.
+pl.comp.os.win3		Microsoft Windows 3.xx - radosci i smutki.
+pl.comp.os.win95	Microsoft Windows 95 - blaski i cienie.
+pl.comp.os.winnt	MS Windows NT na wszelkich platfomach sprzetowych.
+pl.comp.pecet	Pecety, czyli komputery klasy PC.
+pl.comp.programming	Programowanie w jezykach wszelkich.
+pl.comp.security	Bezpieczenstwo systemow i sieci komputerowych. (Moderated)
+pl.comp.sys.amiga	Grupa dyskusyjna uzytkownikow komputera Amiga.
+pl.comp.sys.atari	Grupa dyskusyjna uzytkownikow komputerow atari.
+pl.comp.sys.macintosh	Komputery Macintosh i dyskusje na ich temat.
+pl.comp.sys.novell	Wszystko o Novellu.
+pl.comp.sys.sun.admin	Administrowanie komputerami Sun.
+pl.comp.sys.xwindow	X Window System - system otwarty i rozproszony.
+pl.comp.tlumaczenia	Tlumaczenie literatury komputerowej. (Moderated)
+pl.comp.www	World Wide Web w Polsce i po polsku.
+pl.comp.www.nowe-strony		Nowe strony www - info, dyskusje, opinie.
+pl.fidonet.bramka	Fido widziane z Internetu.
+pl.gazety.donosy	Donosy z Warszawy :-) (Moderated)
+pl.gazety.dyrdymalki	Dystrybucja 'Dyrdymalek'. (Moderated)
+pl.gazety.gazeta	Prawiedziennik polskiego echa. (Moderated)
+pl.hum.poezja	O poezji i poetach, pisaniu i czytaniu wierszy.
+pl.hum.polszczyzna	Aby jezyk gietki powiedzial wszystko, co pomysli glowa.
+pl.hum.tlumaczenia	Z polskiego i na polski.
+pl.hum.x-muza	Dla tych, ktorzy nad MegaHit przedkladaja Mistrzow Kina.
+pl.internet.komunikaty	Komunikaty o problemach z lacznoscia, "trouble tickets" itp. (Moderated)
+pl.internet.nowosci	Ogloszenia o nowosciach w polskim Internecie. (Moderated)
+pl.internet.polip	Problemy Internetu polskiego i swiatowego.
+pl.irc			Dyskusje polskich uzytkownikow IRC.
+pl.listserv.chomor-l	Polski humor, Lista chomor-l@archimedes.pol.lublin.pl
+pl.listserv.dziennikarz	Lista dyskusyjna Dziennikarz.
+pl.listserv.plotki	Lista polskich plotkarzy. (plotki@ia.pw.edu.pl)
+pl.listserv.polwro	Lista ludzi zwiazanych z Politechnika Wroclawska.
+pl.misc.budowanie	Budowanie i remontowanie domow i mieszkan.
+pl.misc.elektronika	Urzadzenia elektroniczne od srodka.
+pl.misc.kolej	Od drezyny do TGV.
+pl.misc.militaria	Wojskowosc, strategia, technika wojskowa, etc.
+pl.misc.paranauki	Psychotronika, UFO, astrologia, magia...
+pl.misc.samochody	Samochod nie tylko zza kolka.
+pl.misc.samochody.garbusy	Uzytkownicy i milosnicy VW Garbusa.
+pl.misc.telefonia	Telefonia, telefony - uslugi, przepisy, urzadzenia.
+pl.misc.telefonia.gsm	Dyskusja o telefonii komorkowej GSM i pochodnych.
+pl.misc.telefonia.gsm.gielda	Ogloszenia o kupnie/sprzedazy telefonow GSM.
+pl.misc.telefonia.gsm.sms	Tekstowy serwis informacyjny.
+pl.misc.telefonia.isdn	Cyfrowa Siec z Integracja Uslug - pytania, dyskusje.
+pl.misc.transport	Komunikacja miejska dla fanow i uzytkownikow.
+pl.news.admin		Administratorzy polskich news, laczcie sie!
+pl.news.czytniki	Czytniki news - konfiguracja, uzytkowanie.
+pl.news.nowe-grupy	Zakladanie nowych grup w hierarchii pl.*.
+pl.ogloszenia.kupie	Ogloszenia o kupnie roznych rzeczy.
+pl.ogloszenia.rozne	Ogloszenia rozne.
+pl.ogloszenia.sprzedam	Ogloszenia o sprzedazy roznych rzeczy.
+pl.org.psi	PSI - dyskusje czlonkow i sympatykow.
+pl.praca.dyskusje	Dyskusje na temat pracy.
+pl.praca.oferowana	Ogloszenia o pracy. (Moderated)
+pl.praca.szukana	Ogloszenia o poszukiwaniu pracy.
+pl.pregierz	Usenetowy pregierz publiczny.
+pl.rec.akwarium	Akwarystyka.
+pl.rec.anime	Grupa milosnikow anime, mangi i jezyka japonskiego.
+pl.rec.ascii-art	Rysowanie znakami ASCII.
+pl.rec.audio	Audio i Hi-Fi dla kazdego.
+pl.rec.fantastyka.babylon5	Pozdrowienia z Babylonu 5.
+pl.rec.fantastyka.sf-f	Science Fiction & Fantasy, lista sf-f@uci.agh.edu.pl.
+pl.rec.fantastyka.startrek	Wszystko dla fanow - filmy, seriale, ksiazki.
+pl.rec.fantastyka.starwars	Gwiezdne Wojny: filmy, ksiazki, komiksy, gry w swiecie GW.
+pl.rec.fantastyka.x-files	ONI nie pozwalaja na krotki opis.
+pl.rec.film	Filmy w kinie, tv i na wideo.
+pl.rec.film.animowany	Wszelkie filmy animowane - z wyjatkiem mangi.
+pl.rec.foto	Fotografia - co, jak i czym.
+pl.rec.gory	Dyskusje o gorach i kwalifikowanej turystyce gorskiej.
+pl.rec.gry.brydz	Brydzysci po polsku o brydzu.
+pl.rec.gry.karciane	Gry karciane oraz pasjanse.
+pl.rec.gry.komputerowe	Rozkosze lamania glowy i joysticka.
+pl.rec.gry.komputerowe.klasyka	Klasyka gier komputerowych.
+pl.rec.gry.komputerowe.roguelike	Grimoiry tamtego swiata.
+pl.rec.gry.komputerowe.sprzet	Sprzet przydatny graczom.
+pl.rec.gry.konsole	Konsole do gier i gry na nie.
+pl.rec.gry.mud		Dla graczy w MUDy.
+pl.rec.gry.rpg		Gry RPG (Role Playing) bez komputera.
+pl.rec.gry.scrabble	Dyskusje na temat gry Scrabble po polsku.
+pl.rec.gry.strategiczne	Triumf umyslu nad slepa furia.
+pl.rec.gry.szachy	Gimnastyka umyslu dla kazdego.
+pl.rec.harcerstwo	Ogolnoswiatowa grupa dyskusyjna harcerstwa polskiego.
+pl.rec.hihot	Wszystko do smiechu.
+pl.rec.humor.monty-python	A teraz cos z zupelnie innej beczki.
+pl.rec.humor.najlepsze	Usenet na wesolo - znalezione w grupach pl.* (Moderated)
+pl.rec.kino-domowe	Po prostu kino w domu.
+pl.rec.komiks	Grupa dla entuzjastow komiksu (i nie tylko).
+pl.rec.ksiazki	Ksiazki, ktore warto (lub nie) przeczytac.
+pl.rec.kuchnia	Uroki kuchni i rozkosze podniebienia.
+pl.rec.lotnictwo	Ptakom podobni...
+pl.rec.mineraly	Kolorowy swiat mineralow.
+pl.rec.modelarstwo	Modele kartonowe, drewniane, plastikowe i inne.
+pl.rec.motocykle	Motocykle - technika, rozrywka, turystyka.
+pl.rec.muzyka	Wszystko o muzyce.
+pl.rec.muzyka.bin	Muzyka w postaci binarnej.
+pl.rec.muzyka.folk	Muzyka folkowa roznych kultur.
+pl.rec.muzyka.gitara	Techniki gry na gitarze, tabulatury, rady, akordy, gitarzysci.
+pl.rec.muzyka.jazz	JAZZ we wszystkich kolorach teczy.
+pl.rec.muzyka.metal	Artykuly metalowe.
+pl.rec.muzyka.rock	Muzyka rockowa polska i zagraniczna.
+pl.rec.muzyka.techno	Muzyka techno oraz informacje o imprezach.
+pl.rec.nurkowanie	Nurkuj bracie pokis mlody!!!
+pl.rec.ogrody	Ogrody ozdobne, warzywne, rekreacyjne, wodne, dydaktyczne.
+pl.rec.paralotnie	Paralotnie, lotnie, szybowce i inne rozrywki latajace.
+pl.rec.paranoja	Oni (i ONI) sa wszedzie.
+pl.rec.radio	Radio, krotkofalarstwo itp.
+pl.rec.radio.amatorskie	Krotkofalarstwo, packet radio, sport DX-owy. (Moderated)
+pl.rec.radio.cb	CB-Radio - dyskusje techniczne, sprzet, ogloszenia.
+pl.rec.rowery	Rowery: sprzet, wyprawy, jazda w miescie.
+pl.rec.sport	Dla kibicow i dla tych ktorzy sami uprawiaja sport.
+pl.rec.sport.koszykowka	Koszykowka polska, europejska i NBA.
+pl.rec.sport.motorowe	Sporty motorowe.
+pl.rec.sport.pilka-nozna	Grupa dla kibicow i sympatykow pilki noznej.
+pl.rec.sport.tenis	Tenis na swiecie.
+pl.rec.telewizja	Rozmowy milosnikow malego ekranu.
+pl.rec.travel		Turystyka i podroze w wszelkich formach i postaciach.
+pl.rec.wedkarstwo	Techniki polowu, przynety, sprzet, lowiska.
+pl.rec.windsurfing	Windsurgfing i wszystko z nim zwiazane.
+pl.rec.zbieractwo	Monety, karty telefoniczne, znaczki i inne kolekcje.
+pl.rec.zeglarstwo	Zeglarze wod slonych i slodkich.
+pl.rec.zeglarstwo.szanty	Szanty i piosenka zeglarska.
+pl.rec.zwierzaki	Zwierzeta bedace naszymi przyjaciolmi.
+pl.regionalne.gorny-slask	Gorny Slask, Zaglebie - pytania, komentarze, propozycje.
+pl.regionalne.krakow	Krakowiaczek ci ja!
+pl.regionalne.lodz	Forum mieszkancow miasta Lodzi i okolic.
+pl.regionalne.lublin	Grupa mieszkancow i przyjaciol Lublina.
+pl.regionalne.poznan	Poznan i okolice: Pyrlandia.
+pl.regionalne.szczecin	Forum wymiany informacji o Szczecinie.
+pl.regionalne.szczecin.ogloszenia	Ogloszenia dotyczace Szczecina i okolic.
+pl.regionalne.trojmiasto	My, mieszkancy Trojmiasta!
+pl.regionalne.warszawa	Wirtualna Warszawa - rozmowy, informacje.
+pl.regionalne.warszawa.ogloszenia	Ogloszenia dotyczace Warszawy i okolic.
+pl.regionalne.wroclaw	O Wroclawiu, nie tylko dla Wroclawian.
+pl.sci.chemia	Chemia czysta, technologia i inzynieria.
+pl.sci.filozofia	Miejsce spotkan filozofow (nie chlopskich).
+pl.sci.fizyka	Forum fizykow polskich.
+pl.sci.geodezja	Geodezja i kartografia.
+pl.sci.historia		Ludzie, obyczaje, zdarzenia na przestrzeni wiekow.
+pl.sci.kosmos	Ogromny i pelen zagadek.
+pl.sci.matematyka	Zagadnienia krolowej nauk.
+pl.sci.medycyna		Od pediatrii do patologii.
+pl.sci.psychologia	Psychologia w zyciu codziennym.
+pl.sci.socjologia	Socjologia i nauki pokrewne.
+pl.sci.weterynaria	Leczenie zwierzat.
+pl.soc.dekadentyzm	Antyspoleczne poglady, poezja, swirunki, kreacja.
+pl.soc.dzieci	Jak miec dzieci i to przezyc.
+pl.soc.edukacja	Edukacja i wychowanie od niemowlaka do umarlaka.
+pl.soc.edukacja.szkola	Szkola i jej uzytkownicy - uczniowie.
+pl.soc.inwalidzi	Sieciowe forum osob niepelnosprawnych.
+pl.soc.polityka		Dyskusje o polityce (lista polityka@mimuw.edu.pl).
+pl.soc.polityka.wybory	Wybory i referenda w Polsce.
+pl.soc.prawo	Prawo na co dzien - dyskusje, porady, opinie.
+pl.soc.prawo.podatki	Podatki w Polsce.
+pl.soc.religia	Dyskusje religijne (lista religia@uci.agh.edu.pl).
+pl.soc.savoir-vivre	Zasady kultury osobistej i ich zasadnosc.
+pl.soc.seks	Wszystko o seksie (ale nie obrazki).
+pl.soc.seks.moderowana	Kulturalnie o seksie i milosci. (Moderated)
+pl.soc.seks.towarzyskie	"Biuro" ogloszen towarzyskich i matrymonialnych.
+pl.soc.wegetarianizm	Ideologia, a NIE przepisy.
+pl.soc.zieloni	Polski ruch ekologiczny.
+pl.test			Tu mozna wysylac wszelkie testy.
