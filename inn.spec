@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.2.3
-Release:	6
+Release:	7
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -22,7 +22,7 @@ Source8:	%{name}.init
 Source9:	%{name}-cnfsstat.cron
 Source10:	%{name}.logrotate
 #Patch0:	ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
-Patch0:		%{name}-2.2.3-v6-20000907.patch.gz
+Patch0:		%{name}-2.2.3-v6-20000915.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 URL:		http://www.isc.org/inn.html
@@ -30,7 +30,7 @@ Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
-Requires:	%{name}-libs = %{version}
+Prereq:		%{name}-libs = %{version}
 Requires:	cleanfeed
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
@@ -268,8 +268,6 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man[1358]/* \
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/ldconfig 
-
 if [ -f /var/lib/news/history ]; then
 	cd /var/lib/news
 	%{_bindir}/makehistory -i -r
@@ -357,8 +355,8 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del inn
 fi
 
-%postun
-/sbin/ldconfig 
+%post libs -p /sbin/ldconfig 
+%postun libs -p /sbin/ldconfig 
 
 %files
 %defattr(644,root,root,755)
