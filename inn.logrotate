@@ -14,7 +14,7 @@
 	olddir /var/log/archiv/news
 	create 640 news news
 	prerotate
-		ctlinnd -s pause "Flushing log and syslog files"
+		ctlinnd -s pause "Flushing log and syslog files" || :
 	endscript
 	postrotate
 		ctlinnd -s go "Flushing log and syslog files"
@@ -25,7 +25,7 @@
 	olddir /var/log/archiv/news
 	create 640 news news
 	prerotate
-		ctlinnd -s pause "Flushing log and syslog files"
+		ctlinnd -s pause "Flushing log and syslog files" || :
 	endscript
 	postrotate
 		ctlinnd -s go "Flushing log and syslog files"
