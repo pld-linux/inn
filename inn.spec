@@ -382,7 +382,7 @@ fi
 %attr(660,news,news) %ghost /var/log/news/news.err
 
 # SPOOL
-%attr(770,root,news) %dir /var/spool/news
+%attr(771,root,news) %dir /var/spool/news
 %attr(770,root,news) %dir /var/spool/news/cycbuffs
 %attr(770,root,news) %dir /var/spool/news/innfeed
 %attr(770,root,news) %dir /var/spool/news/incoming
