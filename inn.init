@@ -2,11 +2,11 @@
 #
 # innd		InterNet News System
 #
-# chkconfig: 345 95 05
-# description: inn is the most popular server for Usenet news. It allows \
-#              you to setup local news servers. It can be difficult to \
-#              set up properly though, so be sure to read /usr/doc/inn* \
-#              before trying.
+# chkconfig:	345 95 05
+# description:	inn is the most popular server for Usenet news. It allows \
+#		you to setup local news servers. It can be difficult to \
+#		set up properly though, so be sure to read /usr/doc/inn* \
+#		before trying.
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -19,8 +19,8 @@
 
 # Check that networking is up.
 if is_no "${NETWORKING}"; then
-    msg_Network_Down INN
-    exit 1
+	msg_Network_Down "INN"
+	exit 1
 fi
 			
 
@@ -28,83 +28,80 @@ fi
 case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
-	    msg_starting "INN"
-	    daemon inndstart
-	    if is_yes $DOINNWATCH ; then
-		msg_starting "INN Watch"
-		busy
-		su - news -c "/usr/bin/innwatch &"
-		if ps -C innwatch >/dev/null 2>&1; then
-		    deltext;ok
-		else
-		    deltext;fail
+		msg_starting "INN"
+		daemon inndstart
+		if is_yes $DOINNWATCH ; then
+			msg_starting "INN Watch"
+			busy
+			su - news -c "/usr/bin/innwatch &"
+			RETVAL=$?
+			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
+			if ps -C innwatch >/dev/null 2>&1; then
+				deltext;ok
+			else
+				deltext;fail
+			fi
 		fi
-    	    fi
-	    touch /var/lock/subsys/inn
 	else
-    	    msg_Already_Running "INN"
-	    exit 1
+		msg_Already_Running "INN"
+		exit 1
 	fi
-	touch /var/lock/subsys/inn
 	;;
   stop)
 	if [ -f /var/lock/subsys/inn ]; then
-
-	    if [ -f /var/run/news/innd.pid ]; then
 		msg_stopping "INN"
 		busy
 		if ctlinnd shutdown "Stopping INN service";then
-		    deltext;ok
+			deltext;ok
 		else
-		    deltext;fail
+			deltext;fail
 		fi
-	    fi
 
-	    if [ -f /var/run/news/innwatch.pid ]; then
-		msg_stopping "INN Watch"
-		busy
-        	if killall -9 innwatch; then
-            	    deltext;ok
-        	else
-            	    deltext;died
-        	fi
-		rm -f /var/run/news/innwatch.pid /var/run/news/LOCK.innwatch >/dev/null 2>&1
-	    fi
+		if [ -f /var/run/news/innwatch.pid ]; then
+			msg_stopping "INN Watch"
+			busy
+	        	if killall -9 innwatch; then
+				deltext;ok
+			else
+				deltext;died
+			fi
+			rm -f /var/run/news/innwatch.pid \
+			/var/run/news/LOCK.innwatch >/dev/null 2>&1
+		fi
 
-	    if [ -f /var/run/news/infeed.pid ]; then
-		msg_stopping "INN Feed"
-		killproc innfeed -9
-		rm -f /var/run/news/innfeed.pid >/dev/null 2>&1
-	    fi
+		if [ -f /var/run/news/infeed.pid ]; then
+			msg_stopping "INN Feed"
+			killproc innfeed -9
+			rm -f /var/run/news/innfeed.pid >/dev/null 2>&1
+		fi
 
-	    if [ -f /var/run/news/actived.pid ]; then
-		msg_stopping "INN Actived"
-		killproc actived -9
-		rm -f /var/run/news/actived.pid >/dev/null 2>&1
-	    fi
+		if [ -f /var/run/news/actived.pid ]; then
+			msg_stopping "INN Actived"
+			killproc actived -9
+			rm -f /var/run/news/actived.pid >/dev/null 2>&1
+		fi
 
 	else
-	    msg_Already_Running INN
-	    exit 1
+		msg_Already_Running INN
+		exit 1
 	fi
-
-	rm -f /var/lock/subsys/inn  >/dev/null 2>&1
+	rm -f /var/lock/subsys/inn >/dev/null 2>&1
 	;;
   status)
 	status innd
 	;;
   reload)
 	if [ -f /var/lock/subsys/inn ]; then
-    	    msg_reload "INN"
-	    busy
-	    if ctlinnd reload all "Reloading";then
-		deltext;ok
-	    else
-		deltext;fail
-	    fi
-        else
-	    msg_Not_Running INN
-	    exit 1
+		msg_reload "INN"
+		busy
+		if ctlinnd reload all "Reloading";then
+			deltext;ok
+		else
+			deltext;fail
+		fi
+	else
+		msg_Not_Running INN
+		exit 1
 	fi
 	;;
   restart)
@@ -118,4 +115,4 @@ case "$1" in
 	;;
 esac
 
-exit 0
+exit $RETVAL
