@@ -20,9 +20,9 @@ Source7:	%{name}.crontab
 Source8:	%{name}.init
 Source9:	%{name}-cnfsstat.cron
 Source10:	%{name}.logrotate
-Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/inn-2.2.1-v6-19991121.diff.gz
+Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
 Patch1:		%{name}-PLD.patch
-Patch2:		inn-install.patch
+Patch2:		%{name}-install.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -52,8 +52,8 @@ w katalogu /usr/share/doc/inn-*.
 %package libs
 Summary:	INN libraries
 Summary(de):	INN-Library
-Summary(pl):	Biblioteki do INN-a
 Summary(fr):	Bibliothèque INN
+Summary(pl):	Biblioteki do INN-a
 Group:		Development/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
@@ -547,6 +547,7 @@ fi
 %{_mandir}/man[58]/**
 
 %files libs
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 
 %files devel
