@@ -8,7 +8,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.1
-Release:	0.9
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -345,6 +345,11 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory 
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
+# remove unpackaged files
+rm -f $RPM_BUILD_ROOT%{_datadir}/news/filter/filter_innd.* (conflict with cleanfeed)
+rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
+rm -f $RPM_BUILD_ROOT%{_bindir}/rc.news
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -531,8 +536,6 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/INN.py
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.pl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_innd.py
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.py
 %config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
