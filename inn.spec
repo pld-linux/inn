@@ -364,20 +364,10 @@ else
     echo "news.notice                                     /var/log/news/news.notice"	>> /etc/syslog.conf.inn
 fi
 
-/sbin/chkconfig --add inn
-if [ -f /var/lock/subsys/inn ]; then
-	/etc/rc.d/init.d/inn restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/inn start\" to start inn news server." >&2
-fi
+DESC="inn news server"; %chkconfig_add
 
 %preun
-if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/news ]; then
-		/etc/rc.d/init.d/inn stop
-	fi
-	/sbin/chkconfig --del inn
-fi
+%chkconfig_del
 
 %post libs -p /sbin/ldconfig 
 %postun libs -p /sbin/ldconfig 
