@@ -345,8 +345,10 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory 
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
+# remove files in conflict with cleanfeed
+rm -f $RPM_BUILD_ROOT%{_datadir}/news/filter/filter_innd.* 
+
 # remove unpackaged files
-rm -f $RPM_BUILD_ROOT%{_datadir}/news/filter/filter_innd.* (conflict with cleanfeed)
 rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 rm -f $RPM_BUILD_ROOT%{_bindir}/rc.news
 
