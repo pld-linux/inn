@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2
-Release: 	1
+Release: 	1d
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieæ/Serwery
@@ -34,13 +34,13 @@ Ca³e mnóstwo po¿ytecznych informacji o konfigurowaniu INN-a znajdziesz
 w katalogu /usr/doc/inn-*.
 
 %package devel
-Group: Development/Libraries
-Group(pl):   Programowanie/Biblioteki
-Summary:     INN-Library
-Summary(de): INN-Library
-Summary(fr): Bibliothèque INN
-Summary(pl): INN-biblioteka i pliki naglowkowe dla inn-a
-Summary(tr): INN kitaplýðý
+Summary:	INN-Library
+Summary(de):	INN-Library
+Summary(fr):	Bibliothèque INN
+Summary(pl):	INN-biblioteka i pliki nag³ówkowe dla inn-a
+Summary(tr):	INN kitaplýðý
+Group:		Development/Libraries
+Group(pl):	Programowanie/Biblioteki
 
 %description devel
 This library is needed by several programs that interface to INN, such as
@@ -63,13 +63,13 @@ kitaplýktýr.
 
 
 %package -n inews
-Group: Networking/News
-Group(pl):   Sieæ/News
-Summary: Inews program (used for posting by inn and trn)
-Summary(de): Inews-Programm (für die Zustellung mit inn und trn) 
-Summary(fr): Programme inews (utilisé par inn et trn pour poster)
-Summary(pl): Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
-Summary(tr): Haber biçimlendirme programý
+Summary:	Inews program (used for posting by inn and trn)
+Summary(de):	Inews-Programm (für die Zustellung mit inn und trn) 
+Summary(fr):	Programme inews (utilisé par inn et trn pour poster)
+Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
+Summary(tr):	Haber biçimlendirme programý
+Group:		Networking/News
+Group(pl):	Sieæ/News
 
 %description -n inews
 The inews program is used by some news readers to post news.
@@ -328,7 +328,7 @@ fi
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/storage.conf
 
 %attr(711,root,root) /usr/bin/rnews
-%attr(755, root, root) /usr/bin/inews
+%attr(755,root,root) /usr/bin/inews
 %attr(711,root,root) /usr/sbin/ctlinnd
 %attr(555,news,news) /usr/lib/news/bin/actived
 %attr(555,news,news) /usr/lib/news/bin/actmerge
@@ -430,16 +430,16 @@ fi
 %files devel
 %attr(664,root,root) /usr/include/*
 %attr(664,root,root) /usr/lib/*.a
-%attr(644,root,man) /usr/man/man3/*
+%attr(644,root, man) /usr/man/man3/*
 
 %files -n inews
 /usr/bin/inews
 %attr(4555,news,news) %config /usr/lib/news/bin/inews
-/usr/man/man1/inews.1.gz
+%attr(644,root, man) /usr/man/man1/inews.1.gz
 
 %changelog
 * Fri Jan 29 1999 Maciej Paliwoda <maciejp@uci.agh.edu.p>
-[2.2-1]
+  [2.2-1d]
 - special thanks for Wojtek <A6>lusarczyk <wojtek@shadow.eu.org>
 	& Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
 - new version 2.2 (stable)
