@@ -31,12 +31,6 @@ Patch4:		%{name}-setreuid.patch
 Patch5:		%{name}-sec.patch
 Patch6:		%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
-Prereq:		/sbin/chkconfig
-Prereq:		/sbin/ldconfig
-Prereq:		rc-scripts
-Prereq:		sed
-Prereq:		fileutils
-Prereq:		%{name}-libs = %{version}
 BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	db3-devel
@@ -46,7 +40,12 @@ Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
 Requires:	psmisc >= 20.1
-#Requires:	perl-GD
+Prereq:		/sbin/chkconfig
+Prereq:		/sbin/ldconfig
+Prereq:		rc-scripts
+Prereq:		sed
+Prereq:		fileutils
+Prereq:		%{name}-libs = %{version}
 Provides:	nntpserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
