@@ -27,50 +27,52 @@ else
 	exit 0
 fi
 			
-
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
 		msg_starting "INN"
 		daemon su news -c inndstart
-		if is_yes $DOINNWATCH ; then
+		if is_yes "$DOINNWATCH" ; then
 			msg_starting "INN Watch"
 			busy
-			su news -c "umask 002 ; /usr/bin/setsid /usr/bin/innwatch &" </dev/null >&0 2>&0
+			su news -c "umask 002
+			/usr/bin/setsid /usr/bin/innwatch &" </dev/null >&0 2>&0
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
 			ps -C innwatch >/dev/null 2>&1 || usleep 500000
-			if ps -C innwatch >/dev/null 2>&1; then
-				deltext;ok
+			if [ $RETVAL -eq 0 ] && ps -C innwatch >/dev/null 2>&1; then
+				ok
+				touch /var/lock/subsys/inn
 			else
-				deltext;fail
+				RETVAL=1
+				fail
 			fi
 		else
 			touch /var/lock/subsys/inn
 		fi
 	else
 		msg_already_running "INN"
-		exit 1
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/inn ]; then
 		msg_stopping "INN"
 		busy
-		if ctlinnd shutdown "Stopping INN service";then
-			deltext;ok
+		if ctlinnd shutdown "Stopping INN service"; then
+			ok
 		else
-			deltext;fail
+			fail
 		fi
 
 		if [ -f /var/run/news/innwatch.pid ]; then
 			msg_stopping "INN Watch"
 			busy
 			if killall -9 innwatch; then
-				deltext;ok
+				ok
 			else
-				deltext;died
+				died
 			fi
 			rm -f /var/run/news/innwatch.pid \
 			/var/run/news/LOCK.innwatch >/dev/null 2>&1
@@ -88,25 +90,25 @@ case "$1" in
 			rm -f /var/run/news/actived.pid >/dev/null 2>&1
 		fi
 
+		rm -f /var/lock/subsys/inn >/dev/null 2>&1
 	else
 		msg_not_running INN
-		exit 1
 	fi
-	rm -f /var/lock/subsys/inn >/dev/null 2>&1
 	;;
   status)
 	status innd
+	exit $?
 	;;
-  reload)
+  reload|force-reload)
 	if [ -f /var/lock/subsys/inn ]; then
 		msg_reloading "INN"
 		busy
 		ctlinnd reload all "Reloading" >/dev/null 2>&1;
-		RETVAL=$?
+		[ $? -ne 0 ] && RETVAL=7
 		[ $RETVAL -eq 0 ] && ok || died
 	else
 		msg_not_running INN
-		exit 1
+		exit 7
 	fi
 	;;
   restart)
@@ -115,9 +117,8 @@ case "$1" in
 	$0 start
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
-	;;
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
