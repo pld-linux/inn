@@ -17,6 +17,7 @@ Source4:	inn-cron-expire
 Source5:	inn-cron-rnews
 Source6:	news.init
 Patch0: 	inn-all.patch
+Patch1:		inn-install.patch
 Url: 		http://www.isc.org/inn.html
 Requires: 	cleanfeed
 %requires_pkg	perl
@@ -104,6 +105,7 @@ yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 %prep
 %setup -q 
 %patch0 -p1
+%patch1 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -184,7 +186,8 @@ install storage/methods.h $RPM_BUILD_ROOT/usr/include
 install storage/overview.h $RPM_BUILD_ROOT/usr/include
 
 gzip -9nf $RPM_BUILD_ROOT/usr/man/man{1,3,5,8}/* \
-	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook
+	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
+	INSTALL ChangeLog COPYRIGHT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -268,6 +271,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc {CONTRIBUTORS,HISTORY,README,README.perl_hook,README.tcl_hook}.gz
+%doc {INSTALL,ChangeLog,COPYRIGHT}.gz
 
 %attr(775,news,news) %dir /etc/news
 %attr(755,news,news) %dir /usr/lib/news
@@ -446,13 +450,16 @@ fi
 /usr/man/man1/inews.1.gz
 
 %changelog
-* Thu Apr 15 1999 Piotr Czerwiñski <pius@pld.org.pl>
+* Fri Apr 16 1999 Piotr Czerwiñski <pius@pld.org.pl>
   [2.2-3]
+- changed install procedure to allow building package from non-root 
+  account (inn-install.patch),
+- minor fixes.
+
+* Thu Apr 15 1999 Piotr Czerwiñski <pius@pld.org.pl>
 - fixed Group(pl),
 - changed Buildroot to /tmp/%{name}-%{version}-root,
 - removed man group from man pages,
-- removed INSTALL and COPYRIGHT from %doc (copyright statment is in the
-  Copyright field),
 - added full %defattr description in %files,
 - added Requires: %%{name} = %%{version} to devel subpackage,
 - added some %requires_pkg macros,
