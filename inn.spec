@@ -53,7 +53,7 @@ PreReq:		rc-scripts
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
 Requires(post,preun):	/sbin/chkconfig
-Requires(post):	sed
+Requires(post):	sed >= 4.0
 Requires(post):	fileutils
 Requires(post):	textutils
 Requires(post):	/usr/sbin/usermod
