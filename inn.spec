@@ -3,7 +3,7 @@ Summary:	INN, the InterNet News System (news server)
 Summary(de):	das InterNet News System (News-Server)
 Summary(es):	INN, InterNet News System (servidor news)
 Summary(fr):	INN, le système InterNet News (serveur de news)
-Summary(pl):	INN, serwer nowinek 
+Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
@@ -23,7 +23,7 @@ Source8:	%{name}-cnfsstat.cron
 Source9:	%{name}.logrotate
 Source10:	%{name}-etc-readers.conf
 Source11:	getlist.1.pl
-Source12:	innd.8.pl
+Source12:	%{name}d.8.pl
 #Patch0:	ftp://ftp.north.ad.jp/pub/IPv6/INN/tmp/%{name}-2.3.0-v6-20001011.diff.gz
 Patch0:		%{name}-ipv6.patch
 Patch1:		%{name}-PLD.patch
@@ -99,19 +99,19 @@ Group:		Development/Libraries
 This library is needed by several programs that interface to INN, such
 as newsgate or tin.
 
-%description -l de libs
+%description libs -l de
 Diese Library wird von mehreren Programmen benötigt, die mit INN
 kommunizieren, etwa newsgate oder tin.
 
-%description -l fr libs
+%description libs -l fr
 Cette bibliothèque est nécessaire à plusieurs programmes qui
 s'interfacent avec INN, comme newsgate ou tin.
 
-%description -l pl libs
+%description libs -l pl
 Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z
 INN-em, takich jak newsgate czy tin.
 
-%description -l tr libs
+%description libs -l tr
 INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken
 bir kitaplýktýr.
 
@@ -130,26 +130,26 @@ Requires:	db3-devel
 %description devel
 Header files and developer documentations for INN libraries.
 
-%description -l de devel
+%description devel -l de
 Diese Library wird von mehreren Programmen benötigt, die mit INN
 kommunizieren, etwa newsgate oder tin.
 
-%description -l es devel
+%description devel -l es
 Esta biblioteca es requerida por varios programas que tienen interface
 con INN, como el newsgate o tin.
 
-%description -l fr devel
+%description devel -l fr
 Cette bibliothèque est nécessaire à plusieurs programmes qui
 s'interfacent avec INN, comme newsgate ou tin.
 
-%description -l pl devel
+%description devel -l pl
 Pliki nag³ówkowe i dokumentacja programisty do bibliotek INN-a.
 
-%description -l pt_BR devel
+%description devel -l pt_BR
 Esta biblioteca é requerida por vários programas que tem interface com
 o INN, como o newsgate ou tin.
 
-%description -l tr devel
+%description devel -l tr
 INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken
 bir kitaplýktýr.
 
@@ -164,13 +164,13 @@ Requires:	%{name}-devel = %{version}
 %description static
 Static INN libraries.
 
-%description -l es static
+%description static -l es
 Static libraries for inn development
 
-%description -l pl static
+%description static -l pl
 Biblioteki statyczne do INN.
 
-%description -l pt_BR static
+%description static -l pt_BR
 INN é um servidor de news, que pode ser configurado para manipular
 USENET news bem como newsfeeds privadas. Existe um *MONTE* de
 informações sobre a configuração do INN em /usr/doc -- leia.
@@ -179,7 +179,7 @@ Bibliotecas estáticas para desenvolvimento com inn
 
 %package -n inews
 Summary:	Inews program (used for posting by inn and trn)
-Summary(de):	Inews-Programm (für die Zustellung mit inn und trn) 
+Summary(de):	Inews-Programm (für die Zustellung mit inn und trn)
 Summary(es):	Programa Inews (usado para franqueo por inn y trn)
 Summary(fr):	Programme inews (utilisé par inn et trn pour poster)
 Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
@@ -192,36 +192,36 @@ The inews program is used by some news readers to post news. It does
 some consistency checking and header reformatting, and forwards the
 article on to the news server specified in inn.conf.
 
-%description -l de -n inews
+%description -n inews -l de
 Das Programm 'inews' wird von manchen Newsreadern zum Senden von
 Nachrichten verwendet. Es führt eine Konsistenzprüfung und Header-Neuf
 ormatierung aus und leitet die Nachricht an den in 'inn.conf'
 angegebenen News-Server weiter.
 
-%description -l es -n inews
+%description -n inews -l es
 El programa inews se usa por algunos lectores de news para postar
 mensajes. Hace alguna consistencia chequeando y reformateando headers,
 y enviando el artículo para el servidor de news especificado en el
 inn.conf.
 
-%description -l fr -n inews
+%description -n inews -l fr
 Le programme inews est utilisé par certains lecteurs de news pour
 poster les articles. Il effectue des vérifications et un reformatage
 des en-têtes et fait suivre l'article au serveur de news spécifié dans
 inn.conf.
 
-%description -l pl -n inews
+%description -n inews -l pl
 Inews jest u¿ywany przez niektóre czytniki news do wysy³ania
 artyku³ów. Sprawdza budowê artyku³u, przepisuje nag³ówek i wysy³a do
 serwera news wyszczególnionego w inn.conf.
 
-%description -l pt_BR -n inews
+%description -n inews -l pt_BR
 O programa inews é usado por alguns leitores de news para postar
 mensagens. Ele faz alguma consistência checando e reformatando
 headers, e enviando o artigo para o servidor de news especificado no
 inn.conf.
 
-%description -l tr -n inews
+%description -n inews -l tr
 inews programý bazý haber okuyucular tarafýndan haber yollamak
 amacýyla kullanýlýr. Program bazý güvenlik denetimleri ve baþlýk
 biçimlendirmesi yaparak ve inn.conf dosyasýnda belirtilen haber
@@ -272,7 +272,7 @@ libtoolize --copy --force
 %{__make} all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control
 
-%install 
+%install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}/inn} \
@@ -315,7 +315,7 @@ touch $RPM_BUILD_ROOT/var/log/news/news.notice
 touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
 
-touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h	
+touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h
 install include/{clibrary,dbz,libinn,nntp,ov,qio,ppport,rwlock,storage}.h \
 	$RPM_BUILD_ROOT%{_includedir}/inn
 
@@ -422,8 +422,8 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del inn
 fi
 
-%post libs -p /sbin/ldconfig 
-%postun libs -p /sbin/ldconfig 
+%post libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
