@@ -8,7 +8,7 @@ Version:	2.2
 Release: 	1d
 Copyright:	distributable
 Group:		Networking/Daemons
-Group(pl):	Sieæ/Serwery
+Group(pl):	Sieciowe/Serwery
 Source:		ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	inn-default-active
 Source2:	inn-default-distributions
@@ -19,7 +19,7 @@ Source6:	news.init
 Patch0: 	inn-all.patch
 Url: 		http://www.isc.org/inn.html
 Requires: 	cleanfeed
-Buildroot: 	/tmp/%{name}-%{version}-%{release}-root
+Buildroot: 	/tmp/%{name}-%{version}-root
 Prereq: 	/sbin/chkconfig
 
 %description
@@ -69,7 +69,7 @@ Summary(fr):	Programme inews (utilisé par inn et trn pour poster)
 Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
 Summary(tr):	Haber biçimlendirme programý
 Group:		Networking/News
-Group(pl):	Sieæ/News
+Group(pl):	Sieciowe/News
 
 %description -n inews
 The inews program is used by some news readers to post news.
@@ -180,8 +180,8 @@ install storage/interface.h $RPM_BUILD_ROOT/usr/include
 install storage/methods.h $RPM_BUILD_ROOT/usr/include
 install storage/overview.h $RPM_BUILD_ROOT/usr/include
 
-gzip -9nf $RPM_BUILD_ROOT/usr/man/man{1,3,5,8}/*
-gzip -9nf CONTRIBUTORS COPYRIGHT HISTORY INSTALL README README.perl_hook README.tcl_hook
+gzip -9nf $RPM_BUILD_ROOT/usr/man/man{1,3,5,8}/* \
+	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -263,7 +263,9 @@ if [ $1 = 0 ]; then
 fi
 
 %files
-%attr(555,root,root) %doc CONTRIBUTORS.gz COPYRIGHT.gz HISTORY.gz INSTALL.gz README.gz README.perl_hook.gz README.tcl_hook.gz
+%defattr(644,root,root,755)
+%doc {CONTRIBUTORS,HISTORY,README,README.perl_hook,README.tcl_hook}.gz
+
 %attr(775,news,news) %dir /etc/news
 %attr(755,news,news) %dir /usr/lib/news
 %attr(755,news,news) %dir /usr/lib/news/bin
@@ -404,19 +406,19 @@ fi
 %config(missingok) /usr/lib/news/lib/innshellvars.pl
 %config(missingok) /usr/lib/news/lib/innshellvars.tcl
 
-%attr(644,root,man) /usr/man/man1/convdate.1.gz
-%attr(644,root,man) /usr/man/man1/getlist.1.gz
-%attr(644,root,man) /usr/man/man1/grephistory.1.gz
-%attr(644,root,man) /usr/man/man1/innconfval.1.gz
-%attr(644,root,man) /usr/man/man1/innfeed.1.gz
-%attr(644,root,man) /usr/man/man1/installit.1.gz
-%attr(644,root,man) /usr/man/man1/nntpget.1.gz
-%attr(644,root,man) /usr/man/man1/rnews.1.gz
-%attr(644,root,man) /usr/man/man1/shlock.1.gz
-%attr(644,root,man) /usr/man/man1/shrinkfile.1.gz
-%attr(644,root,man) /usr/man/man1/startinnfeed.1.gz
-%attr(644,root,man) /usr/man/man1/subst.1.gz
-%attr(644,root,man) /usr/man/man[58]/*
+/usr/man/man1/convdate.1.gz
+/usr/man/man1/getlist.1.gz
+/usr/man/man1/grephistory.1.gz
+/usr/man/man1/innconfval.1.gz
+/usr/man/man1/innfeed.1.gz
+/usr/man/man1/installit.1.gz
+/usr/man/man1/nntpget.1.gz
+/usr/man/man1/rnews.1.gz
+/usr/man/man1/shlock.1.gz
+/usr/man/man1/shrinkfile.1.gz
+/usr/man/man1/startinnfeed.1.gz
+/usr/man/man1/subst.1.gz
+/usr/man/man[58]/*
 
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active
 %attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/distributions
@@ -428,19 +430,20 @@ fi
 %attr(660,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.err
 
 %files devel
-%attr(664,root,root) /usr/include/*
-%attr(664,root,root) /usr/lib/*.a
-%attr(644,root, man) /usr/man/man3/*
+%defattr(644,root,root,755)
+/usr/include/*
+/usr/lib/*.a
+/usr/man/man3/*
 
 %files -n inews
 /usr/bin/inews
 %attr(4555,news,news) %config /usr/lib/news/bin/inews
-%attr(644,root, man) /usr/man/man1/inews.1.gz
+%attr(644,root,root) /usr/man/man1/inews.1.gz
 
 %changelog
 * Fri Jan 29 1999 Maciej Paliwoda <maciejp@uci.agh.edu.p>
   [2.2-1d]
-- special thanks for Wojtek <A6>lusarczyk <wojtek@shadow.eu.org>
+- special thanks for Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
 	& Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
 - new version 2.2 (stable)
 - build for Linux PLD
