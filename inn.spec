@@ -45,8 +45,6 @@ BuildRequires:	perl
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
-Requires:	%{perl_archlib}
-%requires_eq	perl
 #Requires:	perl-GD
 Provides:	nntpserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
