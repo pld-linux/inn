@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2.2
-Release: 	6
+Release: 	7
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -29,9 +29,8 @@ Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
 Requires: 	cleanfeed
-Requires:	rc-scripts
+Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
-Requires:	/etc/rc.d/init.d/functions
 BuildRequires:	perl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -71,7 +70,8 @@ Cette bibliothèque est nécessaire à plusieurs programmes qui s'interfacent
 avec INN, comme newsgate ou tin.
 
 %description -l pl devel
-Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z INN-em, takich jak newsgate czy tin. 
+Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z INN-em,
+takich jak newsgate czy tin.
 
 %description -l tr devel
 INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken bir
@@ -167,14 +167,12 @@ make all PATHFILTER=%{_datadir}/news/filter \
 
 %install 
 rm -fr $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d}
-install -d $RPM_BUILD_ROOT%{_bindir}
-install -d $RPM_BUILD_ROOT%{_libdir}/news
-install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth}
-install -d $RPM_BUILD_ROOT%{_includedir}/inn
-install -d $RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8}
-install -d $RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/{news,archiv/news}}
-install -d $RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
+install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
+	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn} \
+	install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
+	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
+	$RPM_BUILD_ROOT/var/{run/news,state/news/backoff,log/{news,archiv/news}} \
+	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
 make install \
 	DESTDIR="$RPM_BUILD_ROOT" \
