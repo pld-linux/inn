@@ -1,0 +1,7 @@
+#!/bin/sh
+
+DOCNFSSTAT=`echo ${DOCNFSSTAT} | tr A-Z a-z`
+
+if [ -z "${DOCNFSSTAT}" -o "${DOCNFSSTAT}" = "on" -o "${DOCNFSSTAT}" = "true" -o "${DOCNFSSTAT}" = "yes" ]; then
+/usr/bin/cnfsstat -s
+fi
