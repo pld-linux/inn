@@ -349,28 +349,28 @@ fi
 
 # CONFIGS (INN is a one big config ;-)
 %attr(755,root,root) %dir %{_sysconfdir}
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/actsync.cfg
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/actsync.ign
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/control.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/cycbuff.conf
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/expire.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/incoming.conf
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/inn.conf
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/innfeed.conf
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/innreport.conf
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/innwatch.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/motd.news
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/news2mail.cf
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/nnrp.access
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/nnrpd.track
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/nntpsend.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/overview.ctl
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/passwd.nntp
-%attr(640,news,news) %config %verify(not size mtime md5) %{_sysconfdir}/storage.conf
-%config %verify(not size mtime md5) %{_sysconfdir}/moderators
-%config %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
-%config %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
-%config %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.cfg
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.ign
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/control.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/cycbuff.conf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/expire.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/incoming.conf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/inn.conf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innfeed.conf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innreport.conf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innwatch.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/motd.news
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/news2mail.cf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrp.access
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrpd.track
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nntpsend.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/passwd.nntp
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/storage.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/moderators
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
 
 %attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
