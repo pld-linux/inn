@@ -2,33 +2,42 @@
 #
 # innd		InterNet News System
 #
-# chkconfig: - 95 25
-# description: inn is the most popular server for Usenet news. It allows \
-#              you to setup local news servers. It can be difficult to \
-#              set up properly though, so be sure to read /usr/doc/inn* \
-#              before trying. 
+# chkconfig:	345 95 25
+#
+# description:	inn is the most popular server for Usenet news. It allows \
+#		you to setup local news servers. It can be difficult to \
+#		set up properly though, so be sure to read /usr/doc/inn* \
+#		before trying. 
 
-# Source function library.
+
+# Source function library
 . /etc/rc.d/init.d/functions
 
-# Get config.
+# Get network config
 . /etc/sysconfig/network
 
-# Check that networking is up.
-if [ ${NETWORKING} = "no" ]
-then
-	exit 0
-fi
+# Get service config
+[ -f /etc/sysconfig/inn ] && . /etc/sysconfig/inn
 
+# Check that networking is up.
+[ "${NETWORKING}" = "no" ] && echo "Error: Networking is down"; exit 0
+
+# Sanity check
 [ -d /etc/news ] || exit 0
 [ -d /usr/lib/news ] || exit 0
 [ -d /var/spool/news ] || exit 0
 
+
 # See how we were called.
 case "$1" in
   start)
-	echo -n "Starting INND system: "
-	su news -c /etc/rc.d/rc.news
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/news ]; then
+		show Starting INND
+		su news -c /etc/rc.d/rc.new
+	else
+		echo "portmap already is running"
+	fi
 	touch /var/lock/subsys/news
 	;;
   stop)
@@ -57,10 +66,14 @@ case "$1" in
 	status innd
 	;;
   restart)
+	$0 stop
+	$0 start
+	;;
+  reload)
 	kill -HUP `cat /var/run/news/innd.pid`
 	;;
   *)
-	echo "Usage: $0 {start|stop|status|restart}"
+	echo "Usage: $0 {start|stop|status|restart|reload}"
 	exit 1
 esac
 
