@@ -29,11 +29,11 @@ case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
 		msg_starting "INN"
-		daemon su - news -c inndstart
+		daemon su news -c inndstart
 		if is_yes $DOINNWATCH ; then
 			msg_starting "INN Watch"
 			busy
-			su - news -c "umask 002 ; /usr/bin/setsid /usr/bin/innwatch &" </dev/null >&0 2>&0
+			su news -c "umask 002 ; /usr/bin/setsid /usr/bin/innwatch &" </dev/null >&0 2>&0
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
 			if ps -C innwatch >/dev/null 2>&1; then
