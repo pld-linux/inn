@@ -39,7 +39,7 @@ BuildRequires:	libtool
 BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	db3-devel
-BuildRequires:	openssl-devel >= 0.9.6a
+BuildRequires:	openssl-devel >= 0.9.6m
 BuildRequires:	perl-devel >= 5.6.1
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	rc-scripts >= 0.2.0
