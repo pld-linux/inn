@@ -48,7 +48,7 @@ BuildRequires:	flex
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
-PreReq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}-%{release}
 PreReq:		rc-scripts
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
@@ -140,7 +140,7 @@ Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty do inn-a
 Summary(pt_BR):	Biblioteca INN
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	db-devel
 
 %description devel
@@ -175,7 +175,7 @@ Summary(es):	Static libraries for inn development
 Summary(pl):	Biblioteki statyczne do INN
 Summary(pt_BR):	Bibliotecas estáticas para desenvolvimento com inn
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static INN libraries.
@@ -202,7 +202,7 @@ Summary(pl):	Inews - program do wysy³ania artyku³ów (u¿ywany przez inn i trn)
 Summary(pt_BR):	Programa Inews (usado para postagem pelo inn e trn)
 Summary(tr):	Haber biçimlendirme programý
 Group:		Networking/News
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description -n inews
 The inews program is used by some news readers to post news. It does
