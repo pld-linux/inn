@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.2.3
-Release:	3
+Release:	4
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -20,7 +20,8 @@ Source7:	%{name}.crontab
 Source8:	%{name}.init
 Source9:	%{name}-cnfsstat.cron
 Source10:	%{name}.logrotate
-Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
+#Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
+Patch0:		%{name}-2.2.3-v6-20000903.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 URL:		http://www.isc.org/inn.html
@@ -162,7 +163,7 @@ sunucuya makaleyi yollar.
 
 %prep
 %setup -q
-#%patch0 -p1
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 
@@ -191,9 +192,9 @@ LDFLAGS="-s"; export LDFLAGS
         --enable-pgp-verify \
 	--enable-shared \
 	--enable-static \
-	--enable-libtool
-#	--enable-ipv6 \
-#	--enable-dual-socket
+	--enable-libtool \
+	--enable-ipv6 \
+	--enable-dual-socket
 
 %{__make} all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
@@ -398,29 +399,29 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/inn
 
 # CONFIGS (INN is a one big config ;-)
-%attr(755,root,root) %dir %{_sysconfdir}
+%attr(755,news,news) %dir %{_sysconfdir}
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.cfg
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.ign
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/control.ctl
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/cycbuff.conf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/expire.ctl
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/incoming.conf
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/inn.conf
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innfeed.conf
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innreport.conf
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innwatch.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/moderators
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/motd.news
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/news2mail.cf
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrp.access
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrpd.track
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nntpsend.ctl
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.ctl
+%attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/passwd.nntp
 %attr(640,news,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/storage.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/moderators
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
 
 %attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
