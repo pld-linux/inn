@@ -1674,15 +1674,15 @@ diff -Nur inn-2.3.2.orig/innfeed/host.h inn-2.3.2/innfeed/host.h
  
  /*
   * Functions used by the Connection to indicate Connection state.
-diff -Nur inn-2.3.2.orig/lib/Makefile inn-2.3.2/lib/Makefile
---- inn-2.3.2.orig/lib/Makefile	Thu May  3 22:27:32 2001
-+++ inn-2.3.2/lib/Makefile	Tue Jun 19 16:06:41 2001
+diff -Nur inn-2.3.3.orig/lib/Makefile inn-2.3.3/lib/Makefile
+--- inn-2.3.3.orig/lib/Makefile	Thu May  3 22:27:32 2001
++++ inn-2.3.3/lib/Makefile	Tue Jun 19 16:06:41 2001
 @@ -16,7 +16,7 @@
  	md5.c nonblocking.c parsedate.c perl.c qio.c radix32.c readin.c \
  	remopen.c reservedfd.c resource.c rwlock.c sendarticle.c \
  	sendpass.c tempname.c waitnb.c wildmat.c version.c xfopena.c \
--	xmalloc.c xsignal.c xwrite.c xwritev.c
-+	xmalloc.c xsignal.c xwrite.c xwritev.c inet_ntoa.c
+-	xmalloc.c xsignal.c xwrite.c
++	xmalloc.c xsignal.c xwrite.c inet_ntoa.c
  
  OBJECTS = $(MISSING_OBJ) \
  	argparse.o checkart.o cleanfrom.o clientactive.o clientlib.o \
@@ -1690,8 +1690,8 @@ diff -Nur inn-2.3.2.orig/lib/Makefile inn-2.3.2/lib/Makefile
  	md5.o nonblocking.o parsedate.o qio.o radix32.o readin.o \
  	remopen.o reservedfd.o resource.o rwlock.o sendarticle.o \
  	sendpass.o tempname.o waitnb.o wildmat.o version.o xfopena.o \
--	xmalloc.o xsignal.o xwrite.o xwritev.o
-+	xmalloc.o xsignal.o xwrite.o xwritev.o inet_ntoa.o
+-	xmalloc.o xsignal.o xwrite.o
++	xmalloc.o xsignal.o xwrite.o inet_ntoa.o
  
  LOBJECTS= $(OBJECTS:.o=.lo)
  
