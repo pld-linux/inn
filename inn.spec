@@ -35,6 +35,7 @@ Patch4:		%{name}-ac253.patch
 #Patch7:		%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	flex
