@@ -175,7 +175,7 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT/usr/lib $RPM_BUILD_ROOT/usr/bin/makehistory\
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
-gzip -9nf $RPM_BUILD_ROOT/usr/share/man/man?/* \
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man?/* \
 	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
 	INSTALL ChangeLog COPYRIGHT
 
@@ -403,19 +403,19 @@ fi
 %config(missingok) /usr/lib/news/lib/innshellvars.pl
 %config(missingok) /usr/lib/news/lib/innshellvars.tcl
 
-/usr/share/man/man1/convdate.1*
-/usr/share/man/man1/getlist.1*
-/usr/share/man/man1/grephistory.1*
-/usr/share/man/man1/innconfval.1*
-/usr/share/man/man1/innfeed.1*
-/usr/share/man/man1/installit.1*
-/usr/share/man/man1/nntpget.1*
-/usr/share/man/man1/rnews.1*
-/usr/share/man/man1/shlock.1*
-/usr/share/man/man1/shrinkfile.1*
-/usr/share/man/man1/startinnfeed.1*
-/usr/share/man/man1/subst.1*
-/usr/share/man/man[58]/*
+%{_mandir}/man1/convdate.1*
+%{_mandir}/man1/getlist.1*
+%{_mandir}/man1/grephistory.1*
+%{_mandir}/man1/innconfval.1*
+%{_mandir}/man1/innfeed.1*
+%{_mandir}/man1/installit.1*
+%{_mandir}/man1/nntpget.1*
+%{_mandir}/man1/rnews.1*
+%{_mandir}/man1/shlock.1*
+%{_mandir}/man1/shrinkfile.1*
+%{_mandir}/man1/startinnfeed.1*
+%{_mandir}/man1/subst.1*
+%{_mandir}/man[58]/*
 
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active
 %attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/distributions
@@ -430,14 +430,14 @@ fi
 %defattr(644,root,root,755)
 /usr/include/*
 /usr/lib/*.a
-/usr/share/man/man3/*
+%{_mandir}/man3/*
 
 %files -n inews
 %defattr(644,root,root,755)
 
 %attr(755,root,root) /usr/bin/inews
 %attr(4555,news,news) %config /usr/bin/inews
-/usr/share/man/man1/inews.1*
+%{_mandir}/man1/inews.1*
 
 %changelog
 * Fri May 14 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
