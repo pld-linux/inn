@@ -5,8 +5,8 @@ Summary(fr):	INN, le système InterNet News (serveur de news)
 Summary(pl):	INN, serwer nowinek 
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.3.1
-Release:	16
+Version:	2.3.2
+Release:	1
 License:	Distributable
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -29,8 +29,7 @@ Patch2:		%{name}-install.patch
 Patch3:		%{name}-db3.patch
 Patch4:		%{name}-setreuid.patch
 Patch5:		%{name}-sec.patch
-Patch6:		%{name}-gcc.patch
-Patch7:		%{name}-frsize.patch
+Patch6:		%{name}-frsize.patch
 URL:		http://www.isc.org/inn.html
 Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -197,7 +196,6 @@ sunucuya makaleyi yollar.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 
 %build
 touch innfeed/*.[ly]
