@@ -248,10 +248,9 @@ sunucuya makaleyi yollar.
 #%patch6 -p1	-- obsolete? (pathrun not used in inndstart)
 #%patch7 -p1	-- obsolete? (?)
 
-%build
 touch innfeed/*.[ly]
 
-rm -f config.cache
+%build
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
@@ -280,7 +279,8 @@ rm -f config.cache
 	--enable-ipv6 \
 	--enable-dual-socket
 
-%{__make} all PATHFILTER=%{_datadir}/news/filter \
+%{__make} all \
+	PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control
 
 %install
