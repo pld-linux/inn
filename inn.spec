@@ -24,6 +24,7 @@ Patch0:		inn-rh.patch
 URL: 		http://www.isc.org/inn.html
 Requires: 	cleanfeed
 Requires:	perl
+Requires:	rc-scripts
 BuildRoot:	/tmp/%{name}-%{version}-root
 Prereq: 	/sbin/chkconfig
 
