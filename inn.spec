@@ -143,7 +143,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,cron.{daily,hourly}}
 
 make DESTDIR="$RPM_BUILD_ROOT" install
 
-mv $RPM_BUILD_ROOT/usr/bin/rc.news $RPM_BUILD_ROOT/etc/rc.d
+mv $RPM_BUILD_ROOT%{_bindir}/rc.news $RPM_BUILD_ROOT/etc/rc.d
 
 install $RPM_SOURCE_DIR/inn-default-active $RPM_BUILD_ROOT/var/lib/news/active
 install $RPM_SOURCE_DIR/inn-default-distributions $RPM_BUILD_ROOT/var/lib/news/distributions
@@ -168,7 +168,7 @@ touch $RPM_BUILD_ROOT/var/log/news/news.crit
 touch $RPM_BUILD_ROOT/var/log/news/news.err
 touch $RPM_BUILD_ROOT/var/lib/news/active.times
 
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT/usr/bin/makehistory\
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory\
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
 	-i -r -f $RPM_BUILD_ROOT/var/lib/news/history || :
 
@@ -265,11 +265,11 @@ fi
 
 %attr(775,news,news) %dir /etc/news
 %dir %{_libdir}/news
-%dir /usr/bin
-%dir /usr/bin/auth
-%dir /usr/bin/control
-%dir /usr/bin/filter
-%dir /usr/bin/rnews.libexec
+%dir %{_bindir}
+%dir %{_bindir}/auth
+%dir %{_bindir}/control
+%dir %{_bindir}/filter
+%dir %{_bindir}/rnews.libexec
 %dir %{_libdir}/news/lib
 %dir /var/lib/news
 %dir /var/lib/news/backoff
@@ -326,77 +326,77 @@ fi
 %attr(550,news,news) %config %verify(not size mtime md5) /etc/news/send-uucp
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/storage.conf
 
-%attr(755,root,root) /usr/bin/rnews
-%attr(755,root,root) /usr/bin/inews
+%attr(755,root,root) %{_bindir}/rnews
+%attr(755,root,root) %{_bindir}/inews
 %attr(755,root,root) /usr/sbin/ctlinnd
-%attr(755,root,root) /usr/bin/actived
-%attr(755,root,root) /usr/bin/actmerge
-%attr(755,root,root) /usr/bin/actsync
-%attr(755,root,root) /usr/bin/actsyncd
-%attr(755,root,root) /usr/bin/archive
-%attr(755,root,root) /usr/bin/batcher
-%attr(755,root,root) /usr/bin/buffchan
-%attr(755,root,root) /usr/bin/cnfsstat
-%attr(755,root,root) /usr/bin/control/*
-%attr(755,root,root) /usr/bin/controlbatch
-%attr(755,root,root) /usr/bin/controlchan
-%attr(755,root,root) /usr/bin/convdate
-%attr(755,root,root) /usr/bin/crosspost
-%attr(755,root,root) /usr/bin/ctlinnd
-%attr(755,root,root) /usr/bin/cvtbatch
-%attr(755,root,root) /usr/bin/expire
-%attr(755,root,root) /usr/bin/expireindex
-%attr(755,root,root) /usr/bin/expireover
-%attr(755,root,root) /usr/bin/expirerm
-%attr(755,root,root) /usr/bin/fastrm
-%attr(755,root,root) /usr/bin/filechan
-%attr(640,news,news) /usr/bin/filter/*
-%attr(755,root,root) /usr/bin/getlist
-%attr(755,root,root) /usr/bin/grephistory
-%attr(2555,root,news) /usr/bin/inews
-%attr(755,root,root) /usr/bin/inncheck
-%attr(755,root,root) /usr/bin/innconfval
-%attr(755,root,root) /usr/bin/innd
-%attr(755,root,root) /usr/bin/inndf
-%attr(4550,root,news) /usr/bin/inndstart
-%attr(755,root,root) /usr/bin/innfeed-convcfg
-%attr(755,root,root) /usr/bin/innmail
-%attr(755,root,root) /usr/bin/innstat
-%attr(755,root,root) /usr/bin/innwatch
-%attr(755,root,root) /usr/bin/innxbatch
-%attr(755,root,root) /usr/bin/innxmit
-%attr(755,root,root) /usr/bin/mailpost
-%attr(755,root,root) /usr/bin/makeactive
-%attr(755,root,root) /usr/bin/makehistory
-%attr(755,root,root) /usr/bin/mod-active
-%attr(755,root,root) /usr/bin/news2mail
-%attr(755,root,root) /usr/bin/newsrequeue
-%attr(755,root,root) /usr/bin/nntpget
-%attr(755,root,root) /usr/bin/nntpsend
-%attr(755,root,root) /usr/bin/overchan
-%attr(755,root,root) /usr/bin/procbatch
-%attr(755,root,root) /usr/bin/prunehistory
-%attr(755,root,root) /usr/bin/pullnews
-%attr(755,root,root) /usr/bin/rnews.libexec/*
-%attr(755,root,root) /usr/bin/scanlogs
-%attr(755,root,root) /usr/bin/scanspool
-%attr(755,root,root) /usr/bin/send-*
-%attr(755,root,root) /usr/bin/sendxbatches
-%attr(755,root,root) /usr/bin/shlock
-%attr(755,root,root) /usr/bin/shrinkfile
-%attr(755,root,root) /usr/bin/simpleftp
-%attr(755,root,root) /usr/bin/sm
-%attr(755,root,root) %config /usr/bin/innfeed
-%attr(755,root,root) %config /usr/bin/innreport
-%attr(755,root,root) %config /usr/bin/news.daily
-%attr(755,root,root) %config /usr/bin/nnrpd
-%attr(755,root,root) %config /usr/bin/parsecontrol
-%attr(755,root,root) %config /usr/bin/pgpverify
-%attr(755,root,root) %config /usr/bin/rc.news
-%attr(4550,root,uucp) %config /usr/bin/rnews
-%attr(4550,root,news) %config /usr/bin/startinnfeed
-%attr(755,root,root) /usr/bin/tally.control
-%attr(755,root,root) /usr/bin/writelog
+%attr(755,root,root) %{_bindir}/actived
+%attr(755,root,root) %{_bindir}/actmerge
+%attr(755,root,root) %{_bindir}/actsync
+%attr(755,root,root) %{_bindir}/actsyncd
+%attr(755,root,root) %{_bindir}/archive
+%attr(755,root,root) %{_bindir}/batcher
+%attr(755,root,root) %{_bindir}/buffchan
+%attr(755,root,root) %{_bindir}/cnfsstat
+%attr(755,root,root) %{_bindir}/control/*
+%attr(755,root,root) %{_bindir}/controlbatch
+%attr(755,root,root) %{_bindir}/controlchan
+%attr(755,root,root) %{_bindir}/convdate
+%attr(755,root,root) %{_bindir}/crosspost
+%attr(755,root,root) %{_bindir}/ctlinnd
+%attr(755,root,root) %{_bindir}/cvtbatch
+%attr(755,root,root) %{_bindir}/expire
+%attr(755,root,root) %{_bindir}/expireindex
+%attr(755,root,root) %{_bindir}/expireover
+%attr(755,root,root) %{_bindir}/expirerm
+%attr(755,root,root) %{_bindir}/fastrm
+%attr(755,root,root) %{_bindir}/filechan
+%attr(640,news,news) %{_bindir}/filter/*
+%attr(755,root,root) %{_bindir}/getlist
+%attr(755,root,root) %{_bindir}/grephistory
+%attr(2555,root,news) %{_bindir}/inews
+%attr(755,root,root) %{_bindir}/inncheck
+%attr(755,root,root) %{_bindir}/innconfval
+%attr(755,root,root) %{_bindir}/innd
+%attr(755,root,root) %{_bindir}/inndf
+%attr(4550,root,news) %{_bindir}/inndstart
+%attr(755,root,root) %{_bindir}/innfeed-convcfg
+%attr(755,root,root) %{_bindir}/innmail
+%attr(755,root,root) %{_bindir}/innstat
+%attr(755,root,root) %{_bindir}/innwatch
+%attr(755,root,root) %{_bindir}/innxbatch
+%attr(755,root,root) %{_bindir}/innxmit
+%attr(755,root,root) %{_bindir}/mailpost
+%attr(755,root,root) %{_bindir}/makeactive
+%attr(755,root,root) %{_bindir}/makehistory
+%attr(755,root,root) %{_bindir}/mod-active
+%attr(755,root,root) %{_bindir}/news2mail
+%attr(755,root,root) %{_bindir}/newsrequeue
+%attr(755,root,root) %{_bindir}/nntpget
+%attr(755,root,root) %{_bindir}/nntpsend
+%attr(755,root,root) %{_bindir}/overchan
+%attr(755,root,root) %{_bindir}/procbatch
+%attr(755,root,root) %{_bindir}/prunehistory
+%attr(755,root,root) %{_bindir}/pullnews
+%attr(755,root,root) %{_bindir}/rnews.libexec/*
+%attr(755,root,root) %{_bindir}/scanlogs
+%attr(755,root,root) %{_bindir}/scanspool
+%attr(755,root,root) %{_bindir}/send-*
+%attr(755,root,root) %{_bindir}/sendxbatches
+%attr(755,root,root) %{_bindir}/shlock
+%attr(755,root,root) %{_bindir}/shrinkfile
+%attr(755,root,root) %{_bindir}/simpleftp
+%attr(755,root,root) %{_bindir}/sm
+%attr(755,root,root) %config %{_bindir}/innfeed
+%attr(755,root,root) %config %{_bindir}/innreport
+%attr(755,root,root) %config %{_bindir}/news.daily
+%attr(755,root,root) %config %{_bindir}/nnrpd
+%attr(755,root,root) %config %{_bindir}/parsecontrol
+%attr(755,root,root) %config %{_bindir}/pgpverify
+%attr(755,root,root) %config %{_bindir}/rc.news
+%attr(4550,root,uucp) %config %{_bindir}/rnews
+%attr(4550,root,news) %config %{_bindir}/startinnfeed
+%attr(755,root,root) %{_bindir}/tally.control
+%attr(755,root,root) %{_bindir}/writelog
 
 %config(missingok) %{_libdir}/news/lib/innreport_inn.pm
 %config(missingok) %{_libdir}/news/lib/innshellvars
@@ -435,8 +435,8 @@ fi
 %files -n inews
 %defattr(644,root,root,755)
 
-%attr(755,root,root) /usr/bin/inews
-%attr(4555,news,news) %config /usr/bin/inews
+%attr(755,root,root) %{_bindir}/inews
+%attr(4555,news,news) %config %{_bindir}/inews
 %{_mandir}/man1/inews.1*
 
 %changelog
