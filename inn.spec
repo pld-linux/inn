@@ -36,12 +36,13 @@ Patch7:		%{name}-ac25x.patch
 Patch8:		%{name}-ac253.patch
 Patch9:		%{name}-db4.patch
 Patch10:	%{name}-nolibs.patch
+Patch11:	%{name}-link.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	flex
-BuildRequires:	libtool
+BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl-devel >= 5.6.1
 PreReq:		%{name}-libs = %{version}
@@ -250,6 +251,7 @@ sunucuya makaleyi yollar.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 touch innfeed/*.[ly]

@@ -1,0 +1,11 @@
+--- inn-2.3.3/storage/Makefile.orig	Mon May  6 08:02:07 2002
++++ inn-2.3.3/storage/Makefile	Sun Jan  5 12:18:53 2003
+@@ -38,7 +38,7 @@
+ 
+ libstorage.la:	$(P) $(OBJECTS) $(LOBJECTS) $(LSM_OBJECTS) $(LOV_OBJECTS)
+ 	$(LIBCC) $(LDFLAGS) -o libstorage.la $(LOBJECTS) $(LSM_OBJECTS) $(LOV_OBJECTS) \
+-		-rpath $(PATHLIB) -version-info 2:0:0
++		$(EXTSTORAGELIBS) ../lib/libinn.la -rpath $(PATHLIB) -version-info 2:0:0
+ 
+ libstorage.a:         $(P) $(OBJECTS) $(SM_OBJECTS) $(OV_OBJECTS)
+ 	ar r $@ $(OBJECTS) $(SM_OBJECTS) $(OV_OBJECTS)
