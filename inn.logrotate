@@ -7,6 +7,7 @@
 }
 
 /var/log/news/news {
+	olddir /var/log/archiv/news
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files"
 	endscript
@@ -16,6 +17,7 @@
 }
 
 /var/log/news/*log {
+	olddir /var/log/archiv/news
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files"
 	endscript
