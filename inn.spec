@@ -15,10 +15,13 @@ Source2:	inn-default-distributions
 Source3:	inn-default-newsgroups
 Source4:	inn-cron-expire
 Source5:	inn-cron-rnews
-Source6:	news.init
-Patch0: 	inn-all.patch
-Patch1:		inn-install.patch
-Url: 		http://www.isc.org/inn.html
+Source6:	inn-etc-nnrp.access
+Source7:	inn-cron-nntpsend
+Source8:	innd.init
+Source9:	ftp://ftp.exit109.com/users/jeremy/cleanfeed-latest.tar.gz
+Source10:	ftp://ftp.isc.org/pub/pgpcontrol/pgpverify-1.10
+Patch0:		inn-rh.patch
+URL: 		http://www.isc.org/inn.html
 Requires: 	cleanfeed
 Requires:	perl
 Buildroot: 	/tmp/%{name}-%{version}-root
@@ -44,7 +47,6 @@ Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
-
 
 %description devel
 This library is needed by several programs that interface to INN, such as
@@ -103,17 +105,19 @@ kullanýlýr.  Program bazý güvenlik denetimleri ve baþlýk biçimlendirmesi
 yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 
 %prep
-%setup -q 
+%setup  -q 
 %patch0 -p1
-%patch1 -p1
 
 %build
 touch innfeed/*.[ly]
 
+rm -f config.cache
+autoconf
+libtoolize --copy --force
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure %{_target} \
-        --prefix=/usr/lib/news \
-        --mandir=/usr/man \
+        --prefix=/usr \
+	--sysconfdir=/etc/news \
         --with-news-user=news \
         --with-news-group=news \
         --with-news-master=news \
@@ -130,62 +134,48 @@ CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
         --enable-merge-to-groups \
         --enable-pgp-verify \
 	--enable-shared
+
 make all
 
 %install 
 rm -fr $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{news,rc.d/init.d,news},etc/cron.{daily,hourly}}
-install -d $RPM_BUILD_ROOT/{usr/{lib/{news/{bin,lib}},bin,sbin,include,man/{man{1,3,5,8}}}}
-install -d $RPM_BUILD_ROOT/{var/{lib/news/backoff,spool/news/{in.coming/{bad,tmp},cycbuffs,innfeed,archive,out.going,over.view,uni.over}}}
-install -d $RPM_BUILD_ROOT/{var/{lock/news,log/news/OLD,run/news}}
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,cron.{daily,hourly}}
 
 make DESTDIR="$RPM_BUILD_ROOT" install
-install %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
-install %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
-install %{SOURCE3} $RPM_BUILD_ROOT/var/lib/news/newsgroups
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/cron.daily/inn-cron-expire
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/cron.daily/inn-cron-rnews
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/rc.d/init.d/news
-install samples/nntpsend $RPM_BUILD_ROOT/etc/cron.hourly/inn-cron-nntpsend
 
-install samples/default $RPM_BUILD_ROOT/etc/news
-install samples/docheckgroups $RPM_BUILD_ROOT/etc/news
-install samples/innreport_inn.pm $RPM_BUILD_ROOT/etc/news
-install samples/innshellvars $RPM_BUILD_ROOT/etc/news
-install samples/innshellvars.pl $RPM_BUILD_ROOT/etc/news
-install samples/innshellvars.tcl $RPM_BUILD_ROOT/etc/news
-install samples/send-ihave $RPM_BUILD_ROOT/etc/news
-install samples/send-nntp $RPM_BUILD_ROOT/etc/news
-install samples/send-uucp $RPM_BUILD_ROOT/etc/news
-install /dev/null $RPM_BUILD_ROOT/etc/news/.news.daily
-install $RPM_BUILD_ROOT/usr/lib/news/bin/rc.news $RPM_BUILD_ROOT/etc/rc.d/rc.news
+mv $RPM_BUILD_ROOT/usr/bin/rc.news $RPM_BUILD_ROOT/etc/rc.d
 
-ln -sf /usr/lib/news/bin/ctlinnd $RPM_BUILD_ROOT/usr/sbin/ctlinnd
-ln -sf ../lib/news/bin/rnews $RPM_BUILD_ROOT/usr/bin/rnews
-ln -sf ../lib/news/bin/inews $RPM_BUILD_ROOT/usr/bin/inews
-ln -sf /etc/news/innshellvars $RPM_BUILD_ROOT/usr/lib/news/lib/innshellvars
-ln -sf /etc/news/innshellvars.pl $RPM_BUILD_ROOT/usr/lib/news/lib/innshellvars.pl
-ln -sf /etc/news/innshellvars.tcl $RPM_BUILD_ROOT/usr/lib/news/lib/innshellvars.tcl
+install $RPM_SOURCE_DIR/inn-default-active $RPM_BUILD_ROOT/var/lib/news/active
+install $RPM_SOURCE_DIR/inn-default-distributions $RPM_BUILD_ROOT/var/lib/news/distributions
+install $RPM_SOURCE_DIR/inn-default-newsgroups $RPM_BUILD_ROOT/var/lib/news/newsgroups
 
-install /dev/null $RPM_BUILD_ROOT/var/lib/news/subscriptions
-install /dev/null $RPM_BUILD_ROOT/var/lib/news/active.times
+install $RPM_SOURCE_DIR/inn-cron-expire $RPM_BUILD_ROOT/etc/cron.daily/inn-cron-expire
+install $RPM_SOURCE_DIR/inn-cron-rnews $RPM_BUILD_ROOT/etc/cron.daily/inn-cron-rnews
+install $RPM_SOURCE_DIR/inn-cron-nntpsend $RPM_BUILD_ROOT/etc/cron.hourly/inn-cron-nntpsend
 
-install /dev/null $RPM_BUILD_ROOT/var/log/news/news.notice
-install /dev/null $RPM_BUILD_ROOT/var/log/news/news.crit
-install /dev/null $RPM_BUILD_ROOT/var/log/news/news.err
+install $RPM_SOURCE_DIR/inn-etc-nnrp.access $RPM_BUILD_ROOT/etc/news/nnrp.access
 
-install lib/libinn.a $RPM_BUILD_ROOT/usr/lib
-install storage/libstorage.a $RPM_BUILD_ROOT/usr/lib
-install include/configdata.h $RPM_BUILD_ROOT/usr/include
-install include/dbz.h $RPM_BUILD_ROOT/usr/include
-install include/libinn.h $RPM_BUILD_ROOT/usr/include
-install include/storage.h $RPM_BUILD_ROOT/usr/include
-install include/clibrary.h $RPM_BUILD_ROOT/usr/include
-install storage/interface.h $RPM_BUILD_ROOT/usr/include
-install storage/methods.h $RPM_BUILD_ROOT/usr/include
-install storage/overview.h $RPM_BUILD_ROOT/usr/include
+install $RPM_SOURCE_DIR/innd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/innd
 
-gzip -9nf $RPM_BUILD_ROOT/usr/man/man{1,3,5,8}/* \
+rm -f $RPM_BUILD_ROOT/var/lib/news/history
+
+umask 002
+touch $RPM_BUILD_ROOT/var/lib/news/subscriptions
+touch $RPM_BUILD_ROOT/var/lib/news/history
+touch $RPM_BUILD_ROOT/var/lib/news/.news.daily
+touch $RPM_BUILD_ROOT/var/log/news/news.notice
+touch $RPM_BUILD_ROOT/var/log/news/news.crit
+touch $RPM_BUILD_ROOT/var/log/news/news.err
+touch $RPM_BUILD_ROOT/var/lib/news/active.times
+
+LD_LIBRARY_PATH=$RPM_BUILD_ROOT/usr/lib $RPM_BUILD_ROOT/usr/bin/makehistory\
+	-a $RPM_BUILD_ROOT/var/lib/news/active \
+	-i -r -f $RPM_BUILD_ROOT/var/lib/news/history || :
+
+#Fix perms in sample directory to avoid bogus dependencies
+find samples -name "*.in" -exec chmod a-x {} \;
+
+gzip -9nf $RPM_BUILD_ROOT/usr/share/man/man?/* \
 	CONTRIBUTORS HISTORY README README.perl_hook README.tcl_hook \
 	INSTALL ChangeLog COPYRIGHT
 
@@ -260,12 +250,12 @@ fi
 /sbin/ldconfig 
 
 %preun
-if [ $1 = 0 ]; then
-   if [ -f /var/lock/subsys/news ]; then
-       /etc/rc.d/init.d/news stop
-       /etc/rc.d/init.d/inn stop
-   fi
-   /sbin/chkconfig --del news
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/news ]; then
+		/etc/rc.d/init.d/news stop
+		/etc/rc.d/init.d/inn stop
+	fi
+	/sbin/chkconfig --del news
 fi
 
 %files
@@ -274,15 +264,15 @@ fi
 %doc {INSTALL,ChangeLog,COPYRIGHT}.gz
 
 %attr(775,news,news) %dir /etc/news
-%attr(755,news,news) %dir /usr/lib/news
-%attr(755,news,news) %dir /usr/lib/news/bin
-%attr(755,news,news) %dir /usr/lib/news/bin/auth
-%attr(750,news,news) %dir /usr/lib/news/bin/control
-%attr(750,news,news) %dir /usr/lib/news/bin/filter
-%attr(750,news,news) %dir /usr/lib/news/bin/rnews.libexec
-%attr(755,news,news) %dir /usr/lib/news/lib
-%attr(755,news,news) %dir /var/lib/news
-%attr(775,news,news) %dir /var/lib/news/backoff
+%dir /usr/lib/news
+%dir /usr/bin
+%dir /usr/bin/auth
+%dir /usr/bin/control
+%dir /usr/bin/filter
+%dir /usr/bin/rnews.libexec
+%dir /usr/lib/news/lib
+%dir /var/lib/news
+%dir /var/lib/news/backoff
 %attr(750,news,news) %dir /var/log/news
 %attr(775,news,news) %dir /var/log/news/OLD
 %attr(775,news,news) %dir /var/run/news
@@ -336,101 +326,101 @@ fi
 %attr(550,news,news) %config %verify(not size mtime md5) /etc/news/send-uucp
 %attr(640,news,news) %config %verify(not size mtime md5) /etc/news/storage.conf
 
-%attr(711,root,root) /usr/bin/rnews
+%attr(755,root,root) /usr/bin/rnews
 %attr(755,root,root) /usr/bin/inews
-%attr(711,root,root) /usr/sbin/ctlinnd
-%attr(555,news,news) /usr/lib/news/bin/actived
-%attr(555,news,news) /usr/lib/news/bin/actmerge
-%attr(555,news,news) /usr/lib/news/bin/actsync
-%attr(555,news,news) /usr/lib/news/bin/actsyncd
-%attr(555,news,news) /usr/lib/news/bin/archive
-%attr(555,news,news) /usr/lib/news/bin/batcher
-%attr(550,news,news) /usr/lib/news/bin/buffchan
-%attr(550,news,news) /usr/lib/news/bin/cnfsstat
-%attr(550,news,news) /usr/lib/news/bin/control/*
-%attr(550,news,news) /usr/lib/news/bin/controlbatch
-%attr(550,news,news) /usr/lib/news/bin/controlchan
-%attr(555,news,news) /usr/lib/news/bin/convdate
-%attr(550,news,news) /usr/lib/news/bin/crosspost
-%attr(550,news,news) /usr/lib/news/bin/ctlinnd
-%attr(555,news,news) /usr/lib/news/bin/cvtbatch
-%attr(550,news,news) /usr/lib/news/bin/expire
-%attr(550,news,news) /usr/lib/news/bin/expireindex
-%attr(550,news,news) /usr/lib/news/bin/expireover
-%attr(555,news,news) /usr/lib/news/bin/expirerm
-%attr(550,news,news) /usr/lib/news/bin/fastrm
-%attr(555,news,news) /usr/lib/news/bin/filechan
-%attr(640,news,news) /usr/lib/news/bin/filter/*
-%attr(550,news,news) /usr/lib/news/bin/getlist
-%attr(555,news,news) /usr/lib/news/bin/grephistory
-%attr(2511,news,news) /usr/lib/news/bin/inews
-%attr(550,news,news) /usr/lib/news/bin/inncheck
-%attr(550,news,news) /usr/lib/news/bin/innconfval
-%attr(550,news,news) /usr/lib/news/bin/innd
-%attr(550,news,news) /usr/lib/news/bin/inndf
-%attr(4510,root,news) /usr/lib/news/bin/inndstart
-%attr(550,news,news) %config /usr/lib/news/bin/innfeed
-%attr(550,news,news) /usr/lib/news/bin/innfeed-convcfg
-%attr(550,news,news) /usr/lib/news/bin/innmail
-%attr(550,news,news) %config /usr/lib/news/bin/innreport
-%attr(550,news,news) /usr/lib/news/bin/innstat
-%attr(550,news,news) /usr/lib/news/bin/innwatch
-%attr(550,news,news) /usr/lib/news/bin/innxbatch
-%attr(550,news,news) /usr/lib/news/bin/innxmit
-%attr(550,news,news) /usr/lib/news/bin/mailpost
-%attr(550,news,news) /usr/lib/news/bin/makeactive
-%attr(550,news,news) /usr/lib/news/bin/makehistory
-%attr(550,news,news) /usr/lib/news/bin/mod-active
-%attr(550,news,news) %config /usr/lib/news/bin/news.daily
-%attr(550,news,news) /usr/lib/news/bin/news2mail
-%attr(550,news,news) /usr/lib/news/bin/newsrequeue
-%attr(550,news,news) %config /usr/lib/news/bin/nnrpd
-%attr(550,news,news) /usr/lib/news/bin/nntpget
-%attr(550,news,news) /usr/lib/news/bin/nntpsend
-%attr(550,news,news) /usr/lib/news/bin/overchan
-%attr(550,news,news) %config /usr/lib/news/bin/parsecontrol
-%attr(550,news,news) %config /usr/lib/news/bin/pgpverify
-%attr(550,news,news) /usr/lib/news/bin/procbatch
-%attr(555,news,news) /usr/lib/news/bin/prunehistory
-%attr(555,news,news) /usr/lib/news/bin/pullnews
-%attr(550,news,news) %config /usr/lib/news/bin/rc.news
-%attr(4550,news,uucp) %config /usr/lib/news/bin/rnews
-%attr(555,news,news) /usr/lib/news/bin/rnews.libexec/*
-%attr(550,news,news) /usr/lib/news/bin/scanlogs
-%attr(550,news,news) /usr/lib/news/bin/scanspool
-%attr(550,news,news) /usr/lib/news/bin/send-*
-%attr(555,news,news) /usr/lib/news/bin/sendxbatches
-%attr(555,news,news) /usr/lib/news/bin/shlock
-%attr(555,news,news) /usr/lib/news/bin/shrinkfile
-%attr(550,news,news) /usr/lib/news/bin/simpleftp
-%attr(550,news,news) /usr/lib/news/bin/sm
-%attr(4510,root,news) %config /usr/lib/news/bin/startinnfeed
-%attr(550,news,news) /usr/lib/news/bin/tally.control
-%attr(550,news,news) /usr/lib/news/bin/writelog
+%attr(755,root,root) /usr/sbin/ctlinnd
+%attr(755,root,root) /usr/bin/actived
+%attr(755,root,root) /usr/bin/actmerge
+%attr(755,root,root) /usr/bin/actsync
+%attr(755,root,root) /usr/bin/actsyncd
+%attr(755,root,root) /usr/bin/archive
+%attr(755,root,root) /usr/bin/batcher
+%attr(755,root,root) /usr/bin/buffchan
+%attr(755,root,root) /usr/bin/cnfsstat
+%attr(755,root,root) /usr/bin/control/*
+%attr(755,root,root) /usr/bin/controlbatch
+%attr(755,root,root) /usr/bin/controlchan
+%attr(755,root,root) /usr/bin/convdate
+%attr(755,root,root) /usr/bin/crosspost
+%attr(755,root,root) /usr/bin/ctlinnd
+%attr(755,root,root) /usr/bin/cvtbatch
+%attr(755,root,root) /usr/bin/expire
+%attr(755,root,root) /usr/bin/expireindex
+%attr(755,root,root) /usr/bin/expireover
+%attr(755,root,root) /usr/bin/expirerm
+%attr(755,root,root) /usr/bin/fastrm
+%attr(755,root,root) /usr/bin/filechan
+%attr(640,news,news) /usr/bin/filter/*
+%attr(755,root,root) /usr/bin/getlist
+%attr(755,root,root) /usr/bin/grephistory
+%attr(2555,root,news) /usr/bin/inews
+%attr(755,root,root) /usr/bin/inncheck
+%attr(755,root,root) /usr/bin/innconfval
+%attr(755,root,root) /usr/bin/innd
+%attr(755,root,root) /usr/bin/inndf
+%attr(4550,root,news) /usr/bin/inndstart
+%attr(755,root,root) /usr/bin/innfeed-convcfg
+%attr(755,root,root) /usr/bin/innmail
+%attr(755,root,root) /usr/bin/innstat
+%attr(755,root,root) /usr/bin/innwatch
+%attr(755,root,root) /usr/bin/innxbatch
+%attr(755,root,root) /usr/bin/innxmit
+%attr(755,root,root) /usr/bin/mailpost
+%attr(755,root,root) /usr/bin/makeactive
+%attr(755,root,root) /usr/bin/makehistory
+%attr(755,root,root) /usr/bin/mod-active
+%attr(755,root,root) /usr/bin/news2mail
+%attr(755,root,root) /usr/bin/newsrequeue
+%attr(755,root,root) /usr/bin/nntpget
+%attr(755,root,root) /usr/bin/nntpsend
+%attr(755,root,root) /usr/bin/overchan
+%attr(755,root,root) /usr/bin/procbatch
+%attr(755,root,root) /usr/bin/prunehistory
+%attr(755,root,root) /usr/bin/pullnews
+%attr(755,root,root) /usr/bin/rnews.libexec/*
+%attr(755,root,root) /usr/bin/scanlogs
+%attr(755,root,root) /usr/bin/scanspool
+%attr(755,root,root) /usr/bin/send-*
+%attr(755,root,root) /usr/bin/sendxbatches
+%attr(755,root,root) /usr/bin/shlock
+%attr(755,root,root) /usr/bin/shrinkfile
+%attr(755,root,root) /usr/bin/simpleftp
+%attr(755,root,root) /usr/bin/sm
+%attr(755,root,root) %config /usr/bin/innfeed
+%attr(755,root,root) %config /usr/bin/innreport
+%attr(755,root,root) %config /usr/bin/news.daily
+%attr(755,root,root) %config /usr/bin/nnrpd
+%attr(755,root,root) %config /usr/bin/parsecontrol
+%attr(755,root,root) %config /usr/bin/pgpverify
+%attr(755,root,root) %config /usr/bin/rc.news
+%attr(4550,root,uucp) %config /usr/bin/rnews
+%attr(4550,root,news) %config /usr/bin/startinnfeed
+%attr(755,root,root) /usr/bin/tally.control
+%attr(755,root,root) /usr/bin/writelog
 
 %config(missingok) /usr/lib/news/lib/innreport_inn.pm
 %config(missingok) /usr/lib/news/lib/innshellvars
 %config(missingok) /usr/lib/news/lib/innshellvars.pl
 %config(missingok) /usr/lib/news/lib/innshellvars.tcl
 
-/usr/man/man1/convdate.1.gz
-/usr/man/man1/getlist.1.gz
-/usr/man/man1/grephistory.1.gz
-/usr/man/man1/innconfval.1.gz
-/usr/man/man1/innfeed.1.gz
-/usr/man/man1/installit.1.gz
-/usr/man/man1/nntpget.1.gz
-/usr/man/man1/rnews.1.gz
-/usr/man/man1/shlock.1.gz
-/usr/man/man1/shrinkfile.1.gz
-/usr/man/man1/startinnfeed.1.gz
-/usr/man/man1/subst.1.gz
-/usr/man/man[58]/*
+/usr/share/man/man1/convdate.1*
+/usr/share/man/man1/getlist.1*
+/usr/share/man/man1/grephistory.1*
+/usr/share/man/man1/innconfval.1*
+/usr/share/man/man1/innfeed.1*
+/usr/share/man/man1/installit.1*
+/usr/share/man/man1/nntpget.1*
+/usr/share/man/man1/rnews.1*
+/usr/share/man/man1/shlock.1*
+/usr/share/man/man1/shrinkfile.1*
+/usr/share/man/man1/startinnfeed.1*
+/usr/share/man/man1/subst.1*
+/usr/share/man/man[58]/*
 
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active
 %attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/distributions
 %attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/newsgroups
-%attr(644,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/subscriptions
+%attr(644,news,root) %config(noreplace) %verify(not size mtime md5) /var/lib/news/subscriptions
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active.times
 %attr(664,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.notice
 %attr(660,news,news) %config(noreplace) %verify(not size mtime md5) /var/log/news/news.crit
@@ -440,16 +430,21 @@ fi
 %defattr(644,root,root,755)
 /usr/include/*
 /usr/lib/*.a
-/usr/man/man3/*
+/usr/share/man/man3/*
 
 %files -n inews
 %defattr(644,root,root,755)
 
 %attr(755,root,root) /usr/bin/inews
-%attr(4555,news,news) %config /usr/lib/news/bin/inews
-/usr/man/man1/inews.1.gz
+%attr(4555,news,news) %config /usr/bin/inews
+/usr/share/man/man1/inews.1*
 
 %changelog
+* Fri May 14 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+- man pages moved to /usr/share/ma (FHS 2.0 compiliat),
+- removed not neccessary uid/gid=(news),
+- changed install prefix to /usr.
+
 * Mon Apr 19 1999 Piotr Czerwiñski <pius@pld.org.pl>
   [2.2-3]
 - recompiled on new rpm.
