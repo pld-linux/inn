@@ -218,8 +218,8 @@ libtoolize --copy --force
         --with-sendmail=%{_libdir}/sendmail \
 	--with-openssl=%{_prefix} \
 	--with-berkeleydb=%{_prefix} \
-	%{?bcond_on_largefiles:--with-largefiles} \
-        %{!?bcond_on_largefiles:--enable-tagged-hash} \
+	%{?_with_largefiles:--with-largefiles} \
+        %{!?_with_largefiles:--enable-tagged-hash} \
         --enable-merge-to-groups \
         --enable-pgp-verify \
 	--enable-shared \
