@@ -36,7 +36,7 @@ case "$1" in
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ]; then
 			msg_starting "INN ovdb_monitor"
-			daemon su news -c ovdb_init 2>&1 > /dev/null
+			su news -c ovdb_init 2>&1 > /dev/null
 			ok
 		fi
 
