@@ -84,10 +84,10 @@ diff -ur inn-2.2.2.orig/frontends/Makefile inn-2.2.2/frontends/Makefile
  
  ##  Low-level install actions.
  $D$(PATHBIN)/inews:		inews
--	$(LIBTOOL) ../installit.sh $(OWNER) -m 02555 -b .OLD $? $@
+-	$(LIBTOOL) ../installit.sh $(OWNER) -m $(INEWSMODE) -b .OLD $? $@
 +	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
  $D$(PATHBIN)/rnews:		rnews
--	$(LIBTOOL) ../installit.sh $(ROWNER) -m 04550 -b .OLD $? $@
+-	$(LIBTOOL) ../installit.sh $(ROWNER) -m $(RNEWSMODE) -b .OLD $? $@
 +	$(LIBTOOL) --mode=install $(INSTALL) $? $D$(PATHBIN)
  $D$(PATHBIN)/ctlinnd:	ctlinnd
 -	$(LIBTOOL) ../installit.sh $(OWNER) -m  0550 -b .OLD $? $@
