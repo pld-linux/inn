@@ -1,7 +1,7 @@
-diff -Nur inn-2.3.3.orig/authprogs/ckpasswd.c inn-2.3.3/authprogs/ckpasswd.c
---- inn-2.3.3.orig/authprogs/ckpasswd.c	Mon May  6 08:02:07 2002
-+++ inn-2.3.3/authprogs/ckpasswd.c	Thu May  9 22:29:51 2002
-@@ -14,15 +14,8 @@
+diff -Nur inn-2.3.4.orig/authprogs/ckpasswd.c inn-2.3.4/authprogs/ckpasswd.c
+--- inn-2.3.4.orig/authprogs/ckpasswd.c	Mon Dec 23 00:00:38 2002
++++ inn-2.3.4/authprogs/ckpasswd.c	Tue Jan 14 22:01:31 2003
+@@ -14,19 +14,8 @@
  # include <fcntl.h>
  #endif
  
@@ -9,19 +9,23 @@ diff -Nur inn-2.3.3.orig/authprogs/ckpasswd.c inn-2.3.3/authprogs/ckpasswd.c
 -# ifdef HAVE_NDBM_H
 -#  include <ndbm.h>
 -# else
--#  ifdef HAVE_DB1_NDBM_H
--#   include <db1/ndbm.h>
+-#  ifdef HAVE_GDBM_NDBM_H
+-#   include <gdbm-ndbm.h>
+-#  else
+-#   ifdef HAVE_DB1_NDBM_H
+-#    include <db1/ndbm.h>
+-#   endif
 -#  endif
 -# endif
 -#endif
-+#define DB_DBM_HSEARCH 1
++#define DB_DBM_HSEARCH1
 +#include <db.h>
  
  #ifdef HAVE_GETSPNAM
  # include <shadow.h>
-diff -Nur inn-2.3.3.orig/configure.in inn-2.3.3/configure.in
---- inn-2.3.3.orig/configure.in	Thu May  9 22:28:03 2002
-+++ inn-2.3.3/configure.in	Thu May  9 22:29:23 2002
+diff -Nur inn-2.3.4.orig/configure.in inn-2.3.4/configure.in
+--- inn-2.3.4.orig/configure.in	Tue Jan 14 22:00:39 2003
++++ inn-2.3.4/configure.in	Tue Jan 14 22:03:08 2003
 @@ -762,12 +762,7 @@
  AC_CHECK_LIB(regex, regexec)
  
@@ -36,7 +40,7 @@ diff -Nur inn-2.3.3.orig/configure.in inn-2.3.3/configure.in
  AC_SUBST(DBM_LIB)
  
  dnl Libraries and flags for embedded Perl.  Some distributions of Linux have
-@@ -991,15 +986,10 @@
+@@ -1001,16 +996,10 @@
  
  dnl Generic checks for header files.
  dnl NOTUSED: sys/file.h sys/ioctl.h
@@ -45,9 +49,10 @@ diff -Nur inn-2.3.3.orig/configure.in inn-2.3.3/configure.in
                   sys/bitypes.h sys/file.h sys/filio.h sys/ioctl.h \
                   sys/select.h sys/sysinfo.h sys/time.h unistd.h)
  
--dnl Some Linux systems have db1/ndbm.h instead of ndbm.h.
+-dnl Some Linux systems have db1/ndbm.h instead of ndbm.h.  Others have
+-dnl gdbm-ndbm.h instead.
 -if test x"$ac_cv_header_ndbm_h" = xno ; then
--    AC_CHECK_HEADERS(db1/ndbm.h)
+-    AC_CHECK_HEADERS(db1/ndbm.h gdbm-ndbm.h)
 -fi
 -
  dnl Checks for typedefs, structures, and compiler characteristics.

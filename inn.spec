@@ -7,11 +7,11 @@ Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.3.3
-Release:	2
+Version:	2.3.4
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
-Source0:	ftp://ftp.isc.org/isc/inn/OLD/2.3/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -28,15 +28,14 @@ Source12:	%{name}d.8.pl
 Patch0:		%{name}-ipv6.patch
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
-Patch3:		%{name}-db3.patch
+Patch3:		%{name}-db.patch
 Patch4:		%{name}-setreuid.patch
 Patch5:		%{name}-sec.patch
 Patch6:		%{name}-frsize.patch
 Patch7:		%{name}-ac25x.patch
 Patch8:		%{name}-ac253.patch
-Patch9:		%{name}-db4.patch
-Patch10:	%{name}-nolibs.patch
-Patch11:	%{name}-link.patch
+Patch9:		%{name}-nolibs.patch
+Patch10:	%{name}-link.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	bison
@@ -251,7 +250,6 @@ sunucuya makaleyi yollar.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
 
 %build
 touch innfeed/*.[ly]
