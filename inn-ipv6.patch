@@ -758,17 +758,12 @@ diff -Nur inn-2.3.2.orig/innd/inndstart.c inn-2.3.2/innd/inndstart.c
  
      /* Now, permanently drop privileges. */
      if (setgid(news_gid) < 0 || getgid() != news_gid) {
-@@ -330,24 +396,47 @@
+@@ -330,24 +396,42 @@
  
      /* Build the argument vector for innd.  Pass -p<port> to innd to tell it
         what port we just created and bound to for it. */
 -    innd_argv = NEW(char *, 1 + argc + 1);
-+#ifdef INET6
-+    if (innconf->listenonipv6 && !in6any)
-+       innd_argv = NEW(char *, 1 + argc + 2);
-+    else
-+#endif
-+       innd_argv = NEW(char *, 1 + argc + 1);
++    innd_argv = NEW(char *, 1 + argc + 2);
      i = 0;
  #ifdef DEBUGGER
      innd_argv[i++] = DEBUGGER;
