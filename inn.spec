@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.2.3
-Release:	4
+Release:	5
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -21,7 +21,7 @@ Source8:	%{name}.init
 Source9:	%{name}-cnfsstat.cron
 Source10:	%{name}.logrotate
 #Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/%{name}-2.2.1-v6-19991121.diff.gz
-Patch0:		%{name}-2.2.3-v6-20000903.patch.gz
+Patch0:		%{name}-2.2.3-v6-20000906.patch.gz
 Patch1:		%{name}-PLD.patch
 Patch2:		%{name}-install.patch
 URL:		http://www.isc.org/inn.html
