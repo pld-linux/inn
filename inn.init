@@ -32,6 +32,14 @@ RETVAL=0
 case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
+		grep -v "#" /etc/news/inn.conf | grep ovmethod | grep ovdb 2>&1 >/dev/null
+		RETVAL=$?
+		if [ $RETVAL -eq 0 ]; then
+			msg_starting "INN ovdb_monitor"
+			daemon su news -c ovdb_init 2>&1 > /dev/null
+			ok
+		fi
+
 		msg_starting "INN"
 		daemon su news -c inndstart
 		if is_yes "$DOINNWATCH" ; then
