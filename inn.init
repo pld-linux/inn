@@ -41,6 +41,8 @@ case "$1" in
 			else
 				deltext;fail
 			fi
+		else
+			touch /var/lock/subsys/inn
 		fi
 	else
 		msg_Already_Running "INN"
@@ -82,7 +84,7 @@ case "$1" in
 		fi
 
 	else
-		msg_Already_Running INN
+		msg_Not_Running INN
 		exit 1
 	fi
 	rm -f /var/lock/subsys/inn >/dev/null 2>&1
