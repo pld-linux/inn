@@ -169,8 +169,8 @@ make all PATHFILTER=%{_datadir}/news/filter \
 %install 
 rm -fr $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn} \
-	install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
+	$RPM_BUILD_ROOT{%{_bindir},%{_libdir}/news,%{_includedir}/inn}
+install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
 	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,8} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
