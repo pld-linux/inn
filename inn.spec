@@ -11,8 +11,6 @@ Version:	2.3.2
 Release:	7
 License:	distributable
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
@@ -96,13 +94,6 @@ Summary(de):	INN-Library
 Summary(fr):	BibliothХque INN
 Summary(pl):	Biblioteki do INN-a
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 
 %description libs
 This library is needed by several programs that interface to INN, such
@@ -133,13 +124,6 @@ Summary(pl):	Pliki nagЁСwkowe i dokumentacja programisty do inn-a
 Summary(pt_BR):	Biblioteca INN
 Summary(tr):	INN kitaplЩПЩ
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-libs = %{version}
 Requires:	db3-devel
 
@@ -175,13 +159,6 @@ Summary(es):	Static libraries for inn development
 Summary(pl):	Biblioteki statyczne do INN
 Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com inn
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
@@ -209,8 +186,6 @@ Summary(pl):	Inews - program do wysyЁania artykuЁСw (u©ywany przez inn i trn)
 Summary(pt_BR):	Programa Inews (usado para postagem pelo inn e trn)
 Summary(tr):	Haber biГimlendirme programЩ
 Group:		Networking/News
-Group(de):	Netzwerkwesen/News
-Group(pl):	Sieciowe/News
 
 %description -n inews
 The inews program is used by some news readers to post news. It does
