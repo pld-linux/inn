@@ -17,9 +17,10 @@ Source4:	%{name}-etc-nnrp.access
 Source5:	%{name}.crontab
 Source6:	%{name}.initd
 Source7:	%{name}-cnfsstat.cron
-Patch0:		%{name}-config.patch
-Patch1:		%{name}-makefile.patch
-Patch2:		%{name}-authdir.patch
+Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/inn-2.2.1-v6-19991121.diff.gz
+Patch1:		%{name}-config.patch
+Patch2:		%{name}-makefile.patch
+Patch3:		%{name}-authdir.patch
 URL: 		http://www.isc.org/inn.html
 Prereq: 	/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -116,6 +117,7 @@ yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -141,7 +143,8 @@ LDFLAGS="-s"; export LDFLAGS
         --enable-merge-to-groups \
         --enable-pgp-verify \
 	--enable-shared \
-	--enable-static
+	--enable-static \
+	--enable-ipv6
 
 make all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
