@@ -476,7 +476,7 @@ fi
 %attr(755,root,root) %{_libdir}/news/rnews/*
 
 # SUID
-%attr(4754,root,root) %{_bindir}/inndstart
+%attr(4754,root,news) %{_bindir}/inndstart
 %attr(4754,root,news) %{_bindir}/startinnfeed
 %attr(4754,root,uucp) %{_bindir}/rnews
 
