@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.2.3
-Release:	2
+Release:	3
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
