@@ -165,7 +165,7 @@ LDFLAGS="-s"; export LDFLAGS
 #	--enable-ipv6 \
 #	--enable-dual-socket
 
-make all PATHFILTER=%{_datadir}/news/filter \
+%{__make} all PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
 	RNEWSPROGS=%{_bindir}
 
@@ -178,7 +178,7 @@ install -d $RPM_BUILD_ROOT%{_datadir}/news/{control,filter,auth} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
 
-make install \
+%{__make} install \
 	DESTDIR="$RPM_BUILD_ROOT" \
 	PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
