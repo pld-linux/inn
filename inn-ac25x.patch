@@ -6,8 +6,8 @@
  dnl top of the build directory, not the source directory).
 -builddir=`pwd`
 -AC_SUBST(builddir)
-+abs_builddir=`pwd`
-+AC_SUBST(abs_builddir)
++xxx_builddir=`pwd`
++AC_SUBST(xxx_builddir)
  
  dnl Earlier versions of INN used --with-largefiles, which was the wrong flag
  dnl from the perspective of what --with and --enable are supposed to mean.
@@ -29,7 +29,7 @@
  ##  when linking the test suite.
  
 -builddir	= @builddir@
-+builddir	= @abs_builddir@
++builddir	= @xxx_builddir@
  
  ##  Basic compiler settings.  COPT is the variable to override on the make
  ##  command line to change the optimization or add warning flags (such as
