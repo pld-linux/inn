@@ -23,13 +23,27 @@
 # See how we were called.
 case "$1" in
   start)
-	if [ ! -f /var/lock/subsys/crond ]; then
-	    if [ ! -f ${SERVERPID} ] ; then
-		show Starting INN service
-		daemon ${INNDSTART} ${INNFLAGS}
-	    else
-		show Starting INN service
-		daemon ${INNDSTART} -r ${INNFLAGS}
+	if [ ! -f /var/lock/subsys/inn ]; then
+	    show Starting INN service
+	    busy
+	    rm -f ${SERVERPID}
+	    su - news -c ". /etc/rc.d/init.d/functions; daemon ${INNDSTART} ${INNFLAGS}"
+
+    	    DOINNWATCH=`echo ${DOINNWATCH} | tr A-Z a-z`
+	    if [ -z "${DOINNWATCH}" -o "${DOINNWATCH}" = "on" \
+    		-o "${DOINNWATCH}" = "true" -o "${DOINNWATCH}" = "yes" ]; then
+		show Starting INNWatch service
+		busy
+		su - news -c ". /etc/rc.d/init.d/functions; daemon /usr/bin/innwatch"
+    	    fi
+
+	    DOCNFSSTAT=`echo ${DOCNFSSTAT} | tr A-Z a-z`
+    	    if [ -z "${DOCNFSSTAT}" -o "${DOCNFSSTAT}" = "on" \
+		-o "${DOCNFSSTAT}" = "true" -o "${DOCNFSSTAT}" = "yes" ]; then
+		show Starting CNFSstat service
+		busy
+		su - news -c ". /etc/rc.d/init.d/functions; daemon /usr/bin/cnfsstat -s -l"
+
 	    fi
 	else
     	    echo 'INND is running'
@@ -37,8 +51,36 @@ case "$1" in
 	touch /var/lock/subsys/inn
 	;;
   stop)
-	show Stopping INND service
-	killproc innd
+	if [ -f /var/run/news/innd.pid ]; then
+	    show Stopping INND service
+	    killproc innd
+	    rm -f /var/run/news/innd.pid
+	fi
+
+	if [ -f /var/run/news/innwatch.pid ]; then
+	    show Stopping INNWatch service
+	    killproc innwatch -9
+	    rm -f /var/run/news/innwatach.pid
+	fi
+
+	if [ -f /var/run/news/infeed.pid ]; then
+	    show Stopping INNFeed service
+	    killproc innfeed -9
+	    rm -f /var/run/news/infeed.pid
+	fi
+
+	if [ -f /var/run/news/actived.pid ]; then
+	    show Stopping INN Actived service
+	    killproc actived -9
+	    rm -f /var/run/news/actived.pid
+	fi
+
+	if [ -f /var/run/news/cnfstat.pid ]; then
+	    show Stopping CNFSstat service
+	    killproc cnfsstat -9
+	    rm -f /var/run/news/cnfstat.pid
+	fi
+
 	rm -f /var/lock/subsys/inn
 	;;
   status)
