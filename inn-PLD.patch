@@ -1,43 +1,58 @@
-diff -Nur inn-2.2.1.orig/include/paths.h.in inn-2.2.1/include/paths.h.in
---- inn-2.2.1.orig/include/paths.h.in	Tue Oct 13 14:18:45 1998
-+++ inn-2.2.1/include/paths.h.in	Sat Oct 23 15:40:40 1999
-@@ -14,7 +14,7 @@
- */
+diff -ur inn-2.3.1.orig/Makefile inn-2.3.1/Makefile
+--- inn-2.3.1.orig/Makefile	Thu Jan 11 09:55:23 2001
++++ inn-2.3.1/Makefile	Sun Jan 21 02:42:15 2001
+@@ -65,7 +65,7 @@
+ ##  Installation rules.  make install installs everything; make update only
+ ##  updates the binaries, scripts, and documentation and leaves config
+ ##  files alone.
+-install: directories
++install:
+ 	@for D in $(ALLDIRS) ; do \
+ 	    echo '' ; \
+ 	    cd $$D && $(MAKE) install || exit 1 ; cd .. ; \
+@@ -81,7 +81,7 @@
+ directories:
+ 	@chmod +x support/install-sh
+ 	for D in $(INSTDIRS) ; do \
+-	    support/install-sh $(OWNER) -m 0755 -d $$D ; \
++	    support/install-sh -m 0755 -d $(DESTDIR)$$D ; \
+ 	done
+ 	support/install-sh $(OWNER) -m 0750 -d $(PATHRUN)
+ 
+diff -ur inn-2.3.1.orig/include/paths.h.in inn-2.3.1/include/paths.h.in
+--- inn-2.3.1.orig/include/paths.h.in	Thu Jan 11 09:55:23 2001
++++ inn-2.3.1/include/paths.h.in	Sun Jan 21 02:41:21 2001
+@@ -15,12 +15,12 @@
+ /* Default prefix path is pathbin. */
  #define _PATH_NNRPD		"nnrpd"
  #define _PATH_NNTPD		"nnrpd"
 -#define _PATH_AUTHDIR		"auth"
-+#define _PATH_AUTHDIR		"/usr/share/news/auth"
++#define _PATH_AUTHDIR		"/usr/lib/news/auth"
+ #define _PATH_AUTHDIR_GENERIC	"generic"
+ #define _PATH_AUTHDIR_NOPASS	"resolv"
+ #define _PATH_AUTHDIR_PASSWD	"passwd"
  #define _PATH_CTLINND		"ctlinnd"
- #define _PATH_RNEWSPROGS	"rnews.libexec"
- /* Prefix path is pathfilter */
-diff -Nur inn-2.2.1.orig/Makefile inn-2.2.1/Makefile
---- inn-2.2.1.orig/Makefile	Wed Aug 25 17:25:55 1999
-+++ inn-2.2.1/Makefile	Mon Nov  1 14:27:31 1999
-@@ -44,7 +44,7 @@
- ##  Directories where files get put.
- directories:
- 	chmod +x ./makedirs.sh
--	DESTDIR=$(DESTDIR) ./makedirs.sh;
-+	DESTDIR=$(DESTDIR) ./makedirs.sh -p;
+-#define _PATH_RNEWSPROGS	"rnews.libexec"
++#define _PATH_RNEWSPROGS	"/usr/lib/news/rnews"
  
- ##  Other generic targets.
- depend tags ctags profiled:
-diff -Nur inn-2.2.1.orig/Makefile inn-2.2.1/Makefile
---- inn-2.2.1.orig/Makefile	Wed Aug 25 17:25:55 1999
-+++ inn-2.2.1/Makefile	Mon Oct 18 22:37:40 1999
-@@ -34,7 +34,7 @@
- 	$(MAKE) $(FLAGS) WHAT_TO_MAKE=all DESTDIR=$(DESTDIR) common
+ /* Default prefix path is pathfilter. */
+ #define _PATH_TCL_STARTUP	"startup.tcl"
+diff -ur inn-2.3.1.orig/doc/man/rnews.1~ inn-2.3.1/doc/man/rnews.1
+--- inn-2.3.1/doc/man/rnews.1~	Thu Jan 11 09:55:23 2001
++++ inn-2.3.1/doc/man/rnews.1	Sun Jan 21 06:10:42 2001
+@@ -67,7 +67,7 @@
+ is defined and the command is any other word, then
+ .I rnews
+ will try to execute a program with that name in the directory
+-.IR <pathbin\ in\ inn.conf>/bin/rnews.libexec .
++.IR /usr/lib/news/rnews .
  
- ##  Install everything.
--install:	directories
-+install:
- 	$(MAKE) $(FLAGS) WHAT_TO_MAKE=install DESTDIR=$(DESTDIR) common
- 	@echo "" ; echo Do not forget to update your cron entries.
- 	@echo Also run makehistory if you have to.
-diff -ur inn-2.2.2.orig/samples/scanlogs.in inn-2.2.2/samples/scanlogs.in
---- inn-2.2.2.orig/samples/scanlogs.in	Mon Dec 13 14:18:37 1999
-+++ inn-2.2.2/samples/scanlogs.in	Sun Jan 30 01:12:20 2000
-@@ -10,7 +10,7 @@
+ The batch will be fed into the program's standard input, and the
+ standard output will be read back as input into
+diff -ur inn-2.3.1.orig/scripts/scanlogs.in inn-2.3.1/scripts/scanlogs.in
+--- inn-2.3.1.orig/scripts/scanlogs.in	Thu Jan 11 09:55:23 2001
++++ inn-2.3.1/scripts/scanlogs.in	Sun Jan 21 02:42:37 2001
+@@ -11,7 +11,7 @@
  ##  then get a better egrep, like the FSF one.
  
  ##  Directory where old log files are kept.
@@ -46,3 +61,22 @@ diff -ur inn-2.2.2.orig/samples/scanlogs.in inn-2.2.2/samples/scanlogs.in
  ##  If you want to archive the active file, enable this line.
  ACTIVEFILE=${ACTIVE}
  ##  Number of lines of error in each category to report.
+diff -ur inn-2.3.1.orig/Makefile.global.in~ inn-2.3.1/scripts/Makefile.global.in
+--- inn-2.3.1/Makefile.global.in~	Thu Jan 11 09:55:23 2001
++++ inn-2.3.1/Makefile.global.in	Sun Jan 21 05:08:12 2001
+@@ -179,15 +179,6 @@
+ ##  configure; inews and rnews are special and have configure flags to
+ ##  control how they're installed.  See INSTALL for more information.
+ 
+-NEWSUSER        = @NEWSUSER@
+-NEWSGROUP       = @NEWSGRP@
+-
+-INEWSMODE       = @INEWSMODE@
+-RNEWSMODE       = @RNEWSMODE@
+-
+-OWNER           = -o $(NEWSUSER) -g $(NEWSGROUP)
+-ROWNER          = -o $(NEWSUSER) -g @RNEWSGRP@
+-
+ INSTALL         = ../support/install-sh -c
+
+ ##  Installation commands.  These commands are used by the installation
