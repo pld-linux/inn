@@ -52,10 +52,9 @@ diff -Nur inn-2.4.0.orig/Makefile inn-2.4.0/Makefile
  
  update: 
  	@chmod +x support/install-sh
-diff -Nur inn-2.4.0.orig/Makefile.global.in inn-2.4.0/Makefile.global.in
---- inn-2.4.0.orig/Makefile.global.in	2003-05-09 06:25:27.000000000 +0200
-+++ inn-2.4.0/Makefile.global.in	2003-06-29 12:59:13.000000000 +0200
-@@ -234,15 +234,6 @@
+--- inn-2.4.1.orig/Makefile.global.in	2003-05-09 06:25:27.000000000 +0200
++++ inn-2.4.1/Makefile.global.in	2003-06-29 12:59:13.000000000 +0200
+@@ -234,16 +234,7 @@
  ##  configure; inews and rnews are special and have configure flags to
  ##  control how they're installed.  See INSTALL for more information.
  
@@ -64,6 +63,7 @@ diff -Nur inn-2.4.0.orig/Makefile.global.in inn-2.4.0/Makefile.global.in
 -
 -INEWSMODE       = @INEWSMODE@
 -RNEWSMODE       = @RNEWSMODE@
+ FILEMODE        = @FILEMODE@
 -
 -OWNER           = -o $(NEWSUSER) -g $(NEWSGROUP)
 -ROWNER          = -o $(NEWSUSER) -g @RNEWSGRP@

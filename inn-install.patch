@@ -27,14 +27,14 @@
  
  ##  Some additional definitions needed by some versions of make, to ensure a
  ##  consistant set of variables are available.
---- inn-2.3.1/site/Makefile~	Thu Jan 11 09:55:23 2001
-+++ inn-2.3.1/site/Makefile	Sun Jan 21 05:49:06 2001
+--- inn-2.4.1/site/Makefile~	Thu Jan 11 09:55:23 2001
++++ inn-2.4.1/site/Makefile	Sun Jan 21 05:49:06 2001
 @@ -144,8 +144,6 @@
  $D$(PATH_NEWSGROUPS):	; $(CP_RPUB) newsgroups.minimal $@
  $D$(PATH_ACTIVE_TIMES):
  	touch $@
 -	chown $(NEWSUSER) $@
 -	chgrp $(NEWSGROUP) $@
- 	chmod 644 $@
+ 	chmod $(FILEMODE) $@
  
  ##  Remove files that are unchanged from the release version.
