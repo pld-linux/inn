@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.2.3
-Release:	1
+Release:	2
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -28,6 +28,7 @@ Prereq:		/sbin/chkconfig
 Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
+Requires:	%{name}-libs = %{version}
 Requires:	cleanfeed
 Requires:	rc-scripts >= 0.2.0
 Requires:	/etc/cron.d
@@ -48,6 +49,35 @@ jak równie¿ do obs³ugi ,,prywatnych'' grup w sieciach intranetowych.
 Ca³e mnóstwo po¿ytecznych informacji o konfigurowaniu INN-a znajdziesz
 w katalogu /usr/share/doc/inn-*.
 
+%package libs
+Summary:	INN libraries
+Summary(de):	INN-Library
+Summary(pl):	Biblioteki do INN-a
+Summary(fr):	Bibliothèque INN
+Group:		Development/Libraries
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
+
+%description libs
+This library is needed by several programs that interface to INN, such
+as newsgate or tin.
+
+%description -l de libs
+Diese Library wird von mehreren Programmen benötigt, die mit INN
+kommunizieren, etwa newsgate oder tin.
+
+%description -l fr libs
+Cette bibliothèque est nécessaire à plusieurs programmes qui
+s'interfacent avec INN, comme newsgate ou tin.
+
+%description -l pl libs
+Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z
+INN-em, takich jak newsgate czy tin.
+
+%description -l tr libs
+INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken
+bir kitaplýktýr.
+
 %package devel
 Summary:	INN header files and development documentations
 Summary(de):	INN-Library
@@ -57,7 +87,7 @@ Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
-Requires:	%{name} = %{version}
+Requires:	%{name}-libs = %{version}
 
 %description devel
 This library is needed by several programs that interface to INN, such
@@ -430,9 +460,6 @@ fi
 %attr(4754,root,news) %{_bindir}/startinnfeed
 %attr(4754,root,uucp) %{_bindir}/rnews
 
-# LIBS
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
-
 # BINARIES
 %attr(755,root,root) %{_bindir}/actived
 %attr(755,root,root) %{_bindir}/actmerge
@@ -518,6 +545,9 @@ fi
 %{_mandir}/man1/startinnfeed.1*
 %{_mandir}/man1/subst.1*
 %{_mandir}/man[58]/**
+
+%files libs
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 
 %files devel
 %defattr(644,root,root,755)
