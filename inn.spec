@@ -309,7 +309,7 @@ fi
 
 [ -f /var/lib/news/.news.daily ] || {
 	touch /var/lib/news/.news.daily
-	chown news.news /var/lib/.news.daily
+	chown news.news /var/lib/news/.news.daily
 	chmod 664 /var/lib/news/.news.daily
 }
 
