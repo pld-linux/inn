@@ -25,26 +25,15 @@ case "$1" in
   start)
 	if [ ! -f /var/lock/subsys/inn ]; then
 	    show Starting INN service
-	    busy
-	    rm -f ${SERVERPID}
-	    su - news -c ". /etc/rc.d/init.d/functions; daemon ${INNDSTART} ${INNFLAGS}"
+	    daemon inndstart
 
-    	    DOINNWATCH=`echo ${DOINNWATCH} | tr A-Z a-z`
-	    if [ -z "${DOINNWATCH}" -o "${DOINNWATCH}" = "on" \
-    		-o "${DOINNWATCH}" = "true" -o "${DOINNWATCH}" = "yes" ]; then
-		show Starting INNWatch service
-		busy
-		su - news -c ". /etc/rc.d/init.d/functions; daemon /usr/bin/innwatch"
-    	    fi
-
-	    DOCNFSSTAT=`echo ${DOCNFSSTAT} | tr A-Z a-z`
-    	    if [ -z "${DOCNFSSTAT}" -o "${DOCNFSSTAT}" = "on" \
-		-o "${DOCNFSSTAT}" = "true" -o "${DOCNFSSTAT}" = "yes" ]; then
-		show Starting CNFSstat service
-		busy
-		su - news -c ". /etc/rc.d/init.d/functions; daemon /usr/bin/cnfsstat -s -l"
-
-	    fi
+#    	    DOINNWATCH=`echo ${DOINNWATCH} | tr A-Z a-z`
+#	    if [ -z "${DOINNWATCH}" -o "${DOINNWATCH}" = "on" -o "${DOINNWATCH}" = "true" -o "${DOINNWATCH}" = "yes" ]; then
+#		show Starting INN Watch service
+#		busy
+#		/usr/bin/innwatch &
+#		deltext;ok
+#    	    fi
 	else
     	    echo 'INND is running'
 	fi
@@ -52,33 +41,27 @@ case "$1" in
 	;;
   stop)
 	if [ -f /var/run/news/innd.pid ]; then
-	    show Stopping INND service
+	    show Stopping INN service
 	    killproc innd
 	    rm -f /var/run/news/innd.pid
 	fi
 
-	if [ -f /var/run/news/innwatch.pid ]; then
-	    show Stopping INNWatch service
-	    killproc innwatch -9
-	    rm -f /var/run/news/innwatach.pid
-	fi
+#	if [ -f /var/run/news/innwatch.pid ]; then
+#	    show Stopping INN Watch service
+#	    killproc innwatch -9
+#	    rm -f /var/run/news/innwatch.pid /var/run/news/LOCK.innwatch
+#	fi
 
 	if [ -f /var/run/news/infeed.pid ]; then
-	    show Stopping INNFeed service
+	    show Stopping INN Feed service
 	    killproc innfeed -9
-	    rm -f /var/run/news/infeed.pid
+	    rm -f /var/run/news/innfeed.pid
 	fi
 
 	if [ -f /var/run/news/actived.pid ]; then
 	    show Stopping INN Actived service
 	    killproc actived -9
 	    rm -f /var/run/news/actived.pid
-	fi
-
-	if [ -f /var/run/news/cnfstat.pid ]; then
-	    show Stopping CNFSstat service
-	    killproc cnfsstat -9
-	    rm -f /var/run/news/cnfstat.pid
 	fi
 
 	rm -f /var/lock/subsys/inn
