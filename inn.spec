@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2.2
-Release: 	3
+Release: 	4
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -29,9 +29,9 @@ Prereq:		/sbin/ldconfig
 Prereq:		sed
 Prereq:		fileutils
 Requires: 	cleanfeed
-Requires:	perl
 Requires:	rc-scripts
 Requires:	/etc/cron.d
+BuildRequires:	perl
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %define		_sysconfdir	/etc/news
@@ -48,10 +48,10 @@ Ca³e mnóstwo po¿ytecznych informacji o konfigurowaniu INN-a znajdziesz
 w katalogu /usr/share/doc/inn-*.
 
 %package devel
-Summary:	INN-Library
+Summary:	INN header files and development documentations
 Summary(de):	INN-Library
 Summary(fr):	Bibliothèque INN
-Summary(pl):	INN-biblioteka i pliki nag³ówkowe dla inn-a
+Summary(pl):	Pliki nag³ówkowe i dokumentacja programisty do inn-a
 Summary(tr):	INN kitaplýðý
 Group:		Development/Libraries
 Group(pl):	Programowanie/Biblioteki
@@ -76,6 +76,18 @@ Biblioteka niezbêdna do dzia³ania kilku programów wspó³pracuj±cych z INN-em, tak
 INN ile arayüz gerektiren programlar için (newsgate, tin gibi) gereken bir
 kitaplýktýr.
 
+%package static
+Summary:	Static INN libraries
+Summary(pl):	Biblioteki statyczne do INN
+Group:		Development/Libraries
+Group(pl):	Programowanie/Biblioteki
+Requires:	%{name}-devel = %{version}
+
+%description static
+Static INN libraries.
+
+%description -l pl static
+Biblioteki statyczne do INN.
 
 %package -n inews
 Summary:	Inews program (used for posting by inn and trn)
@@ -488,29 +500,31 @@ fi
 %attr(755,root,root) %{_bindir}/writelog
 
 # MAN
-%{_mandir}/man1/convdate.1.gz
-%{_mandir}/man1/getlist.1.gz
-%{_mandir}/man1/grephistory.1.gz
-%{_mandir}/man1/innconfval.1.gz
-%{_mandir}/man1/innfeed.1.gz
-%{_mandir}/man1/installit.1.gz
-%{_mandir}/man1/nntpget.1.gz
-%{_mandir}/man1/rnews.1.gz
-%{_mandir}/man1/shlock.1.gz
-%{_mandir}/man1/shrinkfile.1.gz
-%{_mandir}/man1/startinnfeed.1.gz
-%{_mandir}/man1/subst.1.gz
-%{_mandir}/man[58]/*.gz
+%{_mandir}/man1/convdate.1*
+%{_mandir}/man1/getlist.1*
+%{_mandir}/man1/grephistory.1*
+%{_mandir}/man1/innconfval.1*
+%{_mandir}/man1/innfeed.1*
+%{_mandir}/man1/installit.1*
+%{_mandir}/man1/nntpget.1*
+%{_mandir}/man1/rnews.1*
+%{_mandir}/man1/shlock.1*
+%{_mandir}/man1/shrinkfile.1*
+%{_mandir}/man1/startinnfeed.1*
+%{_mandir}/man1/subst.1*
+%{_mandir}/man[58]/**
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/inn/*
-%{_libdir}/lib*.a
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
 %{_mandir}/man3/*
 
+%files static
+%attr(644,root,root) %{_libdir}/lib*.a
+
 %files -n inews
 %defattr(644,root,root,755)
 %attr(2755,root,news) %{_bindir}/inews
-%{_mandir}/man1/inews.1.gz
+%{_mandir}/man1/inews.1*
