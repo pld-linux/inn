@@ -42,7 +42,7 @@ BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	flex
 BuildRequires:	libtool >= 1:1.4.2-9
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	perl-devel >= 5.8.0
 PreReq:		%{name}-libs = %{version}
 PreReq:		rc-scripts
