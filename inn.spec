@@ -5,7 +5,7 @@ Summary(pl):	INN, serwer nowinek
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name: 		inn
 Version:	2.2.2
-Release: 	2
+Release: 	3
 Copyright:	distributable
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -22,7 +22,7 @@ Source9:	%{name}-cnfsstat.cron
 Source10:	%{name}.logrotate
 Patch0:		ftp://ftp.nemoto.ecei.tohoku.ac.jp/pub/Net/IPv6/Patches/inn-2.2.1-v6-19991121.diff.gz
 Patch1:		%{name}-PLD.patch
-Patch2:		%{name}-libinn.so.patch
+Patch2:		inn-install.patch
 URL: 		http://www.isc.org/inn.html
 Prereq: 	/sbin/chkconfig
 Prereq:		/sbin/ldconfig
@@ -117,7 +117,7 @@ yaparak ve inn.conf dosyasýnda belirtilen haber sunucuya makaleyi yollar.
 %setup -q
 #%patch0 -p1
 %patch1 -p1
-#%patch2 -p1
+%patch2 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -143,7 +143,8 @@ LDFLAGS="-s"; export LDFLAGS
         --enable-merge-to-groups \
         --enable-pgp-verify \
 	--enable-shared \
-	--enable-static
+	--enable-static \
+	--enable-libtool
 #	--enable-ipv6 \
 #	--enable-dual-socket
 
@@ -179,6 +180,9 @@ install %{SOURCE8} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
 install %{SOURCE9} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 install %{SOURCE10} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 
+mv $RPM_BUILD_ROOT%{_bindir}/c7unbatch.sh $RPM_BUILD_ROOT%{_bindir}/c7unbatch
+mv $RPM_BUILD_ROOT%{_bindir}/gunbatch.sh $RPM_BUILD_ROOT%{_bindir}/gunbatch
+
 rm -f $RPM_BUILD_ROOT/var/state/news/history
 
 umask 002
@@ -196,7 +200,7 @@ install include/dbz.h		$RPM_BUILD_ROOT%{_includedir}/inn
 install include/libinn.h	$RPM_BUILD_ROOT%{_includedir}/inn
 install include/storage.h	$RPM_BUILD_ROOT%{_includedir}/inn
 
-mv $RPM_BUILD_ROOT%{_datadir}/news/*.a	$RPM_BUILD_ROOT%{_libdir}
+mv $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
 
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
 	-a $RPM_BUILD_ROOT/var/state/news/active \
@@ -213,6 +217,8 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man[1358]/* \
 rm -rf $RPM_BUILD_ROOT
 
 %post
+/sbin/ldconfig 
+
 if [ -f /var/state/news/history ]; then
 	cd /var/state/news
 	%{_bindir}/makehistory -i -r
@@ -286,7 +292,6 @@ else
 fi
 
 /sbin/chkconfig --add inn
-/sbin/ldconfig 
 
 %preun
 if [ "$1" = "0" ]; then
@@ -295,6 +300,9 @@ if [ "$1" = "0" ]; then
     fi
     /sbin/chkconfig --del inn
 fi
+
+%postun
+/sbin/ldconfig 
 
 %files
 %defattr(644,root,root,755)
@@ -405,6 +413,9 @@ fi
 # SGID
 %attr(2755,root,news) %{_bindir}/inews
 
+# LIBS
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+
 # BINARIES
 %attr(755,root,root) %{_bindir}/actived
 %attr(755,root,root) %{_bindir}/actmerge
@@ -494,7 +505,9 @@ fi
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/inn/*
-%{_libdir}/*.a
+%{_libdir}/lib*.a
+%{_libdir}/lib*.la
+%{_libdir}/lib*.so
 %{_mandir}/man3/*
 
 %files -n inews
