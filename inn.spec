@@ -7,8 +7,8 @@ Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.3.2
-Release:	10
+Version:	2.3.3
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -33,6 +33,7 @@ Patch4:		%{name}-setreuid.patch
 Patch5:		%{name}-sec.patch
 Patch6:		%{name}-frsize.patch
 Patch7:		%{name}-ac25x.patch
+Patch8:		%{name}-ac253.patch
 URL:		http://www.isc.org/inn.html
 BuildRequires:	autoconf
 BuildRequires:	libtool
@@ -49,12 +50,12 @@ Requires:	util-linux
 Requires:	procps
 Requires:	textutils
 Requires:	awk
-Prereq:		/sbin/chkconfig
-Prereq:		/sbin/ldconfig
-Prereq:		rc-scripts
-Prereq:		sed
-Prereq:		fileutils
-Prereq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+Requires(post):	sed
+Requires(post):	fileutils
+Requires(post):	/usr/sbin/usermod
 Provides:	nntpserver
 Obsoletes:	leafnode
 Obsoletes:	leafnode+
@@ -242,6 +243,7 @@ sunucuya makaleyi yollar.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 touch innfeed/*.[ly]
@@ -250,24 +252,24 @@ rm -f config.cache
 %{__autoconf}
 %{__libtoolize}
 %configure \
-        --with-news-user=news \
-        --with-news-group=news \
-        --with-news-master=news \
-        --with-db-dir=/var/lib/news \
-        --with-etc-dir=%{_sysconfdir} \
-        --with-log-dir=/var/log/news \
-        --with-run-dir=/var/run/news \
-        --with-spool-dir=/var/spool/news \
-        --with-lib-dir=%{_datadir}/news \
-        --with-tmp-path=/var/spool/news/incoming/tmp \
-        --with-perl \
-        --with-sendmail=%{_libdir}/sendmail \
+	--with-news-user=news \
+	--with-news-group=news \
+	--with-news-master=news \
+	--with-db-dir=/var/lib/news \
+	--with-etc-dir=%{_sysconfdir} \
+	--with-log-dir=/var/log/news \
+	--with-run-dir=/var/run/news \
+	--with-spool-dir=/var/spool/news \
+	--with-lib-dir=%{_datadir}/news \
+	--with-tmp-path=/var/spool/news/incoming/tmp \
+	--with-perl \
+	--with-sendmail=%{_libdir}/sendmail \
 	--with-openssl=%{_prefix} \
 	--with-berkeleydb=%{_prefix} \
 	%{?_with_largefiles:--with-largefiles} \
-        %{!?_with_largefiles:--enable-tagged-hash} \
-        --enable-merge-to-groups \
-        --enable-pgp-verify \
+	%{!?_with_largefiles:--enable-tagged-hash} \
+	--enable-merge-to-groups \
+	--enable-pgp-verify \
 	--enable-shared \
 	--enable-static \
 	--enable-libtool \
@@ -284,7 +286,8 @@ install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
 	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archiv/news}} \
-	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs}
+	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs} \
+	$RPM_BUILD_ROOT/home/services/news
 
 %{__make} install \
 	DESTDIR="$RPM_BUILD_ROOT" \
@@ -333,12 +336,13 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_datadir} $RPM_BUILD_ROOT%{_bindir}/makehistory
 #Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
-gzip -9nf CONTRIBUTORS INSTALL HISTORY README* ChangeLog LICENSE NEWS
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if [ "`su - news -s /bin/sh -c pwd 2>/dev/null`" = "/var/spool/news" ]; then
+	/usr/sbin/usermod -d /home/services/news news
+fi
 if [ -f /var/lib/news/history ]; then
 	cd /var/lib/news
 	%{_bindir}/makedbz -s `wc -l <history` -f history
@@ -427,12 +431,12 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del inn
 fi
 
-%post libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
-%doc {CONTRIBUTORS,INSTALL,HISTORY,README*,ChangeLog,LICENSE,NEWS}.gz
+%doc CONTRIBUTORS INSTALL HISTORY README* ChangeLog LICENSE NEWS
 
 # DB
 %attr(770,root,news) %dir /var/lib/news
@@ -468,7 +472,7 @@ fi
 %attr(770,root,news) %dir /var/spool/news/uniover
 
 # CRON PARTS
-%attr(640,root,root) %config %verify(not size mtime md5) /etc/cron.d/inn
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/cron.d/inn
 
 # RC-SCRIPT
 %attr(754,root,root) /etc/rc.d/init.d/inn
@@ -506,18 +510,18 @@ fi
 %attr(755,root,root) %dir %{_datadir}/news/filter
 
 %attr(755,root,root) %{_datadir}/news/docheckgroups
-%config %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
-%config %verify(not size mtime md5) %{_datadir}/news/innshellvars
-%config %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
-%config %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
 
-%config %verify(not size mtime md5) %{_datadir}/news/filter/INN.py
-%config %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
-%config %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
-%config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
-%config %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.py
-%config %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
-%config %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/INN.py
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.py
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
+%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
 
 %attr(755,root,root) %{_datadir}/news/control/checkgroups
 %attr(755,root,root) %{_datadir}/news/control/checkgroups.pl
