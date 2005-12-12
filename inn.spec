@@ -44,15 +44,14 @@ BuildRequires:	flex
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
-PreReq:		%{name}-libs = %{version}-%{release}
-PreReq:		rc-scripts
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
-Requires(post,preun):	/sbin/chkconfig
-Requires(post):	sed >= 4.0
-Requires(post):	fileutils
-Requires(post):	textutils
 Requires(post):	/usr/sbin/usermod
+Requires(post):	fileutils
+Requires(post):	sed >= 4.0
+Requires(post):	textutils
+Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/etc/cron.d
 Requires:	awk
 Requires:	cleanfeed >= 0.95.7b-4
@@ -345,7 +344,7 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory 
 find samples -name "*.in" -exec chmod a-x {} \;
 
 # remove files in conflict with cleanfeed
-rm -f $RPM_BUILD_ROOT%{_datadir}/news/filter/filter_innd.* 
+rm -f $RPM_BUILD_ROOT%{_datadir}/news/filter/filter_innd.*
 
 # remove unpackaged files
 rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
@@ -461,15 +460,15 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 # DB
 %attr(770,root,news) %dir /var/lib/news
 %attr(770,root,news) %dir /var/lib/news/backoff
-%attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active
-%attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/distributions
-%attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/newsgroups
-%attr(664,root,news) %config(noreplace) %verify(not size mtime md5) /var/lib/news/active.times
+%attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/active
+%attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/distributions
+%attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/newsgroups
+%attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/active.times
 %attr(664,news,news) %ghost /var/lib/news/.news.daily
 %attr(664,news,news) %ghost /var/lib/news/history
 
 # LOGS
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/logrotate.d/inn
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/inn
 %attr(770,root,news) %dir /var/log/news
 %attr(770,root,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
@@ -491,56 +490,56 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(770,root,news) %dir /var/spool/news/uniover
 
 # CRON PARTS
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/cron.d/inn
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/cron.d/inn
 
 # RC-SCRIPT
 %attr(754,root,root) /etc/rc.d/init.d/inn
 
 # CONFIGS (INN is a one big config ;-)
 %attr(755,root,news) %dir %{_sysconfdir}
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.cfg
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/actsync.ign
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/buffindexed.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/control.ctl
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/cycbuff.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/distrib.pats
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/expire.ctl
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/incoming.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/inn.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innfeed.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innreport.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/innwatch.ctl
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/moderators
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/motd.news
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/news2mail.cf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/newsfeeds
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nnrpd.track
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/nntpsend.ctl
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ovdb.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/overview.fmt
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/passwd.nntp
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/radius.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/readers.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sasl.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/storage.conf
-%attr(640,root,news) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/subscriptions
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/actsync.cfg
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/actsync.ign
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/buffindexed.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/control.ctl
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/cycbuff.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/distrib.pats
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/expire.ctl
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/incoming.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inn.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innfeed.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innreport.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innwatch.ctl
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/moderators
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/motd.news
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/news2mail.cf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/newsfeeds
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nnrpd.track
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nntpsend.ctl
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ovdb.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/overview.fmt
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/passwd.nntp
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/radius.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/readers.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sasl.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/storage.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/subscriptions
 
 %attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
 %attr(755,root,root) %dir %{_datadir}/news/filter
 
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innreport_inn.pm
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars.pl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/innshellvars.tcl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innreport_inn.pm
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars.pl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars.tcl
 
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/INN.py
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter_nnrpd.pl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/filter.tcl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.pl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/nnrpd_auth.py
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup_innd.pl
-%config(noreplace) %verify(not size mtime md5) %{_datadir}/news/filter/startup.tcl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/INN.py
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/filter_nnrpd.pl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/filter.tcl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/nnrpd_auth.pl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/nnrpd_auth.py
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/startup_innd.pl
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/startup.tcl
 
 %attr(755,root,root) %{_datadir}/news/control/checkgroups.pl
 %attr(755,root,root) %{_datadir}/news/control/ihave.pl
