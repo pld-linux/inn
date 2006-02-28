@@ -1,3 +1,5 @@
+# TODO
+# - post script is nightmare
 #
 # Conditional build:
 %bcond_with	largefiles	# enable largefiles (disables tagged hash)
@@ -12,7 +14,7 @@ Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.2
-Release:	1
+Release:	0.1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -36,6 +38,7 @@ Patch6:		%{name}-db4.patch
 Patch7:		%{name}-lib_install_modes.patch
 Patch8:		%{name}-config.patch
 URL:		http://www.isc.org/sw/inn/
+BuildRequires:	fix-%post-script-first
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
@@ -44,6 +47,7 @@ BuildRequires:	flex
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
 Requires(post):	/usr/sbin/usermod
@@ -77,20 +81,20 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 INN is a news server, which can be set up to handle USENET news, as
 well as private "newsfeeds". There is a *LOT* of information about
-setting up INN in /usr/share/doc -- read it.
+setting up INN in %{_docdir}/%{name}-%{version} -- read it.
 
 If you want innreport to generate graphs you need perl-GD package.
 
 %description -l es
 INN es un servidor de news, que puede ser configurado para manipular
 USENET news bien como newsfeeds privadas. Existe un *Montón* de
-información sobre la configuración del INN en /usr/doc -- léela.
+información sobre la configuración del INN en %{_docdir}/%{name}-%{version} -- léela.
 
 %description -l pl
 INN jest serwerem news, który mo¿na skonfigurowaæ do obs³ugi USENET-u,
 jak równie¿ do obs³ugi ,,prywatnych'' grup w sieciach intranetowych.
 Ca³e mnóstwo po¿ytecznych informacji o konfigurowaniu INN-a znajdziesz
-w katalogu /usr/share/doc/inn-*.
+w katalogu %{_docdir}/%{name}-%{version}.
 
 Je¶li chcesz ¿eby innreport generowa³ wykresy musisz zainstalowaæ
 pakiet perl-GD.
@@ -98,7 +102,7 @@ pakiet perl-GD.
 %description -l pt_BR
 INN é um servidor de news, que pode ser configurado para manipular
 USENET news bem como newsfeeds privadas. Existe um *MONTE* de
-informações sobre a configuração do INN em /usr/doc -- leia.
+informações sobre a configuração do INN em %{_docdir}/%{name}-%{version} -- leia.
 
 %package libs
 Summary:	INN libraries
@@ -340,7 +344,7 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory 
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
 	-i -r -f $RPM_BUILD_ROOT/var/lib/news/history || :
 
-#Fix perms in sample directory to avoid bogus dependencies
+# Fix perms in sample directory to avoid bogus dependencies
 find samples -name "*.in" -exec chmod a-x {} \;
 
 # remove files in conflict with cleanfeed
@@ -354,7 +358,9 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/rc.news
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ "`getent passwd http | cut -d: -f6`" = "/var/spool/news" ]; then
+# FIXME: unify this! and change setup package! and /home/services/news
+# doesn't exist so why bother changing it?
+if [ "`getent passwd news | cut -d: -f6`" = "/var/spool/news" ]; then
 	/usr/sbin/usermod -d /home/services/news news
 fi
 umask 022
@@ -368,6 +374,7 @@ if [ -f /var/lib/news/history ]; then
 	chmod 644 history.*
 else
 	cd /var/lib/news
+	# FIXME: this will fail immediately as it needs *configured* inn.conf!
 	%{_bindir}/makehistory
 	%{_bindir}/makedbz -s `wc -l <history` -f history
 	for i in dir hash index pag; do
@@ -376,72 +383,72 @@ else
 	chown news:news history history.*
 	chmod 644 history history.*
 fi
-[ -f /var/lib/news/active.times ] || {
+
+if [ ! -f /var/lib/news/active.times ]; then
 	touch /var/lib/news/active.times
 	chown news:news /var/lib/news/active.times
-}
+fi
 
-[ -f /var/log/news/news.notice ] || {
-	touch /var/log/news/news.notice
-	chown news:news /var/log/news/news.notice
-	chmod 664 /var/log/news/news.notice
-}
-
-[ -f /var/log/news/news.crit ] || {
-	touch /var/log/news/news.crit
-	chown news:news /var/log/news/news.crit
-	chmod 660 /var/log/news/news.crit
-}
-
-[ -f /var/log/news/news.err ] || {
-	touch /var/log/news/news.err
-	chown news:news /var/log/news/news.err
-	chmod 660 /var/log/news/news.err
-}
-
-[ -f /var/lib/news/.news.daily ] || {
+if [ ! -f /var/lib/news/.news.daily ]; then
 	touch /var/lib/news/.news.daily
 	chown news:news /var/lib/news/.news.daily
 	chmod 664 /var/lib/news/.news.daily
-}
+fi
+
+# FIXME: /var/log is syslog daemon business, not ours!
+if [ ! -f /var/log/news/news.notice ]; then
+	touch /var/log/news/news.notice
+	chown news:news /var/log/news/news.notice
+	chmod 664 /var/log/news/news.notice
+fi
+
+if [ ! -f /var/log/news/news.crit ]; then
+	touch /var/log/news/news.crit
+	chown news:news /var/log/news/news.crit
+	chmod 660 /var/log/news/news.crit
+fi
+
+if [ ! -f /var/log/news/news.err ]; then
+	touch /var/log/news/news.err
+	chown news:news /var/log/news/news.err
+	chmod 660 /var/log/news/news.err
+fi
+
 
 umask 027
+# DUDE !!! LEAVE MY SYSLOG ALONE!
 if [ -f /etc/syslog.conf ]; then
-  if ! grep -q INN /etc/syslog.conf; then
-    sed -i 's/mail.none;/mail.none;news.none;/' /etc/syslog.conf
-    echo ''										>> /etc/syslog.conf
-    echo '#'										>> /etc/syslog.conf
-    echo '# INN'									>> /etc/syslog.conf
-    echo '#' 										>> /etc/syslog.conf
-    echo 'news.=crit                                        /var/log/news/news.crit'	>> /etc/syslog.conf
-    echo 'news.=err                                         /var/log/news/news.err'	>> /etc/syslog.conf
-    echo 'news.notice                                       /var/log/news/news.notice'	>> /etc/syslog.conf
+	if ! grep -q INN /etc/syslog.conf; then
+		sed -i 's/mail.none;/mail.none;news.none;/' /etc/syslog.conf
+	# FIXME: use cat <<-EOF here
+		echo ''										>> /etc/syslog.conf
+		echo '#'										>> /etc/syslog.conf
+		echo '# INN'									>> /etc/syslog.conf
+		echo '#' 										>> /etc/syslog.conf
+		echo 'news.=crit                                        /var/log/news/news.crit'	>> /etc/syslog.conf
+		echo 'news.=err                                         /var/log/news/news.err'	>> /etc/syslog.conf
+		echo 'news.notice                                       /var/log/news/news.notice'	>> /etc/syslog.conf
     fi
-  if [ -f /var/run/syslog.pid ]; then
-    kill -HUP `cat /var/run/syslog.pid` 2> /dev/null ||:
-  fi
+	if [ -f /var/run/syslog.pid ]; then
+		kill -HUP `cat /var/run/syslog.pid` 2> /dev/null ||:
+	fi
 else
-    # syslog.conf does not exist
-    echo "mail.none /var/log/messages" 							> /etc/syslog.conf.inn
-    echo "" 										>> /etc/syslog.conf.inn
-    echo "# INN" 									>> /etc/syslog.conf.inn
-    echo "news.=crit                                      /var/log/news/news.crit"	>> /etc/syslog.conf.inn
-    echo "news.=err                                       /var/log/news/news.err"	>> /etc/syslog.conf.inn
-    echo "news.notice                                     /var/log/news/news.notice"	>> /etc/syslog.conf.inn
+# FIXME, i use syslog-ing what then?
+	# syslog.conf does not exist
+	echo "mail.none /var/log/messages" 							> /etc/syslog.conf.inn
+	echo "" 										>> /etc/syslog.conf.inn
+	echo "# INN" 									>> /etc/syslog.conf.inn
+	echo "news.=crit                                      /var/log/news/news.crit"	>> /etc/syslog.conf.inn
+	echo "news.=err                                       /var/log/news/news.err"	>> /etc/syslog.conf.inn
+	echo "news.notice                                     /var/log/news/news.notice"	>> /etc/syslog.conf.inn
 fi
 
 /sbin/chkconfig --add inn
-if [ -f /var/lock/subsys/inn ]; then
-	/etc/rc.d/init.d/inn restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/inn start\" to start inn news server." >&2
-fi
+%service inn restart "inn news server"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/news ]; then
-		/etc/rc.d/init.d/inn stop
-	fi
+	%service inn stop
 	/sbin/chkconfig --del inn
 fi
 
