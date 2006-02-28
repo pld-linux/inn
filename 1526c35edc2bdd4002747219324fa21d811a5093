@@ -1,0 +1,4 @@
+- added using %{_sysconfdir} macro i more places,
+- permission on suid binaries changed to 4754,
+- added /vat/log/archiv/news directory for archiving old inn logs (still
+  is missing logrotate file for inn - must be added).
