@@ -13,12 +13,12 @@ Summary(pl):	INN, serwer nowinek
 Summary(pt_BR):	INN, InterNet News System (servidor news)
 Summary(tr):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.4.2
+Version:	2.4.3
 Release:	0.1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	4942a275c70e0256dad6f1857be6d62e
+# Source0-md5:	6caa10909a7bf55fb91535685990aec9
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -37,6 +37,8 @@ Patch5:		%{name}-setgid.patch
 Patch6:		%{name}-db4.patch
 Patch7:		%{name}-lib_install_modes.patch
 Patch8:		%{name}-config.patch
+Patch9:		%{name}-db4.4.patch
+Patch10:	%{name}-libdir.patch
 URL:		http://www.isc.org/sw/inn/
 BuildRequires:	fix-%post-script-first
 BuildRequires:	autoconf
@@ -255,6 +257,8 @@ sunucuya makaleyi yollar.
 %patch6
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 touch innfeed/*.[ly]
 
@@ -305,7 +309,7 @@ install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT/home/services/news
 
 %{__make} install \
-	DESTDIR="$RPM_BUILD_ROOT" \
+	DESTDIR=$RPM_BUILD_ROOT \
 	PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
 	PATHRNEWS=%{_libdir}/news/rnews \
@@ -331,11 +335,6 @@ umask 002
 touch $RPM_BUILD_ROOT/var/lib/news/history
 touch $RPM_BUILD_ROOT/var/lib/news/.news.daily
 touch $RPM_BUILD_ROOT/var/lib/news/active.times
-
-# obsolete?
-#touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h
-
-mv -f $RPM_BUILD_ROOT%{_datadir}/news/*.{a,la,so*} $RPM_BUILD_ROOT%{_libdir}
 
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
@@ -597,6 +596,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man1/innmail.1*
 %{_mandir}/man1/nntpget.1*
 %{_mandir}/man1/pgpverify.1*
+%{_mandir}/man1/pullnews.1*
 %{_mandir}/man1/rnews.1*
 %{_mandir}/man1/shlock.1*
 %{_mandir}/man1/shrinkfile.1*
