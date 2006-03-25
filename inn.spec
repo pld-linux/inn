@@ -358,8 +358,6 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/rc.news
 rm -rf $RPM_BUILD_ROOT
 
 %post
-# FIXME: unify this! and change setup package! and /home/services/news
-# doesn't exist so why bother changing it?
 if [ "`getent passwd news | cut -d: -f6`" = "/var/spool/news" ]; then
 	/usr/sbin/usermod -d /home/services/news news
 fi
@@ -414,35 +412,6 @@ if [ ! -f /var/log/news/news.err ]; then
 	chmod 660 /var/log/news/news.err
 fi
 
-
-umask 027
-# DUDE !!! LEAVE MY SYSLOG ALONE!
-if [ -f /etc/syslog.conf ]; then
-	if ! grep -q INN /etc/syslog.conf; then
-		sed -i 's/mail.none;/mail.none;news.none;/' /etc/syslog.conf
-	# FIXME: use cat <<-EOF here
-		echo ''										>> /etc/syslog.conf
-		echo '#'										>> /etc/syslog.conf
-		echo '# INN'									>> /etc/syslog.conf
-		echo '#' 										>> /etc/syslog.conf
-		echo 'news.=crit                                        /var/log/news/news.crit'	>> /etc/syslog.conf
-		echo 'news.=err                                         /var/log/news/news.err'	>> /etc/syslog.conf
-		echo 'news.notice                                       /var/log/news/news.notice'	>> /etc/syslog.conf
-    fi
-	if [ -f /var/run/syslog.pid ]; then
-		kill -HUP `cat /var/run/syslog.pid` 2> /dev/null ||:
-	fi
-else
-# FIXME, i use syslog-ing what then?
-	# syslog.conf does not exist
-	echo "mail.none /var/log/messages" 							> /etc/syslog.conf.inn
-	echo "" 										>> /etc/syslog.conf.inn
-	echo "# INN" 									>> /etc/syslog.conf.inn
-	echo "news.=crit                                      /var/log/news/news.crit"	>> /etc/syslog.conf.inn
-	echo "news.=err                                       /var/log/news/news.err"	>> /etc/syslog.conf.inn
-	echo "news.notice                                     /var/log/news/news.notice"	>> /etc/syslog.conf.inn
-fi
-
 /sbin/chkconfig --add inn
 %service inn restart "inn news server"
 
@@ -463,6 +432,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %files
 %defattr(644,root,root,755)
 %doc CONTRIBUTORS ChangeLog INSTALL LICENSE NEWS README TODO doc/[Icehs]*
+%attr(700,news,news) %dir /home/services/news
 
 # DB
 %attr(770,root,news) %dir /var/lib/news
