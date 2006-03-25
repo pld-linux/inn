@@ -1,0 +1,81 @@
+--- inn-2.4.3/history/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/history/Makefile	2006-03-25 17:54:30.522169000 +0100
+@@ -21,7 +21,7 @@
+ 	$(MAKE) COPT='$(WARNINGS)' all
+ 
+ install: all
+-	$(LI_XPUB) libinnhist.$(EXTLIB) $(D)$(PATHLIB)/libinnhist.$(EXTLIB)
++	$(LI_XPUB) libinnhist.$(EXTLIB) $(D)$(PATHSLIB)/libinnhist.$(EXTLIB)
+ 
+ library: libinnhist.$(EXTLIB)
+ 
+@@ -44,7 +44,7 @@
+ libinnhist.la: $(OBJECTS) $(LIBSTORAGE) $(LIBINN)
+ 	$(LIBLD) $(LDFLAGS) -o $@ $(LOBJECTS) \
+ 	    $(LIBSTORAGE) $(LIBINN) $(EXTSTORAGELIBS) $(LIBS) \
+-	    -rpath $(PATHLIB) -version-info 2:0:0
++	    -rpath $(PATHSLIB) -version-info 2:0:0
+ 
+ libinnhist.a: $(OBJECTS)
+ 	ar r $@ $(OBJECTS)
+--- inn-2.4.3/lib/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/lib/Makefile	2006-03-25 17:54:11.484979250 +0100
+@@ -33,7 +33,7 @@
+ 	$(MAKE) COPT='$(WARNINGS)' all
+ 
+ install: all
+-	$(LI_XPUB) libinn.$(EXTLIB) $D$(PATHLIB)/libinn.$(EXTLIB)
++	$(LI_XPUB) libinn.$(EXTLIB) $D$(PATHSLIB)/libinn.$(EXTLIB)
+ 
+ clobber clean distclean:
+ 	rm -f *.o *.lo libinn.la libinn.a parsedate.c parsedate
+@@ -46,7 +46,7 @@
+ 
+ libinn.la: $(OBJECTS) $(LOBJECTS)
+ 	$(LIBLD) $(LDFLAGS) -o $@ $(LOBJECTS) $(LIBS) \
+-	    -rpath $(PATHLIB) -version-info 2:0:0
++	    -rpath $(PATHSLIB) -version-info 2:0:0
+ 
+ libinn.a: $(OBJECTS)
+ 	ar r $@ $(OBJECTS)
+--- inn-2.4.3/storage/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/storage/Makefile	2006-03-25 17:53:58.652177250 +0100
+@@ -22,7 +22,7 @@
+ 	$(MAKE) COPT='$(WARNINGS)' all
+ 
+ install: all
+-	$(LI_XPUB) libstorage.$(EXTLIB) $D$(PATHLIB)/libstorage.$(EXTLIB)
++	$(LI_XPUB) libstorage.$(EXTLIB) $D$(PATHSLIB)/libstorage.$(EXTLIB)
+ 	for F in $(PROGRAMS) ; do \
+ 	    $(LI_XPRI) $$F $D$(PATHBIN)/`basename $$F` ; \
+ 	done
+@@ -48,7 +48,7 @@
+ libstorage.la: $(OBJECTS) $(LIBINN)
+ 	$(LIBLD) $(LDFLAGS) -o $@ $(LOBJECTS) \
+ 	    $(LIBINN) $(EXTSTORAGELIBS) $(LIBS) \
+-	    -rpath $(PATHLIB) -version-info 2:0:0
++	    -rpath $(PATHSLIB) -version-info 2:0:0
+ 
+ libstorage.a: $(OBJECTS)
+ 	ar r $@ $(OBJECTS)
+--- inn-2.4.3/Makefile.orig	2006-03-25 17:41:17.840629000 +0100
++++ inn-2.4.3/Makefile	2006-03-25 17:53:18.333657500 +0100
+@@ -6,7 +6,7 @@
+ ##  different mode than the rest.
+ INSTDIRS      = $(PATHNEWS) $(PATHBIN) $(PATHAUTH) $(PATHAUTHRESOLV) \
+ 		$(PATHAUTHPASSWD) $(PATHCONTROL) $(PATHFILTER) \
+-		$(PATHRNEWS) $(PATHDB) $(PATHDOC) $(PATHETC) $(PATHLIB) \
++		$(PATHRNEWS) $(PATHDB) $(PATHDOC) $(PATHETC) $(PATHLIB) $(PATHSLIB) \
+ 		$(PATHMAN) $(MAN1) $(MAN3) $(MAN5) $(MAN8) $(PATHSPOOL) \
+ 		$(PATHTMP) $(PATHARCHIVE) $(PATHARTICLES) $(PATHINCOMING) \
+ 		$(PATHINBAD) $(PATHTAPE) $(PATHOVERVIEW) $(PATHOUTGOING) \
+--- inn-2.4.3/Makefile.global.in.orig	2006-03-25 17:41:17.924634000 +0100
++++ inn-2.4.3/Makefile.global.in	2006-03-25 17:53:38.622925500 +0100
+@@ -202,6 +202,7 @@
+ PATHMAN         = @mandir@
+ PATHINCLUDE     = @includedir@
+ PATHLIB         = @LIBDIR@
++PATHSLIB	= @libdir@
+ PATHCONTROL     = @CONTROLDIR@
+ PATHFILTER      = @FILTERDIR@
+ PATHRUN         = @RUNDIR@
