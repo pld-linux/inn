@@ -331,9 +331,6 @@ umask 002
 touch $RPM_BUILD_ROOT/var/lib/news/history
 touch $RPM_BUILD_ROOT/var/lib/news/.news.daily
 touch $RPM_BUILD_ROOT/var/lib/news/active.times
-touch $RPM_BUILD_ROOT/var/log/news/news.notice
-touch $RPM_BUILD_ROOT/var/log/news/news.crit
-touch $RPM_BUILD_ROOT/var/log/news/news.err
 
 # obsolete?
 #touch $RPM_BUILD_ROOT%{_includedir}/inn/configdata.h
@@ -372,7 +369,8 @@ if [ -f /var/lib/news/history ]; then
 	chmod 644 history.*
 else
 	cd /var/lib/news
-	# FIXME: this will fail immediately as it needs *configured* inn.conf!
+	# FIXME: this will fail immediately as it needs *configured*
+	# inn.conf, but PLD default rpm doesn't provide one!
 	%{_bindir}/makehistory
 	%{_bindir}/makedbz -s `wc -l <history` -f history
 	for i in dir hash index pag; do
@@ -391,25 +389,6 @@ if [ ! -f /var/lib/news/.news.daily ]; then
 	touch /var/lib/news/.news.daily
 	chown news:news /var/lib/news/.news.daily
 	chmod 664 /var/lib/news/.news.daily
-fi
-
-# FIXME: /var/log is syslog daemon business, not ours!
-if [ ! -f /var/log/news/news.notice ]; then
-	touch /var/log/news/news.notice
-	chown news:news /var/log/news/news.notice
-	chmod 664 /var/log/news/news.notice
-fi
-
-if [ ! -f /var/log/news/news.crit ]; then
-	touch /var/log/news/news.crit
-	chown news:news /var/log/news/news.crit
-	chmod 660 /var/log/news/news.crit
-fi
-
-if [ ! -f /var/log/news/news.err ]; then
-	touch /var/log/news/news.err
-	chown news:news /var/log/news/news.err
-	chmod 660 /var/log/news/news.err
 fi
 
 /sbin/chkconfig --add inn
@@ -446,12 +425,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 
 # LOGS
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/inn
-%attr(770,root,news) %dir /var/log/news
-%attr(770,root,news) %dir /var/log/archiv/news
 %attr(770,news,news) %dir /var/run/news
-%attr(664,news,news) %ghost /var/log/news/news.notice
-%attr(660,news,news) %ghost /var/log/news/news.crit
-%attr(660,news,news) %ghost /var/log/news/news.err
 
 # SPOOL
 %attr(771,root,news) %dir /var/spool/news
