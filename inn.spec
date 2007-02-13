@@ -6,12 +6,12 @@
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
-Summary(de.UTF-8):   das InterNet News System (News-Server)
-Summary(es.UTF-8):   INN, InterNet News System (servidor news)
-Summary(fr.UTF-8):   INN, le système InterNet News (serveur de news)
-Summary(pl.UTF-8):   INN, serwer nowinek
-Summary(pt_BR.UTF-8):   INN, InterNet News System (servidor news)
-Summary(tr.UTF-8):   INN, InterNet Haber Sistemi (haber sunucu)
+Summary(de.UTF-8):	das InterNet News System (News-Server)
+Summary(es.UTF-8):	INN, InterNet News System (servidor news)
+Summary(fr.UTF-8):	INN, le système InterNet News (serveur de news)
+Summary(pl.UTF-8):	INN, serwer nowinek
+Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
+Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.3
 Release:	0.1
@@ -108,9 +108,9 @@ informações sobre a configuração do INN em %{_docdir}/%{name}-%{version} -- 
 
 %package libs
 Summary:	INN libraries
-Summary(de.UTF-8):   INN-Library
-Summary(fr.UTF-8):   Bibliothèque INN
-Summary(pl.UTF-8):   Biblioteki do INN-a
+Summary(de.UTF-8):	INN-Library
+Summary(fr.UTF-8):	Bibliothèque INN
+Summary(pl.UTF-8):	Biblioteki do INN-a
 Group:		Development/Libraries
 
 %description libs
@@ -135,12 +135,12 @@ bir kitaplıktır.
 
 %package devel
 Summary:	INN header files and development documentations
-Summary(de.UTF-8):   INN-Library
-Summary(es.UTF-8):   Biblioteca INN
-Summary(fr.UTF-8):   Bibliothèque INN
-Summary(pl.UTF-8):   Pliki nagłówkowe i dokumentacja programisty do inn-a
-Summary(pt_BR.UTF-8):   Biblioteca INN
-Summary(tr.UTF-8):   INN kitaplığı
+Summary(de.UTF-8):	INN-Library
+Summary(es.UTF-8):	Biblioteca INN
+Summary(fr.UTF-8):	Bibliothèque INN
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja programisty do inn-a
+Summary(pt_BR.UTF-8):	Biblioteca INN
+Summary(tr.UTF-8):	INN kitaplığı
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	db-devel
@@ -173,9 +173,9 @@ bir kitaplıktır.
 
 %package static
 Summary:	Static INN libraries
-Summary(es.UTF-8):   Static libraries for inn development
-Summary(pl.UTF-8):   Biblioteki statyczne do INN
-Summary(pt_BR.UTF-8):   Bibliotecas estáticas para desenvolvimento com inn
+Summary(es.UTF-8):	Static libraries for inn development
+Summary(pl.UTF-8):	Biblioteki statyczne do INN
+Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com inn
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -197,12 +197,12 @@ Bibliotecas estáticas para desenvolvimento com inn
 
 %package -n inews
 Summary:	Inews program (used for posting by inn and trn)
-Summary(de.UTF-8):   Inews-Programm (für die Zustellung mit inn und trn)
-Summary(es.UTF-8):   Programa Inews (usado para franqueo por inn y trn)
-Summary(fr.UTF-8):   Programme inews (utilisé par inn et trn pour poster)
-Summary(pl.UTF-8):   Inews - program do wysyłania artykułów (używany przez inn i trn)
-Summary(pt_BR.UTF-8):   Programa Inews (usado para postagem pelo inn e trn)
-Summary(tr.UTF-8):   Haber biçimlendirme programı
+Summary(de.UTF-8):	Inews-Programm (für die Zustellung mit inn und trn)
+Summary(es.UTF-8):	Programa Inews (usado para franqueo por inn y trn)
+Summary(fr.UTF-8):	Programme inews (utilisé par inn et trn pour poster)
+Summary(pl.UTF-8):	Inews - program do wysyłania artykułów (używany przez inn i trn)
+Summary(pt_BR.UTF-8):	Programa Inews (usado para postagem pelo inn e trn)
+Summary(tr.UTF-8):	Haber biçimlendirme programı
 Group:		Networking/News
 Requires:	%{name}-libs = %{version}-%{release}
 
