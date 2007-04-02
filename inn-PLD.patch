@@ -88,7 +88,7 @@ diff -Nur inn-2.4.0.orig/scripts/scanlogs.in inn-2.4.0/scripts/scanlogs.in
  
  ##  Directory where old log files are kept.
 -OLD=${MOST_LOGS}/OLD
-+OLD=/var/log/archiv/news
++OLD=/var/log/archive/news
  ##  If you want to archive the active file, enable this line.
  ACTIVEFILE=${ACTIVE}
  ##  Number of lines of error in each category to report.

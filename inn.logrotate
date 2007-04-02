@@ -1,5 +1,5 @@
 /var/log/news/news.* {
-	olddir /var/log/archiv/news
+	olddir /var/log/archive/news
 	create 640 news news
 	postrotate
 		if [ -e /etc/rc.d/init.d/syslog-ng ] ; then
@@ -11,7 +11,7 @@
 }
 
 /var/log/news/news {
-	olddir /var/log/archiv/news
+	olddir /var/log/archive/news
 	create 640 news news
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files" || :
@@ -22,7 +22,7 @@
 }
 
 /var/log/news/*log {
-	olddir /var/log/archiv/news
+	olddir /var/log/archive/news
 	create 640 news news
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files" || :
