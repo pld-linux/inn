@@ -70,7 +70,7 @@ Requires:	util-linux
 Provides:	nntpserver
 Obsoletes:	leafnode
 Obsoletes:	leafnode+
-Conflicts:	logrotate < 3.7.4
+Conflicts:	logrotate < 3.7-4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
