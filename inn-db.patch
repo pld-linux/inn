@@ -19,19 +19,16 @@ diff -Nur inn-2.4.0.orig/authprogs/ckpasswd.c inn-2.4.0/authprogs/ckpasswd.c
  # define OPT_DBM ""
 --- inn-2.4.2/configure.in.orig	2004-12-22 05:21:19.000000000 +0100
 +++ inn-2.4.2/configure.in	2004-12-27 08:32:38.010338472 +0100
-@@ -780,8 +780,9 @@
+@@ -780,7 +780,7 @@
  dnl Search for various additional libraries used by portions of INN.
  INN_SEARCH_AUX_LIBS(crypt, crypt, CRYPT_LIB)
  INN_SEARCH_AUX_LIBS(getspnam, shadow, SHADOW_LIB)
 -INN_SEARCH_AUX_LIBS(dbm_open, ndbm dbm, DBM_LIB,
--    [AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])])
-+DBM_LIB="-ldb"
-+AC_SUBST(DBM_LIB)
-+AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])
++INN_SEARCH_AUX_LIBS(db_create, db-4.6 db-4.5 db-4.4 db-4.3 db-4.2 db-4.1 db4 db, DBM_LIB,
+     [AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])])
  
  dnl IRIX has a PAM library with the right symbols but no header files suitable
- dnl for use with it, so we have to check the header files first and then only
-@@ -973,17 +974,11 @@
+@@ -973,17 +973,11 @@
  AC_HEADER_SYS_WAIT
  
  dnl Generic checks for header files.
