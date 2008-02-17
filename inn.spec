@@ -14,7 +14,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.3
-Release:	0.2
+Release:	0.3
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -40,6 +40,7 @@ Patch8:		%{name}-config.patch
 Patch9:		%{name}-db4.4.patch
 Patch10:	%{name}-libdir.patch
 Patch11:	%{name}-asneeded.patch
+Patch12:	%{name}-perl-segv.patch
 URL:		http://www.isc.org/sw/inn/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -263,6 +264,7 @@ sunucuya makaleyi yollar.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 touch innfeed/*.[ly]
 
