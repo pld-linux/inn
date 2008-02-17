@@ -14,7 +14,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.3
-Release:	0.1
+Release:	0.2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -39,13 +39,15 @@ Patch7:		%{name}-lib_install_modes.patch
 Patch8:		%{name}-config.patch
 Patch9:		%{name}-db4.4.patch
 Patch10:	%{name}-libdir.patch
+Patch11:	%{name}-asneeded.patch
 URL:		http://www.isc.org/sw/inn/
-BuildRequires:	fix-%post-script-first
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	flex
+BuildRequires:	krb5-devel
+BuildRequires:	libcom_err-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -260,6 +262,7 @@ sunucuya makaleyi yollar.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 touch innfeed/*.[ly]
 
@@ -267,8 +270,9 @@ touch innfeed/*.[ly]
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
+%{__autoheader} -I include
 %configure \
-	CFLAGS="%{rpmcflags} -D_GNU_SOURCE" \
+	CPPFLAGS="-D_GNU_SOURCE" \
 	--with-news-user=news \
 	--with-news-group=news \
 	--with-news-master=news \
@@ -369,9 +373,8 @@ if [ -f /var/lib/news/history ]; then
 	chmod 644 history.*
 else
 	cd /var/lib/news
-	# FIXME: this will fail immediately as it needs *configured*
-	# inn.conf, but PLD default rpm doesn't provide one!
-	%{_bindir}/makehistory
+	# makehistory fails on uninitialized spool(?) - create empty history in such case
+	%{_bindir}/makehistory || ( echo "Creating empty history instead." ; touch history )
 	%{_bindir}/makedbz -s `wc -l <history` -f history
 	for i in dir hash index pag; do
 		[ -f history.n.$i ] && mv history.n.$i history.$i
@@ -610,18 +613,29 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/libinn.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libinn.so.2
+%attr(755,root,root) %{_libdir}/libinnhist.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libinnhist.so.2
+%attr(755,root,root) %{_libdir}/libstorage.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libstorage.so.2
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libinn.so
+%attr(755,root,root) %{_libdir}/libinnhist.so
+%attr(755,root,root) %{_libdir}/libstorage.so
+%{_libdir}/libinn.la
+%{_libdir}/libinnhist.la
+%{_libdir}/libstorage.la
 %{_includedir}
-%{_libdir}/lib*.la
-%{_libdir}/lib*.so
 %{_mandir}/man3/*
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libinn.a
+%{_libdir}/libinnhist.a
+%{_libdir}/libstorage.a
 
 %files -n inews
 %defattr(644,root,root,755)
