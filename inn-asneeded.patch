@@ -1,0 +1,66 @@
+--- inn-2.4.3/backends/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/backends/Makefile	2008-02-17 21:26:43.305437267 +0100
+@@ -62,15 +62,15 @@
+ 	@exit 1
+ 
+ actsync:	actsync.o    $(LIBINN)	; $(LINK) actsync.o    $(INNLIBS)
+-archive:	archive.o    $(BOTH)	; $(LINK) archive.o    $(STORELIBS)
+-batcher:	batcher.o    $(BOTH)	; $(LINK) batcher.o    $(STORELIBS)
+-cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINK) cvtbatch.o   $(STORELIBS)
+-inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      $(STORELIBS)
++archive:	archive.o    $(BOTH)	; $(LINK) archive.o    -Wl,-no-as-needed $(STORELIBS)
++batcher:	batcher.o    $(BOTH)	; $(LINK) batcher.o    -Wl,-no-as-needed $(STORELIBS)
++cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINK) cvtbatch.o   -Wl,-no-as-needed $(STORELIBS)
++inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      -Wl,-no-as-needed $(STORELIBS)
+ innxbatch:	innxbatch.o  $(LIBINN)	; $(LINK) innxbatch.o  $(INNLIBS)
+ innxmit:	innxmit.o    $(BOTH)	; $(LINK) innxmit.o    $(STORELIBS)
+ ninpaths:	ninpaths.o		; $(LINK) ninpaths.o
+ nntpget:	nntpget.o    $(BOTH)	; $(LINK) nntpget.o    $(STORELIBS)
+-overchan:	overchan.o   $(BOTH)	; $(LINK) overchan.o   $(STORELIBS)
++overchan:	overchan.o   $(BOTH)	; $(LINK) overchan.o   -Wl,-no-as-needed $(STORELIBS)
+ shlock:		shlock.o     $(LIBINN)	; $(LINK) shlock.o     $(INNLIBS)
+ shrinkfile:	shrinkfile.o $(LIBINN)	; $(LINK) shrinkfile.o $(INNLIBS)
+ 
+--- inn-2.4.3/expire/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/expire/Makefile	2008-02-17 21:05:55.658337911 +0100
+@@ -54,7 +54,7 @@
+ convdate:	convdate.o     $(LIBINN) ; $(LINK) convdate.o     $(INNLIBS)
+ expire:		expire.o       $(BOTH)   ; $(LINK) expire.o       $(STORELIBS)
+ expireover:	expireover.o   $(BOTH)   ; $(LINK) expireover.o   $(STORELIBS)
+-fastrm:		fastrm.o       $(BOTH)   ; $(LINK) fastrm.o       $(STORELIBS)
++fastrm:		fastrm.o       $(BOTH)   ; $(LINK) fastrm.o       -Wl,-no-as-needed $(STORELIBS)
+ grephistory:	grephistory.o  $(BOTH)   ; $(LINK) grephistory.o  $(STORELIBS)
+ makedbz:	makedbz.o      $(LIBINN) ; $(LINK) makedbz.o      $(INNLIBS)
+ makehistory:	makehistory.o  $(BOTH)   ; $(LINK) makehistory.o  $(STORELIBS)
+--- inn-2.4.3/frontends/Makefile.orig	2008-02-17 20:05:39.596270000 +0100
++++ inn-2.4.3/frontends/Makefile	2008-02-17 21:18:41.001952358 +0100
+@@ -71,12 +71,12 @@
+ getlist:	getlist.o      $(LIBINN) ; $(LINK) getlist.o      $(INNLIBS)
+ inews:		inews.o        $(LIBINN) ; $(LINK) inews.o        $(INNLIBS)
+ innconfval:	innconfval.o   $(LIBINN) ; $(LINK) innconfval.o   $(INNLIBS)
+-ovdb_init:	ovdb_init.o    $(BOTH)   ; $(LINK) ovdb_init.o    $(STORELIBS)
+-ovdb_monitor:	ovdb_monitor.o $(BOTH)   ; $(LINK) ovdb_monitor.o $(STORELIBS)
+-ovdb_server:	ovdb_server.o  $(BOTH)   ; $(LINK) ovdb_server.o  $(STORELIBS)
+-ovdb_stat:	ovdb_stat.o    $(BOTH)   ; $(LINK) ovdb_stat.o    $(STORELIBS)
+-rnews:		rnews.o        $(LIBINN) ; $(LINK) rnews.o        $(STORELIBS)
+-sm:		sm.o           $(BOTH)   ; $(LINK) sm.o           $(STORELIBS)
++ovdb_init:	ovdb_init.o    $(BOTH)   ; $(LINK) ovdb_init.o    -Wl,-no-as-needed $(STORELIBS)
++ovdb_monitor:	ovdb_monitor.o $(BOTH)   ; $(LINK) ovdb_monitor.o -Wl,-no-as-needed $(STORELIBS)
++ovdb_server:	ovdb_server.o  $(BOTH)   ; $(LINK) ovdb_server.o  -Wl,-no-as-needed $(STORELIBS)
++ovdb_stat:	ovdb_stat.o    $(BOTH)   ; $(LINK) ovdb_stat.o    -Wl,-no-as-needed $(STORELIBS)
++rnews:		rnews.o        $(LIBINN) ; $(LINK) rnews.o        -Wl,-no-as-needed $(STORELIBS)
++sm:		sm.o           $(BOTH)   ; $(LINK) sm.o           -Wl,-no-as-needed $(STORELIBS)
+ 
+ ovdb_init.o: ovdb_init.c
+ 	$(CC) $(CFLAGS) $(BERKELEY_DB_CFLAGS) -c $<
+--- inn-2.4.3/innfeed/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/innfeed/Makefile	2008-02-17 20:57:09.756368465 +0100
+@@ -62,7 +62,7 @@
+ 
+ ##  Compilation rules.
+ 
+-INNFEEDLIBS	= $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(EXTSTORAGELIBS) \
++INNFEEDLIBS	= -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(EXTSTORAGELIBS) \
+ 		  $(SASLLIB) $(LIBS)
+ 
+ config_y.c config_y.h: configfile.y
