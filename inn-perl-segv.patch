@@ -1,0 +1,74 @@
+--- inn-2.4.3/lib/perl.c.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/lib/perl.c	2008-02-17 23:29:59.390916158 +0100
+@@ -62,6 +62,7 @@
+ PerlFilter(bool value)
+ {
+     dSP;
++    char *argv[] = { NULL };
+ 
+     if (value == PerlFilterActive)
+         return true;
+@@ -71,7 +72,7 @@
+         if (perl_get_cv("filter_end", false) != NULL) {
+             ENTER;
+             SAVETMPS;
+-            perl_call_argv("filter_end", G_EVAL | G_DISCARD | G_NOARGS, NULL);
++            perl_call_argv("filter_end", G_EVAL | G_DISCARD | G_NOARGS, argv);
+             if (SvTRUE(ERRSV)) {
+                 syslog (L_ERROR, "SERVER perl function filter_end died: %s",
+                         SvPV(ERRSV, PL_na));
+@@ -172,11 +173,10 @@
+     ENTER ;
+     SAVETMPS ;
+     
+-    argv[0] = filterfile ;
+-    argv[1] = NULL ;
+-    
++    argv[0] = NULL;
++
+     if (perl_get_cv("filter_before_reload", false) != NULL)    {
+-        perl_call_argv("filter_before_reload",G_EVAL|G_DISCARD|G_NOARGS,NULL);
++        perl_call_argv("filter_before_reload",G_EVAL|G_DISCARD|G_NOARGS, argv);
+         if (SvTRUE(ERRSV))     /* check $@ */ {
+             syslog (L_ERROR,"SERVER perl function filter_before_reload died: %s",
+                     SvPV(ERRSV, PL_na)) ;
+@@ -185,6 +185,9 @@
+         }
+     }
+ 
++    argv[0] = filterfile ;
++    argv[1] = NULL ;
++    
+     PerlSilence();
+     perl_call_argv ("_load_", 0, argv) ;
+     PerlUnSilence();
+@@ -209,8 +212,9 @@
+         PerlFilter (false) ;
+     }
+     
++    argv[0] = NULL;
+     if (perl_get_cv("filter_after_reload", false) != NULL) {
+-        perl_call_argv("filter_after_reload", G_EVAL|G_DISCARD|G_NOARGS, NULL);
++        perl_call_argv("filter_after_reload", G_EVAL|G_DISCARD|G_NOARGS, argv);
+         if (SvTRUE(ERRSV))     /* check $@ */ {
+             syslog (L_ERROR,"SERVER perl function filter_after_reload died: %s",
+                     SvPV(ERRSV, PL_na)) ;
+--- inn-2.4.3/innd/perl.c.orig	2006-03-20 05:14:57.000000000 +0100
++++ inn-2.4.3/innd/perl.c	2008-02-17 23:37:19.580001105 +0100
+@@ -240,6 +240,7 @@
+ PLstats(void)
+ {
+     dSP;
++    char *argv[] = { NULL };
+     
+     if (perl_get_cv("filter_stats", false) == NULL)
+         return NULL;
+@@ -249,7 +250,7 @@
+ 
+ 	ENTER;
+ 	SAVETMPS;
+-	perl_call_argv("filter_stats", G_EVAL | G_NOARGS, NULL);
++	perl_call_argv("filter_stats", G_EVAL | G_NOARGS, argv);
+ 	SPAGAIN;
+         result = POPp;
+         if (result != NULL && *result)
