@@ -1,7 +1,6 @@
-diff -Nur inn-2.4.0.orig/configure.in inn-2.4.0/configure.in
---- inn-2.4.0.orig/configure.in	2003-06-29 13:20:49.000000000 +0200
-+++ inn-2.4.0/configure.in	2003-06-29 13:22:13.000000000 +0200
-@@ -803,7 +803,7 @@
+--- inn-2.4.3/configure.in.orig	2008-02-17 20:05:39.668274380 +0100
++++ inn-2.4.3/configure.in	2008-02-17 21:43:24.334482662 +0100
+@@ -577,7 +577,7 @@
  AC_SEARCH_LIBS(setproctitle, util,
      [AC_DEFINE(HAVE_SETPROCTITLE, 1,
          [Define if you have the setproctitle function.])],
@@ -10,7 +9,16 @@ diff -Nur inn-2.4.0.orig/configure.in inn-2.4.0/configure.in
       AC_CHECK_FUNCS(pstat)])
  
  dnl The rat's nest of networking libraries.  The common cases are not to
-@@ -1406,7 +1406,7 @@
+@@ -1125,7 +1125,7 @@
+ )])
+ AC_MSG_RESULT($ac_cv_type_$1)
+ if test x"$ac_cv_type_$1" = xno ; then
+-    AC_DEFINE_UNQUOTED($1, $2)
++    AC_DEFINE_UNQUOTED($1, $2, [Define if $1 type does not exist])
+ fi])
+ 
+ INN_CHECK_TYPE(sig_atomic_t, int, [#include <signal.h>])
+@@ -1373,7 +1373,7 @@
      AC_DEFINE([HAVE_INET_NTOA], 1,
                [Define if your system has a working inet_ntoa function.])
  else
@@ -19,7 +27,7 @@ diff -Nur inn-2.4.0.orig/configure.in inn-2.4.0/configure.in
  fi])
  INN_FUNC_INET_NTOA
  
-@@ -1554,7 +1554,7 @@
+@@ -1521,7 +1521,7 @@
      AC_DEFINE([HAVE_SNPRINTF], 1,
          [Define if your system has a working snprintf function.])
  else
@@ -28,3 +36,12 @@ diff -Nur inn-2.4.0.orig/configure.in inn-2.4.0/configure.in
  fi])
  INN_FUNC_SNPRINTF
  
+@@ -1627,7 +1627,7 @@
+             inn_cv_func_mmap=no,
+             inn_cv_func_mmap=no)])
+ if test $inn_cv_func_mmap = yes ; then
+-    AC_DEFINE(HAVE_MMAP)
++    AC_DEFINE(HAVE_MMAP, 1, [Define if mmap function works])
+ fi])
+ 
+ dnl Source used by INN_FUNC_MMAP_NEEDS_MSYNC.
