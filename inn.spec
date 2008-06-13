@@ -13,12 +13,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.4.3
-Release:	0.4
+Version:	2.4.4
+Release:	0.1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	6caa10909a7bf55fb91535685990aec9
+# Source0-md5:	02d9dcf0802b16356d02c0dafbcf98f9
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -35,12 +35,9 @@ Patch3:		%{name}-ac25x.patch
 Patch4:		%{name}-ac253.patch
 Patch5:		%{name}-setgid.patch
 Patch6:		%{name}-db4.patch
-Patch7:		%{name}-lib_install_modes.patch
-Patch8:		%{name}-config.patch
-Patch9:		%{name}-db4.4.patch
-Patch10:	%{name}-libdir.patch
-Patch11:	%{name}-asneeded.patch
-Patch12:	%{name}-perl-segv.patch
+Patch7:		%{name}-config.patch
+Patch8:		%{name}-libdir.patch
+Patch9:		%{name}-asneeded.patch
 URL:		http://www.isc.org/sw/inn/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -262,14 +259,12 @@ sunucuya makaleyi yollar.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
 
 touch innfeed/*.[ly]
 
 %build
 %{__libtoolize}
+cp -f /usr/share/automake/config.* support
 %{__aclocal}
 %{__autoconf}
 %{__autoheader} -I include
