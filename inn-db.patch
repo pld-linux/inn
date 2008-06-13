@@ -1,34 +1,37 @@
-diff -Nur inn-2.4.0.orig/authprogs/ckpasswd.c inn-2.4.0/authprogs/ckpasswd.c
---- inn-2.4.0.orig/authprogs/ckpasswd.c	2003-05-09 06:25:27.000000000 +0200
-+++ inn-2.4.0/authprogs/ckpasswd.c	2003-06-29 13:03:12.000000000 +0200
-@@ -26,13 +26,8 @@
+--- inn-2.4.4/authprogs/ckpasswd.c.orig	2008-05-05 12:18:36.000000000 +0200
++++ inn-2.4.4/authprogs/ckpasswd.c	2008-06-12 23:17:16.157845226 +0200
+@@ -26,11 +26,11 @@
  #include <grp.h>
  
- #if HAVE_DBM
+ #if defined(HAVE_DBM) || defined(HAVE_BDB_DBM)
 -# if HAVE_NDBM_H
 -#  include <ndbm.h>
--# elif HAVE_GDBM_NDBM_H
--#  include <gdbm-ndbm.h>
--# elif HAVE_DB1_NDBM_H
--#  include <db1/ndbm.h>
--# endif
-+# define DB_DBM_HSEARCH 1
-+# include <db.h>
- # define OPT_DBM "d:"
- #else
- # define OPT_DBM ""
---- inn-2.4.2/configure.in.orig	2004-12-22 05:21:19.000000000 +0100
-+++ inn-2.4.2/configure.in	2004-12-27 08:32:38.010338472 +0100
-@@ -780,7 +780,7 @@
- dnl Search for various additional libraries used by portions of INN.
- INN_SEARCH_AUX_LIBS(crypt, crypt, CRYPT_LIB)
- INN_SEARCH_AUX_LIBS(getspnam, shadow, SHADOW_LIB)
--INN_SEARCH_AUX_LIBS(dbm_open, ndbm dbm, DBM_LIB,
-+INN_SEARCH_AUX_LIBS(db_create, db-4.6 db-4.5 db-4.4 db-4.3 db-4.2 db-4.1 db4 db, DBM_LIB,
-     [AC_DEFINE(HAVE_DBM, 1, [Define if you have a dbm library.])])
- 
- dnl IRIX has a PAM library with the right symbols but no header files suitable
-@@ -973,17 +973,11 @@
+-# elif HAVE_BDB_DBM
++# if HAVE_BDB_DBM
+ #  define DB_DBM_HSEARCH 1
+ #  include <db.h>
++# elif HAVE_NDBM_H
++#  include <ndbm.h>
+ # elif HAVE_GDBM_NDBM_H
+ #  include <gdbm-ndbm.h>
+ # elif HAVE_DB1_NDBM_H
+--- inn-2.4.4/configure.in.orig	2008-05-05 12:18:36.000000000 +0200
++++ inn-2.4.4/configure.in	2008-06-12 23:24:11.005485208 +0200
+@@ -670,8 +670,13 @@
+             fi
+         fi
+     else
++	if test "$BERKELEY_DB_DIR" = "/usr" ; then
++        BERKELEY_DB_LDFLAGS=
++        BERKELEY_DB_CFLAGS=
++	else
+         BERKELEY_DB_LDFLAGS="-L$BERKELEY_DB_DIR/lib"
+         BERKELEY_DB_CFLAGS="-I$BERKELEY_DB_DIR/include"
++	fi
+         BERKELEY_DB_LIB="-ldb"
+         AC_MSG_RESULT($BERKELEY_DB_DIR)
+     fi
+@@ -993,17 +998,11 @@
  AC_HEADER_SYS_WAIT
  
  dnl Generic checks for header files.

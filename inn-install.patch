@@ -7,14 +7,14 @@
 -LI_SPRI         = $(LIBTOOL) $(INSTALL) -o root -g $(NEWSGROUP) -m 4550 -B .OLD
 -LI_XPRI         = $(LIBTOOL) $(INSTALL) $(OWNER) -m 0550 -B .OLD
 -LI_XPUB         = $(LIBTOOL) $(INSTALL) $(OWNER) -m 0555 -B .OLD
-+LI_SPRI         = $(LIBTOOL) $(INSTALL) -m 4550
-+LI_XPRI         = $(LIBTOOL) $(INSTALL) -m 0550
-+LI_XPUB         = $(LIBTOOL) $(INSTALL) -m 0555
++LI_SPRI         = $(LIBTOOL) --mode=install $(INSTALL) -m 4550
++LI_XPRI         = $(LIBTOOL) --mode=install $(INSTALL) -m 0550
++LI_XPUB         = $(LIBTOOL) --mode=install $(INSTALL) -m 0555
  
 -LI_INEWS        = $(LIBTOOL) $(INSTALL) $(OWNER) -m $(INEWSMODE) -B .OLD
 -LI_RNEWS        = $(LIBTOOL) $(INSTALL) $(ROWNER) -m $(RNEWSMODE) -B .OLD
-+LI_INEWS        = $(LIBTOOL) $(INSTALL)
-+LI_RNEWS        = $(LIBTOOL) $(INSTALL)
++LI_INEWS        = $(LIBTOOL) --mode=install $(INSTALL)
++LI_RNEWS        = $(LIBTOOL) --mode=install $(INSTALL)
  
 -CP_RPRI         = $(INSTALL) $(OWNER) -m 0640 -B .OLD
 -CP_RPUB         = $(INSTALL) $(OWNER) -m 0644 -B .OLD
@@ -27,9 +27,9 @@
  
  ##  Some additional definitions needed by some versions of make, to ensure a
  ##  consistant set of variables are available.
---- inn-2.4.2/site/Makefile.orig	2004-12-22 05:21:19.000000000 +0100
-+++ inn-2.4.2/site/Makefile	2004-12-28 18:12:21.688619120 +0100
-@@ -132,12 +132,9 @@
+--- inn-2.4.4/site/Makefile.orig	2008-05-05 12:18:36.000000000 +0200
++++ inn-2.4.4/site/Makefile	2008-06-12 23:06:18.100345504 +0200
+@@ -132,15 +132,10 @@
  $D$(PATH_NEWSGROUPS):	; $(CP_DATA) newsgroups.minimal $@
  $D$(PATH_ACTIVE_TIMES):
  	touch $@
@@ -38,6 +38,9 @@
  	chmod $(FILEMODE) $@
  $D$(PATH_HISTORY):
  	touch $@
+-	chown $(NEWSUSER) $@
+-	chgrp $(NEWSGROUP) $@
+ 	chmod $(FILEMODE) $@
 -	$(PATHBIN)/makedbz -i -o
  
  ##  Remove files that are unchanged from the release version.
