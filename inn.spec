@@ -13,12 +13,15 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.4.4
+Version:	2.4.5
 Release:	0.1
 License:	distributable
 Group:		Networking/Daemons
-Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	02d9dcf0802b16356d02c0dafbcf98f9
+#
+#Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
+# Temporary source as ftp.isc.org has some problems...
+Source0:	ftp://ftp.sunet.se/pub/network/isc/inn/%{name}-%{version}.tar.gz
+# Source0-md5:	07bc6530c5e296b0ee81a5d6ac4cd355
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -288,13 +291,10 @@ cp -f /usr/share/automake/config.* support
 	--with-berkeleydb=%{_prefix} \
 	%{?with_largefiles:--enable-largefiles} \
 	%{!?with_largefiles:--enable-tagged-hash} \
-	--enable-merge-to-groups \
-	--enable-pgp-verify \
 	--enable-shared \
 	--enable-static \
 	--enable-libtool \
-	--enable-ipv6 \
-	--enable-dual-socket
+	--enable-ipv6
 
 %{__make} all \
 	PATHFILTER=%{_datadir}/news/filter \
