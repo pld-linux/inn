@@ -45,3 +45,25 @@
  
  ##  Remove files that are unchanged from the release version.
  clean:
+--- ./Makefile.global.in.org	2008-08-06 16:08:48.930217979 +0200
++++ ./Makefile.global.in	2008-08-06 16:13:01.126442273 +0200
+@@ -262,7 +262,7 @@ CP_RPUB         = $(INSTALL) -m 0644
+ CP_XPRI         = $(INSTALL) -m 0550
+ CP_XPUB         = $(INSTALL) -m 0555
+ 
+-CP_DATA	        = $(INSTALL) $(OWNER) -m $(FILEMODE) -B .OLD
++CP_DATA	        = $(INSTALL) $(OWNER) -m $(FILEMODE)
+ 
+ ##  How to install man pages.  Pick one of SOURCE, BSD4.4, NROFF-PACK, or
+ ##  NROFF-PACK-SCO.  Used by doc/man/putman.sh; read that script for more
+--- ./doc/man/Makefile.org	2008-06-29 19:56:57.000000000 +0200
++++ ./doc/man/Makefile	2008-08-06 16:07:29.703558914 +0200
+@@ -5,7 +5,7 @@ include ../../Makefile.global
+ top	= ../..
+ 
+ ##  Edit these if you need to.
+-MANFLAGS = -c $(OWNER) -m 0444 -B .OLD
++MANFLAGS = 
+ 
+ SEC1	= convdate.1 fastrm.1 getlist.1 grephistory.1 inews.1 innconfval.1 \
+ 	innfeed.1 innmail.1 nntpget.1 pgpverify.1 pullnews.1 rnews.1 \
