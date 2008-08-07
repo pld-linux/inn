@@ -18,9 +18,7 @@ Release:	1
 License:	distributable
 Group:		Networking/Daemons
 #
-#Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Temporary source as ftp.isc.org has some problems...
-Source0:	ftp://ftp.sunet.se/pub/network/isc/inn/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 # Source0-md5:	07bc6530c5e296b0ee81a5d6ac4cd355
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
