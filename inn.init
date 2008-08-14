@@ -26,11 +26,7 @@ if is_yes "${NETWORKING}"; then
 else
 	exit 0
 fi
-
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	if [ ! -f /var/lock/subsys/inn ]; then
 		grep -v "#" /etc/news/inn.conf | grep ovmethod | grep ovdb 2>&1 >/dev/null
 		RETVAL=$?
@@ -41,7 +37,7 @@ case "$1" in
 		fi
 
 		msg_starting "INN"
-		daemon su news -c inndstart
+		daemon --user=news inndstart
 		if is_yes "$DOINNWATCH" ; then
 			msg_starting "INN Watch"
 			busy
@@ -63,8 +59,9 @@ case "$1" in
 	else
 		msg_already_running "INN"
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	if [ -f /var/lock/subsys/inn ]; then
 		msg_stopping "INN"
 		busy
@@ -108,10 +105,20 @@ case "$1" in
 	else
 		msg_not_running INN
 	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   status)
 	status innd
-	exit $?
+	innstat
 	;;
   reload|force-reload)
 	if [ -f /var/lock/subsys/inn ]; then
@@ -126,9 +133,9 @@ case "$1" in
 	fi
 	;;
   restart)
-	$0 stop
+	stop
 	sleep 2
-	$0 start
+	start
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
