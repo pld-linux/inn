@@ -1,5 +1,5 @@
 # TODO
-# - post script is nightmare
+# - post script is nightmare - move it to "init" target of init script
 #
 # Conditional build:
 %bcond_with	largefiles	# enable largefiles (disables tagged hash)
@@ -14,10 +14,9 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.5
-Release:	2
+Release:	2.9
 License:	distributable
 Group:		Networking/Daemons
-#
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
 # Source0-md5:	07bc6530c5e296b0ee81a5d6ac4cd355
 Source1:	%{name}-default-active
@@ -39,6 +38,7 @@ Patch6:		%{name}-db4.patch
 Patch7:		%{name}-config.patch
 Patch8:		%{name}-libdir.patch
 Patch9:		%{name}-asneeded.patch
+Patch10:	%{name}-nnrpd_no_trace.patch
 URL:		http://www.isc.org/sw/inn/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -260,6 +260,7 @@ sunucuya makaleyi yollar.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 touch innfeed/*.[ly]
 
