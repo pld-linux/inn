@@ -300,7 +300,7 @@ cp -f /usr/share/automake/config.* support
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{news,rc.d/init.d,cron.d,logrotate.d} \
+install -d $RPM_BUILD_ROOT/etc/{news/pgp,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}} \
 	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
 	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
@@ -472,6 +472,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sasl.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/storage.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/subscriptions
+%attr(755,root,news) %dir %{_sysconfdir}/pgp
 
 %attr(755,root,news) %dir %{_datadir}/news
 %attr(755,root,root) %dir %{_datadir}/news/control
