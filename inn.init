@@ -32,29 +32,19 @@ start() {
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ]; then
 			msg_starting "INN ovdb_monitor"
-			su news -c ovdb_init 2>&1 > /dev/null
-			ok
+			daemon --user news ovdb_init
 		fi
 
 		msg_starting "INN"
 		daemon --user=news inndstart
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
 		if is_yes "$DOINNWATCH" ; then
 			msg_starting "INN Watch"
 			busy
-			su news -c "umask 002
-			/usr/bin/setsid /usr/bin/innwatch &" </dev/null >&0 2>&0
+			daemon --fork --user news /usr/bin/innwatch
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
-			ps -C innwatch >/dev/null 2>&1 || usleep 500000
-			if [ $RETVAL -eq 0 ] && ps -C innwatch >/dev/null 2>&1; then
-				ok
-				touch /var/lock/subsys/inn
-			else
-				RETVAL=1
-				fail
-			fi
-		else
-			touch /var/lock/subsys/inn
 		fi
 	else
 		msg_already_running "INN"
@@ -117,6 +107,7 @@ case "$1" in
   	stop
 	;;
   status)
+  	status innwatch
 	status innd
 	if [ $? -eq 0 ]; then
 		innstat
