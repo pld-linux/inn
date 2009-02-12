@@ -330,10 +330,10 @@ install %{SOURCE9} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
 umask 002
-> $RPM_BUILD_ROOT%{_sysconfdir}/subscriptions
-touch $RPM_BUILD_ROOT/var/lib/news/history
+:> $RPM_BUILD_ROOT%{_sysconfdir}/subscriptions
 touch $RPM_BUILD_ROOT/var/lib/news/.news.daily
 touch $RPM_BUILD_ROOT/var/lib/news/active.times
+touch $RPM_BUILD_ROOT/var/lib/news/history
 
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_bindir}/makehistory \
 	-a $RPM_BUILD_ROOT/var/lib/news/active \
@@ -363,7 +363,7 @@ if [ ! -f /var/lib/news/history ]; then
 	# makehistory fails on uninitialized spool(?) - create empty history in such case
 	%{_bindir}/makehistory || { echo "Creating empty history"; :> history; }
 	chown news:news history
-	chmod 644 history
+	chmod 664 history
 fi
 %{_bindir}/makedbz -s `wc -l history` -f history
 for i in dir hash index pag; do
@@ -371,11 +371,6 @@ for i in dir hash index pag; do
 done
 chown news:news history.*
 chmod 644 history.*
-
-if [ ! -f /var/lib/news/active.times ]; then
-	:> /var/lib/news/active.times
-	chown news:news /var/lib/news/active.times
-fi
 
 if [ ! -f /var/lib/news/.news.daily ]; then
 	:> /var/lib/news/.news.daily
@@ -409,9 +404,9 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(770,root,news) %dir /var/lib/news
 %attr(770,root,news) %dir /var/lib/news/backoff
 %attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/active
+%attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/active.times
 %attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/distributions
 %attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/newsgroups
-%attr(664,root,news) %config(noreplace) %verify(not md5 mtime size) /var/lib/news/active.times
 %attr(664,news,news) %ghost /var/lib/news/.news.daily
 %attr(664,news,news) %ghost /var/lib/news/history
 
