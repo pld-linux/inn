@@ -358,34 +358,29 @@ rm -rf $RPM_BUILD_ROOT
 if [ "`getent passwd news | cut -d: -f6`" = "/var/spool/news" ]; then
 	/usr/sbin/usermod -d /home/services/news news
 fi
+
 umask 022
-if [ -f /var/lib/news/history ]; then
-	cd /var/lib/news
-	%{_bindir}/makedbz -s `wc -l <history` -f history
-	for i in dir hash index pag; do
-		[ -f history.n.$i ] && mv history.n.$i history.$i
-	done
-	chown news:news history.*
-	chmod 644 history.*
-else
-	cd /var/lib/news
+cd /var/lib/news
+if [ ! -f /var/lib/news/history ]; then
 	# makehistory fails on uninitialized spool(?) - create empty history in such case
-	%{_bindir}/makehistory || ( echo "Creating empty history instead." ; touch history )
-	%{_bindir}/makedbz -s `wc -l <history` -f history
-	for i in dir hash index pag; do
-		[ -f history.n.$i ] && mv history.n.$i history.$i
-	done
-	chown news:news history history.*
-	chmod 644 history history.*
+	%{_bindir}/makehistory || { echo "Creating empty history"; :> history; }
+	chown news:news history
+	chmod 644 history
 fi
+%{_bindir}/makedbz -s `wc -l history` -f history
+for i in dir hash index pag; do
+	[ -f history.n.$i ] && mv history.n.$i history.$i
+done
+chown news:news history.*
+chmod 644 history.*
 
 if [ ! -f /var/lib/news/active.times ]; then
-	touch /var/lib/news/active.times
+	:> /var/lib/news/active.times
 	chown news:news /var/lib/news/active.times
 fi
 
 if [ ! -f /var/lib/news/.news.daily ]; then
-	touch /var/lib/news/.news.daily
+	:> /var/lib/news/.news.daily
 	chown news:news /var/lib/news/.news.daily
 	chmod 664 /var/lib/news/.news.daily
 fi
