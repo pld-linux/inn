@@ -1,5 +1,3 @@
-# TODO
-# - post script is nightmare - move it to "init" target of init script
 #
 # Conditional build:
 %bcond_with	largefiles	# enable largefiles (disables tagged hash)
