@@ -365,7 +365,7 @@ if [ ! -f /var/lib/news/history ]; then
 	chown news:news history
 	chmod 664 history
 fi
-%{_bindir}/makedbz -s `wc -l history` -f history
+%{_bindir}/makedbz -s `wc -l < history` -f history
 for i in dir hash index pag; do
 	[ -f history.n.$i ] && mv history.n.$i history.$i
 done
