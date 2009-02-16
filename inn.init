@@ -26,25 +26,26 @@ if is_yes "${NETWORKING}"; then
 else
 	exit 0
 fi
+
 start() {
 	if [ ! -f /var/lock/subsys/inn ]; then
 		grep -v "#" /etc/news/inn.conf | grep ovmethod | grep ovdb 2>&1 >/dev/null
 		RETVAL=$?
 		if [ $RETVAL -eq 0 ]; then
 			msg_starting "INN ovdb_monitor"
-			daemon --user news ovdb_init
+			daemon --pidfile /var/run/news/ovdb_monitor.pid --user news ovdb_init
 		fi
 
 		msg_starting "INN"
-		daemon --user=news inndstart
+		daemon --pidfile /var/run/news/innd.pid --user news inndstart
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
 		if is_yes "$DOINNWATCH" ; then
 			msg_starting "INN Watch"
 			busy
-			daemon --fork --user news /usr/bin/innwatch
+			daemon --fork --pidfile /var/run/news/innwatch.pid --user news /usr/bin/innwatch
 			RETVAL=$?
-			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
+			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/innwatch && ok || fail
 		fi
 	else
 		msg_already_running "INN"
@@ -63,31 +64,27 @@ stop() {
 
 		if [ -f /var/run/news/innwatch.pid ]; then
 			msg_stopping "INN Watch"
-			busy
-			if killall -9 innwatch; then
-				ok
-			else
-				died
-			fi
+			killproc --pidfile /var/run/news/innwatch.pid innwatch -9
 			rm -f /var/run/news/innwatch.pid \
 			/var/run/news/LOCK.innwatch >/dev/null 2>&1
 		fi
 
 		if [ -f /var/run/news/infeed.pid ]; then
 			msg_stopping "INN Feed"
-			killproc innfeed -9
+			killproc --pidfile /var/run/news/infeed.pid innfeed -9
 			rm -f /var/run/news/innfeed.pid >/dev/null 2>&1
 		fi
 
 		if [ -f /var/run/news/actived.pid ]; then
 			msg_stopping "INN Actived"
-			killproc actived -9
+			killproc --pidfile /var/run/news/actived.pid actived -9
 			rm -f /var/run/news/actived.pid >/dev/null 2>&1
 		fi
 
 		if [ -f /var/run/news/ovdb_monitor.pid ]; then
 			msg_stopping "INN ovdb_monitor"
-			killproc ovdb_monitor -15
+			killproc --pidfile /var/run/news/ovdb_monitor.pid ovdb_monitor -15
+			rm -f /var/run/news/ovdb_monitor.pid >/dev/null 2>&1
 		fi
 
 		rm -f /var/lock/subsys/inn >/dev/null 2>&1
@@ -101,13 +98,13 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   status)
-  	status innwatch
+	status innwatch
 	status innd
 	if [ $? -eq 0 ]; then
 		innstat
