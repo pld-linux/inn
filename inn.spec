@@ -11,12 +11,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.4.5
-Release:	2.9
+Version:	2.4.6
+Release:	0.9
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	07bc6530c5e296b0ee81a5d6ac4cd355
+# Source0-md5:	50741ff1b9c230af9109aafc7e98b1a2
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
