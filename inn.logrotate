@@ -21,7 +21,10 @@
 	endscript
 }
 
-/var/log/news/*log {
+/var/log/news/errorlog
+/var/log/news/expire.log
+/var/log/news/innfeed.log
+/var/log/news/nntpsend.log {
 	olddir /var/log/archive/news
 	create 640 news news
 	prerotate
