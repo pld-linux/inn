@@ -1,6 +1,8 @@
 /var/log/news/news.* {
 	olddir /var/log/archive/news
 	create 640 news news
+
+	sharedscripts
 	postrotate
 		if [ -e /etc/rc.d/init.d/syslog-ng ] ; then
 			/etc/rc.d/init.d/syslog-ng reload >/dev/null 2>&1
@@ -10,9 +12,15 @@
 	endscript
 }
 
+/var/log/news/errorlog
+/var/log/news/expire.log
+/var/log/news/innfeed.log
+/var/log/news/nntpsend.log
 /var/log/news/news {
 	olddir /var/log/archive/news
 	create 640 news news
+	
+	sharedscripts
 	prerotate
 		ctlinnd -s pause "Flushing log and syslog files" || :
 	endscript
@@ -21,16 +29,3 @@
 	endscript
 }
 
-/var/log/news/errorlog
-/var/log/news/expire.log
-/var/log/news/innfeed.log
-/var/log/news/nntpsend.log {
-	olddir /var/log/archive/news
-	create 640 news news
-	prerotate
-		ctlinnd -s pause "Flushing log and syslog files" || :
-	endscript
-	postrotate
-		ctlinnd -s go "Flushing log and syslog files"
-	endscript
-}
