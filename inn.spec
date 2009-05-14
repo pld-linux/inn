@@ -63,7 +63,7 @@ Requires:	cleanfeed >= 0.95.7b-4
 Requires:	perl(DynaLoader) = %(%{__perl} -MDynaLoader -e 'print DynaLoader->VERSION')
 Requires:	procps
 Requires:	psmisc >= 20.1
-Requires:	rc-scripts >= 0.2.0
+Requires:	rc-scripts >= 0.4.1.23
 Requires:	textutils
 Requires:	util-linux
 Provides:	nntpserver
