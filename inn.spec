@@ -12,7 +12,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.6
-Release:	0.9
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -43,7 +43,7 @@ BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	flex
-BuildRequires:	krb5-devel
+BuildRequires:	heimdal-devel
 BuildRequires:	libcom_err-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7d
