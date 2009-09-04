@@ -12,7 +12,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.6
-Release:	1
+Release:	2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -37,7 +37,7 @@ Patch7:		%{name}-config.patch
 Patch8:		%{name}-libdir.patch
 Patch9:		%{name}-asneeded.patch
 Patch10:	%{name}-nnrpd_no_trace.patch
-URL:		http://www.isc.org/sw/inn/
+URL:		https://www.isc.org/software/inn/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
@@ -364,13 +364,13 @@ if [ ! -f /var/lib/news/history ]; then
 	%{_bindir}/makehistory || { echo "Creating empty history"; :> history; }
 	chown news:news history
 	chmod 664 history
+	%{_bindir}/makedbz -s `wc -l < history` -f history
+	for i in dir hash index pag; do
+		[ -f history.n.$i ] && mv history.n.$i history.$i
+	done
+	chown news:news history.*
+	chmod 644 history.*
 fi
-%{_bindir}/makedbz -s `wc -l < history` -f history
-for i in dir hash index pag; do
-	[ -f history.n.$i ] && mv history.n.$i history.$i
-done
-chown news:news history.*
-chmod 644 history.*
 
 if [ ! -f /var/lib/news/.news.daily ]; then
 	:> /var/lib/news/.news.daily
