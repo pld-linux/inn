@@ -358,6 +358,9 @@ if [ "`getent passwd news | cut -d: -f6`" = "/var/spool/news" ]; then
 fi
 
 umask 022
+
+%{_bindir}/innupgrade %{_sysconfdir}
+
 cd /var/lib/news
 if [ ! -f /var/lib/news/history ]; then
 	# makehistory fails on uninitialized spool(?) - create empty history in such case
