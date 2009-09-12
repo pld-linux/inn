@@ -12,7 +12,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.4.6
-Release:	2
+Release:	3
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -60,7 +60,6 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/etc/cron.d
 Requires:	awk
 Requires:	cleanfeed >= 0.95.7b-4
-Requires:	perl(DynaLoader) = %(%{__perl} -MDynaLoader -e 'print DynaLoader->VERSION')
 Requires:	procps
 Requires:	psmisc >= 20.1
 Requires:	rc-scripts >= 0.4.1.23
