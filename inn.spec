@@ -190,10 +190,6 @@ Static libraries for inn development
 Biblioteki statyczne do INN.
 
 %description static -l pt_BR.UTF-8
-INN é um servidor de news, que pode ser configurado para manipular
-USENET news bem como newsfeeds privadas. Existe um *MONTE* de
-informações sobre a configuração do INN em /usr/doc -- leia.
-
 Bibliotecas estáticas para desenvolvimento com inn
 
 %package -n inews
@@ -558,7 +554,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/nntpsend
 %attr(755,root,root) %{_bindir}/ovdb_*
 %attr(755,root,root) %{_bindir}/overchan
-%attr(755,root,root) %{__perl}-nocem
+%attr(755,root,root) %{_bindir}/perl-nocem
 %attr(755,root,root) %{_bindir}/pgpverify
 %attr(755,root,root) %{_bindir}/procbatch
 %attr(755,root,root) %{_bindir}/prunehistory
