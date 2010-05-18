@@ -44,10 +44,10 @@ BuildRequires:	bison
 BuildRequires:	db-devel
 BuildRequires:	flex
 BuildRequires:	heimdal-devel
-BuildRequires:	libcom_err-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
+BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
@@ -89,7 +89,8 @@ If you want innreport to generate graphs you need perl-GD package.
 %description -l es.UTF-8
 INN es un servidor de news, que puede ser configurado para manipular
 USENET news bien como newsfeeds privadas. Existe un *Montón* de
-información sobre la configuración del INN en %{_docdir}/%{name}-%{version} -- léela.
+información sobre la configuración del INN en
+%{_docdir}/%{name}-%{version} -- léela.
 
 %description -l pl.UTF-8
 INN jest serwerem news, który można skonfigurować do obsługi USENET-u,
@@ -103,7 +104,8 @@ pakiet perl-GD.
 %description -l pt_BR.UTF-8
 INN é um servidor de news, que pode ser configurado para manipular
 USENET news bem como newsfeeds privadas. Existe um *MONTE* de
-informações sobre a configuração do INN em %{_docdir}/%{name}-%{version} -- leia.
+informações sobre a configuração do INN em
+%{_docdir}/%{name}-%{version} -- leia.
 
 %package libs
 Summary:	INN libraries
@@ -466,8 +468,8 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,news) %dir %{_sysconfdir}/pgp
 
 %attr(755,root,news) %dir %{_datadir}/news
-%attr(755,root,root) %dir %{_datadir}/news/control
-%attr(755,root,root) %dir %{_datadir}/news/filter
+%dir %{_datadir}/news/control
+%dir %{_datadir}/news/filter
 
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innreport_inn.pm
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars
@@ -492,11 +494,11 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_datadir}/news/control/version.pl
 
 %attr(755,root,news) %dir %{_libdir}/news
-%attr(755,root,root) %dir %{_libdir}/news/auth
-%attr(755,root,root) %dir %{_libdir}/news/auth/generic
-%attr(755,root,root) %dir %{_libdir}/news/auth/passwd
-%attr(755,root,root) %dir %{_libdir}/news/auth/resolv
-%attr(755,root,root) %dir %{_libdir}/news/rnews
+%dir %{_libdir}/news/auth
+%dir %{_libdir}/news/auth/generic
+%dir %{_libdir}/news/auth/passwd
+%dir %{_libdir}/news/auth/resolv
+%dir %{_libdir}/news/rnews
 
 %attr(755,root,root) %{_libdir}/news/auth/passwd/*
 %attr(755,root,root) %{_libdir}/news/auth/resolv/*
@@ -556,7 +558,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/nntpsend
 %attr(755,root,root) %{_bindir}/ovdb_*
 %attr(755,root,root) %{_bindir}/overchan
-%attr(755,root,root) %{_bindir}/perl-nocem
+%attr(755,root,root) %{__perl}-nocem
 %attr(755,root,root) %{_bindir}/pgpverify
 %attr(755,root,root) %{_bindir}/procbatch
 %attr(755,root,root) %{_bindir}/prunehistory
