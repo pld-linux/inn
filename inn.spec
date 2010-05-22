@@ -112,7 +112,7 @@ Summary:	INN libraries
 Summary(de.UTF-8):	INN-Library
 Summary(fr.UTF-8):	Bibliothèque INN
 Summary(pl.UTF-8):	Biblioteki do INN-a
-Group:		Development/Libraries
+Group:		Libraries
 
 %description libs
 This library is needed by several programs that interface to INN, such
