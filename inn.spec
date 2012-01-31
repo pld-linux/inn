@@ -26,6 +26,7 @@ Source6:	%{name}-cnfsstat.cron
 Source7:	%{name}.logrotate
 Source8:	getlist.1.pl
 Source9:	%{name}d.8.pl
+Source10:	%{name}.tmpfiles
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-install.patch
 Patch2:		%{name}-db.patch
@@ -302,7 +303,8 @@ install -d $RPM_BUILD_ROOT/etc/{news/pgp,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archive/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs} \
-	$RPM_BUILD_ROOT/home/services/news
+	$RPM_BUILD_ROOT/home/services/news \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -323,6 +325,7 @@ install %{SOURCE6} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
 install %{SOURCE7} $RPM_BUILD_ROOT/etc/logrotate.d/inn
 install %{SOURCE8} $RPM_BUILD_ROOT%{_mandir}/pl/man1/getlist.1
 install %{SOURCE9} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
+install %{SOURCE10} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 rm -f $RPM_BUILD_ROOT/var/lib/news/history
 
@@ -411,6 +414,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(664,news,news) %ghost /var/lib/news/history
 
 # LOGS
+/usr/lib/tmpfiles.d/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/inn
 %attr(770,news,news) %dir /var/run/news
 
