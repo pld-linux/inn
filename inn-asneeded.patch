@@ -1,16 +1,17 @@
---- inn-2.4.3/backends/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
-+++ inn-2.4.3/backends/Makefile	2008-02-17 21:26:43.305437267 +0100
-@@ -62,15 +62,15 @@
+--- inn-2.5.3/backends/Makefile.orig	2013-06-13 17:45:04.427101736 +0200
++++ inn-2.5.3/backends/Makefile	2013-06-13 17:51:35.673760252 +0200
+@@ -84,16 +84,16 @@
  	@exit 1
  
  actsync:	actsync.o    $(LIBINN)	; $(LINK) actsync.o    $(INNLIBS)
 -archive:	archive.o    $(BOTH)	; $(LINK) archive.o    $(STORELIBS)
 -batcher:	batcher.o    $(BOTH)	; $(LINK) batcher.o    $(STORELIBS)
 -cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINK) cvtbatch.o   $(STORELIBS)
--inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      $(STORELIBS)
 +archive:	archive.o    $(BOTH)	; $(LINK) archive.o    -Wl,-no-as-needed $(STORELIBS)
 +batcher:	batcher.o    $(BOTH)	; $(LINK) batcher.o    -Wl,-no-as-needed $(STORELIBS)
 +cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINK) cvtbatch.o   -Wl,-no-as-needed $(STORELIBS)
+ innbind:	innbind.o    $(LIBINN)	; $(LINK) innbind.o    $(INNLIBS)
+-inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      $(STORELIBS)
 +inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      -Wl,-no-as-needed $(STORELIBS)
  innxbatch:	innxbatch.o  $(LIBINN)	; $(LINK) innxbatch.o  $(INNLIBS)
  innxmit:	innxmit.o    $(BOTH)	; $(LINK) innxmit.o    $(STORELIBS)
@@ -53,14 +54,22 @@
  
  ovdb_init.o: ovdb_init.c
  	$(CC) $(CFLAGS) $(BERKELEY_DB_CFLAGS) -c $<
---- inn-2.4.3/innfeed/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
-+++ inn-2.4.3/innfeed/Makefile	2008-02-17 20:57:09.756368465 +0100
-@@ -62,7 +62,7 @@
+--- inn-2.5.3/innfeed/Makefile.orig	2013-06-13 17:45:04.430435070 +0200
++++ inn-2.5.3/innfeed/Makefile	2013-06-13 17:52:19.910425989 +0200
+@@ -52,7 +52,7 @@
  
  ##  Compilation rules.
  
--INNFEEDLIBS	= $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(EXTSTORAGELIBS) \
-+INNFEEDLIBS	= -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(EXTSTORAGELIBS) \
- 		  $(SASLLIB) $(LIBS)
+-INNFEEDLIBS	= $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
++INNFEEDLIBS	= -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
  
  config_y.c config_y.h: configfile.y
+ 	$(YACC) -d $?
+--- inn-2.5.3/storage/buffindexed/ovmethod.mk.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/storage/buffindexed/ovmethod.mk	2013-06-13 18:00:36.177082319 +0200
+@@ -5,4 +5,4 @@
+ 
+ buffindexed/buffindexed_d: buffindexed/buffindexed_d.o libstorage.$(EXTLIB) $(LIBHIST)
+ 	$(LIBLD) $(LDFLAGS) -o $@ buffindexed/buffindexed_d.o \
+-	    $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
++	    -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)

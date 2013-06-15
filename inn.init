@@ -37,7 +37,7 @@ start() {
 		fi
 
 		msg_starting "INN"
-		daemon --pidfile /var/run/news/innd.pid --user news inndstart
+		daemon --pidfile /var/run/news/innd.pid --user news innd
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/inn
 		if is_yes "$DOINNWATCH" ; then
@@ -45,7 +45,7 @@ start() {
 			busy
 			daemon --fork --pidfile /var/run/news/innwatch.pid --user news /usr/bin/innwatch
 			RETVAL=$?
-			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/innwatch && ok || fail
+			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/innwatch
 		fi
 	else
 		msg_already_running "INN"

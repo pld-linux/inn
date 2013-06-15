@@ -1,69 +1,28 @@
---- inn-2.3.1/Makefile.global.in.orig	Sun Jan 21 05:45:47 2001
-+++ inn-2.3.1/Makefile.global.in	Sun Jan 21 05:47:04 2001
-@@ -190,17 +190,17 @@
- ##  group-readable/group-executable file (only the news group).  inews and
- ##  rnews have their own special installation rules.
+--- inn-2.5.3/Makefile.global.in.orig	2013-06-11 18:02:09.360682066 +0200
++++ inn-2.5.3/Makefile.global.in	2013-06-11 18:04:16.297346087 +0200
+@@ -305,7 +305,7 @@
  
--LI_SPRI         = $(LIBTOOL) $(INSTALL) -o root -g $(NEWSGROUP) -m 4550 -B .OLD
--LI_XPRI         = $(LIBTOOL) $(INSTALL) $(OWNER) -m 0550 -B .OLD
--LI_XPUB         = $(LIBTOOL) $(INSTALL) $(OWNER) -m 0555 -B .OLD
-+LI_SPRI         = $(LIBTOOL) --mode=install $(INSTALL) -m 4550
-+LI_XPRI         = $(LIBTOOL) --mode=install $(INSTALL) -m 0550
-+LI_XPUB         = $(LIBTOOL) --mode=install $(INSTALL) -m 0555
+ BACKUP_OPTION	= -B .OLD
  
--LI_INEWS        = $(LIBTOOL) $(INSTALL) $(OWNER) -m $(INEWSMODE) -B .OLD
--LI_RNEWS        = $(LIBTOOL) $(INSTALL) $(ROWNER) -m $(RNEWSMODE) -B .OLD
-+LI_INEWS        = $(LIBTOOL) --mode=install $(INSTALL)
-+LI_RNEWS        = $(LIBTOOL) --mode=install $(INSTALL)
+-LI_SPRI		= $(LIBTOOLINST) $(INSTALL) -o root -g $(RUNASGROUP) -m 4550 $(BACKUP_OPTION)
++LI_SPRI		= $(LIBTOOLINST) $(INSTALL) -m 4550 $(BACKUP_OPTION)
+ LI_XPRI		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0550 $(BACKUP_OPTION)
+ LI_XPUB		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0555 $(BACKUP_OPTION)
  
--CP_RPRI         = $(INSTALL) $(OWNER) -m 0640 -B .OLD
--CP_RPUB         = $(INSTALL) $(OWNER) -m 0644 -B .OLD
--CP_XPRI         = $(INSTALL) $(OWNER) -m 0550 -B .OLD
--CP_XPUB         = $(INSTALL) $(OWNER) -m 0555 -B .OLD
-+CP_RPRI         = $(INSTALL) -m 0640
-+CP_RPUB         = $(INSTALL) -m 0644
-+CP_XPRI         = $(INSTALL) -m 0550
-+CP_XPUB         = $(INSTALL) -m 0555
- 
- ##  Some additional definitions needed by some versions of make, to ensure a
- ##  consistant set of variables are available.
---- inn-2.4.4/site/Makefile.orig	2008-05-05 12:18:36.000000000 +0200
-+++ inn-2.4.4/site/Makefile	2008-06-12 23:06:18.100345504 +0200
-@@ -132,15 +132,10 @@
+--- inn-2.5.3/site/Makefile.orig	2013-06-11 18:02:09.357348733 +0200
++++ inn-2.5.3/site/Makefile	2013-06-11 18:05:13.754011556 +0200
+@@ -145,13 +145,9 @@
  $D$(PATH_NEWSGROUPS):	; $(CP_DATA) newsgroups.minimal $@
  $D$(PATH_ACTIVE_TIMES):
  	touch $@
--	chown $(NEWSUSER) $@
--	chgrp $(NEWSGROUP) $@
+-	chown $(RUNASUSER) $@
+-	chgrp $(RUNASGROUP) $@
  	chmod $(FILEMODE) $@
  $D$(PATH_HISTORY):
  	touch $@
--	chown $(NEWSUSER) $@
--	chgrp $(NEWSGROUP) $@
+-	chown $(RUNASUSER) $@
+-	chgrp $(RUNASGROUP) $@
  	chmod $(FILEMODE) $@
--	$(PATHBIN)/makedbz -i -o
+-	test -z "$D" && $(PATHBIN)/makedbz -i -o
++	test -z "$D" && $(PATHBIN)/makedbz -i -o || :
  
- ##  Remove files that are unchanged from the release version.
- clean:
---- ./Makefile.global.in.org	2008-08-06 16:08:48.930217979 +0200
-+++ ./Makefile.global.in	2008-08-06 16:13:01.126442273 +0200
-@@ -262,7 +262,7 @@ CP_RPUB         = $(INSTALL) -m 0644
- CP_XPRI         = $(INSTALL) -m 0550
- CP_XPUB         = $(INSTALL) -m 0555
- 
--CP_DATA	        = $(INSTALL) $(OWNER) -m $(FILEMODE) -B .OLD
-+CP_DATA	        = $(INSTALL) $(OWNER) -m $(FILEMODE)
- 
- ##  How to install man pages.  Pick one of SOURCE, BSD4.4, NROFF-PACK, or
- ##  NROFF-PACK-SCO.  Used by doc/man/putman.sh; read that script for more
---- ./doc/man/Makefile.org	2008-06-29 19:56:57.000000000 +0200
-+++ ./doc/man/Makefile	2008-08-06 16:07:29.703558914 +0200
-@@ -5,7 +5,7 @@ include ../../Makefile.global
- top	= ../..
- 
- ##  Edit these if you need to.
--MANFLAGS = -c $(OWNER) -m 0444 -B .OLD
-+MANFLAGS = 
- 
- SEC1	= convdate.1 fastrm.1 getlist.1 grephistory.1 inews.1 innconfval.1 \
- 	innfeed.1 innmail.1 nntpget.1 pgpverify.1 pullnews.1 rnews.1 \

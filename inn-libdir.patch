@@ -1,81 +1,133 @@
---- inn-2.4.3/history/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
-+++ inn-2.4.3/history/Makefile	2006-03-25 17:54:30.522169000 +0100
-@@ -21,7 +21,7 @@
- 	$(MAKE) COPT='$(WARNINGS)' all
+--- inn-2.5.3/samples/innreport.conf.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/samples/innreport.conf.in	2013-06-14 19:59:36.165132651 +0200
+@@ -10,7 +10,7 @@
  
- install: all
--	$(LI_XPUB) libinnhist.$(EXTLIB) $(D)$(PATHLIB)/libinnhist.$(EXTLIB)
-+	$(LI_XPUB) libinnhist.$(EXTLIB) $(D)$(PATHSLIB)/libinnhist.$(EXTLIB)
+ # Default parameters
+ section default {
+-	libpath         "@libdir@";
++	libpath         "@innlibdir@";
+ 	logpath		"@LOGDIR@";
+ 	unknown		true;        # want unknown entries.
+         html-unknown    true;        # want unknown entries in HTML reports. 
+--- inn-2.5.3/scripts/innshellvars.tcl.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/scripts/innshellvars.tcl.in	2013-06-14 20:10:44.008452064 +0200
+@@ -23,7 +23,7 @@
  
- library: libinnhist.$(EXTLIB)
+ set inn_newsbin "${inn_pathbin}"
+ set inn_newsetc "${inn_pathetc}"
+-set inn_newslib "@libdir@"
++set inn_newslib "@innlibdir@"
+ set inn_innddir "${inn_pathrun}"
+ set inn_locks "${inn_pathrun}"
+ set env(NEWSBIN) "$inn_newsbin"
+--- inn-2.5.3/scripts/innshellvars.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/scripts/innshellvars.in	2013-06-14 20:30:54.805093495 +0200
+@@ -20,7 +20,7 @@
  
-@@ -44,7 +44,7 @@
- libinnhist.la: $(OBJECTS) $(LIBSTORAGE) $(LIBINN)
- 	$(LIBLD) $(LDFLAGS) -o $@ $(LOBJECTS) \
- 	    $(LIBSTORAGE) $(LIBINN) $(EXTSTORAGELIBS) $(LIBS) \
--	    -rpath $(PATHLIB) -version-info 2:0:0
-+	    -rpath $(PATHSLIB) -version-info 2:0:0
+ NEWSBIN=${PATHBIN}
+ NEWSETC=${PATHETC}
+-NEWSLIB=@libdir@
++NEWSLIB=@innlibdir@
+ INNDDIR=${PATHRUN}
+ LOCKS=${PATHRUN}
+ export NEWSBIN NEWSETC NEWSLIB INNDDIR LOCKS
+--- inn-2.5.3/scripts/innshellvars.pl.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/scripts/innshellvars.pl.in	2013-06-14 20:31:17.728426352 +0200
+@@ -28,7 +28,7 @@
  
- libinnhist.a: $(OBJECTS)
- 	ar r $@ $(OBJECTS)
---- inn-2.4.3/lib/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
-+++ inn-2.4.3/lib/Makefile	2006-03-25 17:54:11.484979250 +0100
-@@ -33,7 +33,7 @@
- 	$(MAKE) COPT='$(WARNINGS)' all
+ $newsbin = $pathbin;
+ $newsetc = $pathetc;
+-$newslib = "@libdir@";
++$newslib = "@innlibdir@";
+ $innddir = $pathrun;
+ $locks = $pathrun;
+ $ENV{'NEWSBIN'} = $newsbin;
+--- inn-2.5.3/Makefile.global.in.orig	2013-06-14 15:36:10.805462084 +0200
++++ inn-2.5.3/Makefile.global.in	2013-06-14 21:05:53.935049745 +0200
+@@ -225,6 +225,7 @@
+ docdir		= @docdir@
+ includedir	= @includedir@
+ libdir		= @libdir@
++datadir		= @datadir@
+ mandir		= @mandir@
+ sysconfdir	= @sysconfdir@
+ tmpdir		= @tmpdir@
+@@ -237,6 +238,7 @@
+ PATHMAN		= $(mandir)
+ PATHINCLUDE	= $(includedir)
+ PATHLIB		= $(libdir)
++PATHINNLIB	= @innlibdir@
+ PATHLIBPERL	= @LIBPERLDIR@
+ PATHCONTROL	= @CONTROLDIR@
+ PATHFILTER	= @FILTERDIR@
+--- inn-2.5.3/perl/INN/Config.pm.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/perl/INN/Config.pm.in	2013-06-14 21:06:40.531715437 +0200
+@@ -37,7 +37,7 @@
+ $spooltemp $path);
+ our $newshome = $pathnews;
+ our $home = $pathnews;
+-our $newslib = "@libdir@";
++our $newslib = "@innlibdir@";
+ our $newsbin = $pathbin;
+ our $controlprogs = $pathcontrol;
+ our $newslbin = "$pathnews/local";
+--- inn-2.5.3/support/fixscript.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/support/fixscript.in	2013-06-14 21:08:38.721712975 +0200
+@@ -25,6 +25,7 @@
+ prefix="@prefix@"
+ exec_prefix="@exec_prefix@"
+ libdir="@libdir@"
++innlibdir="@innlibdir@"
+ libperldir="@LIBPERLDIR@"
  
- install: all
--	$(LI_XPUB) libinn.$(EXTLIB) $D$(PATHLIB)/libinn.$(EXTLIB)
-+	$(LI_XPUB) libinn.$(EXTLIB) $D$(PATHSLIB)/libinn.$(EXTLIB)
+ # We can probably just assume sed is on the path, but since we have it, we may
+@@ -60,7 +61,7 @@
+ case "$interpreter" in
+ */sh|*SH*)
+     path="@SHELL@"
+-    lib=". $libdir/innshellvars"
++    lib=". $innlibdir/innshellvars"
+     ;;
+ */perl*|*PERL*)
+     path=`echo "$interpreter" | sed 's%^#! *[^ ][^ ]*%'"$PERLPATH%"`
+--- inn-2.5.3/support/fixconfig.in.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/support/fixconfig.in	2013-06-14 21:09:38.871711720 +0200
+@@ -17,6 +17,7 @@
+ bindir=@bindir@
+ libexecdir=@libexecdir@
+ libdir=@libdir@
++innlibdir=@innlibdir@
+ sbindir=@sbindir@
+ sysconfdir=@sysconfdir@
  
- clobber clean distclean:
- 	rm -f *.o *.lo libinn.la libinn.a parsedate.c parsedate
-@@ -46,7 +46,7 @@
+@@ -59,6 +60,7 @@
+      -e "s,@bindir[@],$bindir,g" \
+      -e "s,@libexecdir[@],$libexecdir,g" \
+      -e "s,@libdir[@],$libdir,g" \
++     -e "s,@innlibdir[@],$innlibdir,g" \
+      -e "s,@sbindir[@],$sbindir,g" \
+      -e "s,@sysconfdir[@],$sysconfdir,g" \
+      -e "s,@CONTROLDIR[@],$CONTROLDIR,g" \
+--- inn-2.5.3/m4/paths.m4.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/m4/paths.m4	2013-06-14 21:13:15.238373880 +0200
+@@ -47,6 +47,9 @@
+ _INN_ARG_DIR([tmp], ['${prefix}/tmp'], [tmpdir],
+     [AS_HELP_STRING([--with-tmp-dir=PATH],
+         [Path for temporary files [PREFIX/tmp]])])
++_INN_ARG_DIR([innlib], ['${datadir}/news'], [innlibdir],
++    [AS_HELP_STRING([--with-innlib-dir=PATH],
++        [Path to inn library scripts [DATADIR/news]])])
  
- libinn.la: $(OBJECTS) $(LOBJECTS)
- 	$(LIBLD) $(LDFLAGS) -o $@ $(LOBJECTS) $(LIBS) \
--	    -rpath $(PATHLIB) -version-info 2:0:0
-+	    -rpath $(PATHSLIB) -version-info 2:0:0
- 
- libinn.a: $(OBJECTS)
- 	ar r $@ $(OBJECTS)
---- inn-2.4.3/storage/Makefile.orig	2006-03-20 05:14:57.000000000 +0100
-+++ inn-2.4.3/storage/Makefile	2006-03-25 17:53:58.652177250 +0100
-@@ -22,7 +22,7 @@
- 	$(MAKE) COPT='$(WARNINGS)' all
- 
- install: all
--	$(LI_XPUB) libstorage.$(EXTLIB) $D$(PATHLIB)/libstorage.$(EXTLIB)
-+	$(LI_XPUB) libstorage.$(EXTLIB) $D$(PATHSLIB)/libstorage.$(EXTLIB)
- 	for F in $(PROGRAMS) ; do \
- 	    $(LI_XPRI) $$F $D$(PATHBIN)/`basename $$F` ; \
+ dnl Some additional paths used by inn/paths.h.
+ eval PATH_CONFIG="$sysconfdir"
+--- inn-2.5.3/scripts/Makefile.orig	2012-06-15 20:25:36.000000000 +0200
++++ inn-2.5.3/scripts/Makefile	2013-06-14 21:14:08.268372773 +0200
+@@ -27,7 +27,7 @@
  	done
-@@ -48,7 +48,7 @@
- libstorage.la: $(OBJECTS) $(LIBINN)
- 	$(LIBLD) $(LDFLAGS) -o $@ $(LOBJECTS) \
- 	    $(LIBINN) $(EXTSTORAGELIBS) $(LIBS) \
--	    -rpath $(PATHLIB) -version-info 2:0:0
-+	    -rpath $(PATHSLIB) -version-info 2:0:0
+ 	for F in innreport_inn.pm innshellvars innshellvars.pl \
+ 	         innshellvars.tcl ; do \
+-	    $(CP_RPUB) $$F $D$(PATHLIB)/$$F ; \
++	    $(CP_RPUB) $$F $D$(PATHINNLIB)/$$F ; \
+ 	done
  
- libstorage.a: $(OBJECTS)
- 	ar r $@ $(OBJECTS)
---- inn-2.4.3/Makefile.orig	2006-03-25 17:41:17.840629000 +0100
-+++ inn-2.4.3/Makefile	2006-03-25 17:53:18.333657500 +0100
-@@ -6,7 +6,7 @@
- ##  different mode than the rest.
- INSTDIRS      = $(PATHNEWS) $(PATHBIN) $(PATHAUTH) $(PATHAUTHRESOLV) \
- 		$(PATHAUTHPASSWD) $(PATHCONTROL) $(PATHFILTER) \
--		$(PATHRNEWS) $(PATHDB) $(PATHDOC) $(PATHETC) $(PATHLIB) \
-+		$(PATHRNEWS) $(PATHDB) $(PATHDOC) $(PATHETC) $(PATHLIB) $(PATHSLIB) \
- 		$(PATHMAN) $(MAN1) $(MAN3) $(MAN5) $(MAN8) $(PATHSPOOL) \
- 		$(PATHTMP) $(PATHARCHIVE) $(PATHARTICLES) $(PATHINCOMING) \
- 		$(PATHINBAD) $(PATHTAPE) $(PATHOVERVIEW) $(PATHOUTGOING) \
---- inn-2.4.3/Makefile.global.in.orig	2006-03-25 17:41:17.924634000 +0100
-+++ inn-2.4.3/Makefile.global.in	2006-03-25 17:53:38.622925500 +0100
-@@ -202,6 +202,7 @@
- PATHMAN         = @mandir@
- PATHINCLUDE     = @includedir@
- PATHLIB         = @LIBDIR@
-+PATHSLIB	= @libdir@
- PATHCONTROL     = @CONTROLDIR@
- PATHFILTER      = @FILTERDIR@
- PATHRUN         = @RUNDIR@
+ bootstrap:

@@ -15,38 +15,32 @@
  # elif HAVE_GDBM_NDBM_H
  #  include <gdbm-ndbm.h>
  # elif HAVE_DB1_NDBM_H
---- inn-2.4.4/configure.in.orig	2008-05-05 12:18:36.000000000 +0200
-+++ inn-2.4.4/configure.in	2008-06-12 23:24:11.005485208 +0200
-@@ -670,8 +670,13 @@
-             fi
-         fi
+--- inn-2.5.3/m4/berkeleydb.m4.orig	2013-06-11 21:16:28.320439059 +0200
++++ inn-2.5.3/m4/berkeleydb.m4	2013-06-11 20:36:38.617155533 +0200
+@@ -33,8 +33,13 @@
+     if test x"$DB_DIR" = xyes ; then
+         AC_MSG_ERROR([cannot find Berkeley DB])
      else
-+	if test "$BERKELEY_DB_DIR" = "/usr" ; then
-+        BERKELEY_DB_LDFLAGS=
-+        BERKELEY_DB_CFLAGS=
++	if test x"$DB_DIR" = x"/usr" ; then
++	DB_CPPFLAGS=
++	DB_LDFLAGS=
 +	else
-         BERKELEY_DB_LDFLAGS="-L$BERKELEY_DB_DIR/lib"
-         BERKELEY_DB_CFLAGS="-I$BERKELEY_DB_DIR/include"
+         DB_CPPFLAGS="-I$DB_DIR/include"
+         DB_LDFLAGS="-L$DB_DIR/lib"
 +	fi
-         BERKELEY_DB_LIB="-ldb"
-         AC_MSG_RESULT($BERKELEY_DB_DIR)
+         DB_LIBS="-ldb"
+         AC_MSG_RESULT([$DB_DIR])
      fi
-@@ -993,17 +998,11 @@
- AC_HEADER_SYS_WAIT
- 
- dnl Generic checks for header files.
--AC_CHECK_HEADERS(crypt.h inttypes.h limits.h ndbm.h pam/pam_appl.h stdbool.h \
-+AC_CHECK_HEADERS(crypt.h inttypes.h limits.h pam/pam_appl.h stdbool.h \
-                  stddef.h stdint.h string.h sys/bitypes.h sys/filio.h \
-                  sys/loadavg.h sys/param.h sys/select.h sys/sysinfo.h \
-                  sys/time.h unistd.h)
+--- inn-2.5.3/configure.ac.orig	2013-06-11 21:17:03.440438325 +0200
++++ inn-2.5.3/configure.ac	2013-06-11 21:47:46.747066572 +0200
+@@ -384,10 +384,6 @@
+                   stdint.h string.h sys/bitypes.h sys/filio.h sys/loadavg.h \
+                   sys/select.h sys/time.h unistd.h])
  
 -dnl Some Linux systems have db1/ndbm.h instead of ndbm.h.  Others have
 -dnl gdbm-ndbm.h.
--if test x"$ac_cv_header_ndbm_h" = xno ; then
--    AC_CHECK_HEADERS(db1/ndbm.h gdbm-ndbm.h)
--fi
+-AC_CHECK_HEADERS([ndbm.h db1/ndbm.h gdbm-ndbm.h], [break])
 -
- dnl Check to see if herrno is declared.
- AC_DEFUN([INN_NEED_HERRNO_DECLARATION],
- [AC_CACHE_CHECK([whether h_errno must be declared], inn_cv_herrno_need_decl,
+ dnl Check for whether various symbols are declared.
+ AC_CHECK_DECLS([pread, pwrite, snprintf, setproctitle, strlcat,
+                 strlcpy, vsnprintf])

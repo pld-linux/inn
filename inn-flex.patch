@@ -1,0 +1,11 @@
+--- inn-2.5.3/innfeed/configfile.l.orig	2013-06-13 17:24:55.700460265 +0200
++++ inn-2.5.3/innfeed/configfile.l	2013-06-13 17:32:01.870451380 +0200
+@@ -36,7 +36,7 @@
+ int yyget_lineno(void);
+ FILE *yyget_in(void);
+ FILE *yyget_out(void);
+-int yyget_leng(void);
++yy_size_t yyget_leng(void);
+ char *yyget_text(void);
+ int yyget_debug(void);
+ void yyset_lineno(int);
