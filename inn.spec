@@ -64,6 +64,7 @@ Requires:	psmisc >= 20.1
 Requires:	rc-scripts >= 0.4.1.23
 Requires:	textutils
 Requires:	util-linux
+Suggests:	perl-GD
 Provides:	nntpserver
 Obsoletes:	leafnode
 Obsoletes:	leafnode+
