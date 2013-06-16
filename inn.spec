@@ -41,7 +41,7 @@ BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	db-devel >= 4.4
-BuildRequires:	flex
+BuildRequires:	flex >= 2.5.37
 BuildRequires:	heimdal-devel
 BuildRequires:	libtool >= 2:2
 BuildRequires:	openssl-devel >= 0.9.7d
