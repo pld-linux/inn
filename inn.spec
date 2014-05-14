@@ -1,7 +1,7 @@
 #
 # Conditional build:
 %bcond_with	largefiles	# enable largefiles (disables tagged hash)
-#
+
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
 Summary(de.UTF-8):	das InterNet News System (News-Server)
@@ -12,7 +12,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.5.3
-Release:	1
+Release:	2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -56,9 +56,9 @@ Requires(post):	sed >= 4.0
 Requires(post):	textutils
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	/etc/cron.d
 Requires:	awk
 Requires:	cleanfeed >= 0.95.7b-4
+Requires:	crondaemon
 Requires:	procps
 Requires:	psmisc >= 20.1
 Requires:	rc-scripts >= 0.4.1.23
@@ -304,7 +304,7 @@ install -d $RPM_BUILD_ROOT/etc/{news/pgp,rc.d/init.d,cron.d,logrotate.d} \
 	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archive/news}} \
 	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs} \
 	$RPM_BUILD_ROOT/home/services/news \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -315,18 +315,18 @@ install -d $RPM_BUILD_ROOT/etc/{news/pgp,rc.d/init.d,cron.d,logrotate.d} \
 	PATHAUTHPASSWD=%{_libdir}/news/auth/passwd \
 	PATHAUTHRESOLV=%{_libdir}/news/auth/resolv
 
-install samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
+cp -p samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
 
-install %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
-install %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
-install %{SOURCE3} $RPM_BUILD_ROOT/var/lib/news/newsgroups
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/cron.d/inn
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
-install %{SOURCE6} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
-install %{SOURCE7} $RPM_BUILD_ROOT/etc/logrotate.d/inn
-install %{SOURCE8} $RPM_BUILD_ROOT%{_mandir}/pl/man1/getlist.1
-install %{SOURCE9} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
-install %{SOURCE10} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/var/lib/news/newsgroups
+cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/cron.d/inn
+install -p %{SOURCE5} $RPM_BUILD_ROOT/etc/rc.d/init.d/inn
+install -p %{SOURCE6} $RPM_BUILD_ROOT%{_bindir}/cnfsstat.cron
+cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/logrotate.d/inn
+cp -p %{SOURCE8} $RPM_BUILD_ROOT%{_mandir}/pl/man1/getlist.1
+cp -p %{SOURCE9} $RPM_BUILD_ROOT%{_mandir}/pl/man8/innd.8
+cp -p %{SOURCE10} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %{__rm} $RPM_BUILD_ROOT/var/lib/news/history
 
@@ -415,7 +415,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(664,news,news) %ghost /var/lib/news/history
 
 # LOGS
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/inn
 # note: innd (and maybe others) creates files in this directory
 %attr(771,root,news) %dir /var/log/news
