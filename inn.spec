@@ -11,12 +11,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.5.3
-Release:	2
+Version:	2.5.4
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	353fe95232828ddbc80debff86c240bc
+# Source0-md5:	ad9f77a1c84c668ccd268792721a2215
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -29,12 +29,10 @@ Source9:	%{name}d.8.pl
 Source10:	%{name}.tmpfiles
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-install.patch
-Patch2:		%{name}-db.patch
 Patch3:		%{name}-setgid.patch
 Patch4:		%{name}-config.patch
 Patch5:		%{name}-asneeded.patch
 Patch6:		%{name}-nnrpd_no_trace.patch
-Patch7:		%{name}-flex.patch
 Patch8:		%{name}-libdir.patch
 URL:		https://www.isc.org/software/inn/
 BuildRequires:	autoconf >= 2.61
@@ -247,12 +245,10 @@ sunucuya makaleyi yollar.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 %patch8 -p1
 
 touch innfeed/*.[ly]
@@ -316,6 +312,7 @@ install -d $RPM_BUILD_ROOT/etc/{news/pgp,rc.d/init.d,cron.d,logrotate.d} \
 	PATHAUTHRESOLV=%{_libdir}/news/auth/resolv
 
 cp -p samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
+touch $RPM_BUILD_ROOT%{_sysconfdir}/motd.{innd,nnrpd}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/var/lib/news/active
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/var/lib/news/distributions
@@ -453,6 +450,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/expire.ctl
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/incoming.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inn.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inn-radius.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innfeed.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innreport.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innshellvars.local
@@ -462,7 +460,9 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/localgroups
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/moderators
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/motd.innd
+%{_sysconfdir}/motd.innd.sample
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/motd.nnrpd
+%{_sysconfdir}/motd.nnrpd.sample
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/news2mail.cf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/newsfeeds
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nnrpd.track
@@ -470,7 +470,6 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nocem.ctl
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ovdb.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/passwd.nntp
-%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/radius.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/readers.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/send-uucp.cf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/storage.conf
@@ -625,6 +624,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man5/history.5*
 %{_mandir}/man5/incoming.conf.5*
 %{_mandir}/man5/inn.conf.5*
+%{_mandir}/man5/inn-radius.conf.5*
 %{_mandir}/man5/innfeed.conf.5*
 %{_mandir}/man5/innwatch.ctl.5*
 %{_mandir}/man5/localgroups.5*
@@ -640,7 +640,6 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man5/nocem.ctl.5*
 %{_mandir}/man5/ovdb.5*
 %{_mandir}/man5/passwd.nntp.5*
-%{_mandir}/man5/radius.conf.5*
 %{_mandir}/man5/readers.conf.5*
 %{_mandir}/man5/storage.conf.5*
 %{_mandir}/man5/subscriptions.5*

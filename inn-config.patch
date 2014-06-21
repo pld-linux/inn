@@ -114,14 +114,11 @@ diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
  nicenewnews:                 0
  nicennrpd:                   0
  pauseretrytime:              300
---- inn-2.5.3/samples/newsfeeds.in.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/samples/newsfeeds.in	2013-06-13 16:26:55.857199461 +0200
-@@ -41,8 +41,18 @@
- # Empty default subscription list, reject all incoming articles (including
- # locally posted articles) with a distribution of "local" or
- # "collabra-internal", accept all others.
--ME:!*/!local,!collabra-internal::
-+#ME:!*/!local,!collabra-internal::
+--- inn-2.5.4/samples/newsfeeds.in.orig	2014-05-17 10:24:49.000000000 +0200
++++ inn-2.5.4/samples/newsfeeds.in	2014-06-21 21:14:00.955356887 +0200
+@@ -40,11 +40,21 @@
+ ##  For the ME line (and the ME line *only*), patterns affect *outgoing*
+ ##  feeds and distributions affect *incoming* feeds (including local posts).
  
 +## Default of  everything to everybody except for junk, control, anything
 +## with "local" as the newsgroup prefix (i.e. matches "localhost.stuff") or
@@ -133,10 +130,16 @@ diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
 +        /pl,world,usa,na,gnu,bionet,pubnet,u3b,eunet,vmsnet,inet,ddn,k12\
 +	::
 + 
+ # Empty default subscription list, reject all incoming articles (including
+ # locally posted articles) with a distribution of "local" or
+ # "collabra-internal", accept all others (including articles that do not
+ # have a Distribution: header field).
+-ME:!*/!local,!collabra-internal::
++#ME:!*/!local,!collabra-internal::
+ 
  # The same as the above, but would reject all posts that have
  # news.example.com in the path (posts passing through that site).
- #ME/news.example.com:!*/!local,!collabra-internal::
-@@ -139,4 +149,4 @@
+@@ -142,4 +152,4 @@
  # come with INN).
  #capture!\
  #	:*/foo\
