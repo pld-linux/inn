@@ -9,20 +9,3 @@
  LI_XPRI		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0550 $(BACKUP_OPTION)
  LI_XPUB		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0555 $(BACKUP_OPTION)
  
---- inn-2.5.3/site/Makefile.orig	2013-06-11 18:02:09.357348733 +0200
-+++ inn-2.5.3/site/Makefile	2013-06-11 18:05:13.754011556 +0200
-@@ -145,13 +145,9 @@
- $D$(PATH_NEWSGROUPS):	; $(CP_DATA) newsgroups.minimal $@
- $D$(PATH_ACTIVE_TIMES):
- 	touch $@
--	chown $(RUNASUSER) $@
--	chgrp $(RUNASGROUP) $@
- 	chmod $(FILEMODE) $@
- $D$(PATH_HISTORY):
- 	touch $@
--	chown $(RUNASUSER) $@
--	chgrp $(RUNASGROUP) $@
- 	chmod $(FILEMODE) $@
--	test -z "$D" && $(PATHBIN)/makedbz -i -o
-+	test -z "$D" && $(PATHBIN)/makedbz -i -o || :
- 

@@ -33,9 +33,9 @@
  grephistory:	grephistory.o  $(BOTH)   ; $(LINK) grephistory.o  $(STORELIBS)
  makedbz:	makedbz.o      $(LIBINN) ; $(LINK) makedbz.o      $(INNLIBS)
  makehistory:	makehistory.o  $(BOTH)   ; $(LINK) makehistory.o  $(STORELIBS)
---- inn-2.4.3/frontends/Makefile.orig	2008-02-17 20:05:39.596270000 +0100
-+++ inn-2.4.3/frontends/Makefile	2008-02-17 21:18:41.001952358 +0100
-@@ -71,12 +71,12 @@
+--- inn-2.6.0/frontends/Makefile.orig	2016-01-27 17:55:05.173836912 +0100
++++ inn-2.6.0/frontends/Makefile	2016-01-27 18:37:03.467064565 +0100
+@@ -75,12 +75,12 @@
  getlist:	getlist.o      $(LIBINN) ; $(LINK) getlist.o      $(INNLIBS)
  inews:		inews.o        $(LIBINN) ; $(LINK) inews.o        $(INNLIBS)
  innconfval:	innconfval.o   $(LIBINN) ; $(LINK) innconfval.o   $(INNLIBS)
@@ -43,17 +43,17 @@
 -ovdb_monitor:	ovdb_monitor.o $(BOTH)   ; $(LINK) ovdb_monitor.o $(STORELIBS)
 -ovdb_server:	ovdb_server.o  $(BOTH)   ; $(LINK) ovdb_server.o  $(STORELIBS)
 -ovdb_stat:	ovdb_stat.o    $(BOTH)   ; $(LINK) ovdb_stat.o    $(STORELIBS)
--rnews:		rnews.o        $(LIBINN) ; $(LINK) rnews.o        $(STORELIBS)
+-rnews:		rnews.o        $(BOTH)   ; $(LINK) rnews.o        $(STORELIBS)
 -sm:		sm.o           $(BOTH)   ; $(LINK) sm.o           $(STORELIBS)
 +ovdb_init:	ovdb_init.o    $(BOTH)   ; $(LINK) ovdb_init.o    -Wl,-no-as-needed $(STORELIBS)
 +ovdb_monitor:	ovdb_monitor.o $(BOTH)   ; $(LINK) ovdb_monitor.o -Wl,-no-as-needed $(STORELIBS)
 +ovdb_server:	ovdb_server.o  $(BOTH)   ; $(LINK) ovdb_server.o  -Wl,-no-as-needed $(STORELIBS)
 +ovdb_stat:	ovdb_stat.o    $(BOTH)   ; $(LINK) ovdb_stat.o    -Wl,-no-as-needed $(STORELIBS)
-+rnews:		rnews.o        $(LIBINN) ; $(LINK) rnews.o        -Wl,-no-as-needed $(STORELIBS)
++rnews:		rnews.o        $(BOTH)   ; $(LINK) rnews.o        -Wl,-no-as-needed $(STORELIBS)
 +sm:		sm.o           $(BOTH)   ; $(LINK) sm.o           -Wl,-no-as-needed $(STORELIBS)
  
  ovdb_init.o: ovdb_init.c
- 	$(CC) $(CFLAGS) $(BERKELEY_DB_CFLAGS) -c $<
+ 	$(CC) $(CFLAGS) $(BDB_CPPFLAGS) -c $<
 --- inn-2.5.3/innfeed/Makefile.orig	2013-06-13 17:45:04.430435070 +0200
 +++ inn-2.5.3/innfeed/Makefile	2013-06-13 17:52:19.910425989 +0200
 @@ -52,7 +52,7 @@
@@ -65,11 +65,11 @@
  
  config_y.c config_y.h: configfile.y
  	$(YACC) -d $?
---- inn-2.5.3/storage/buffindexed/ovmethod.mk.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/storage/buffindexed/ovmethod.mk	2013-06-13 18:00:36.177082319 +0200
+--- inn-2.6.0/storage/buffindexed/ovmethod.mk.orig	2016-01-27 17:55:05.177170246 +0100
++++ inn-2.6.0/storage/buffindexed/ovmethod.mk	2016-01-27 18:38:18.517061418 +0100
 @@ -5,4 +5,4 @@
  
- buffindexed/buffindexed_d: buffindexed/buffindexed_d.o libstorage.$(EXTLIB) $(LIBHIST)
- 	$(LIBLD) $(LDFLAGS) -o $@ buffindexed/buffindexed_d.o \
+ buffindexed/buffindexed_d: buffindexed/buffindexed_d.$(EXTOBJ) libstorage.$(EXTLIB) $(LIBHIST)
+ 	$(LIBLD) $(LDFLAGS) -o $@ buffindexed/buffindexed_d.$(EXTOBJ) \
 -	    $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
 +	    -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)

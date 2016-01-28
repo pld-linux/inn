@@ -26,20 +26,6 @@
  
  /* Default prefix path is pathfilter. */
  #define INN_PATH_PERL_STARTUP_INND      "startup_innd.pl"
---- inn-2.4.0.orig/Makefile	2003-05-09 06:25:27.000000000 +0200
-+++ inn-2.4.0/Makefile	2003-06-29 12:57:10.000000000 +0200
-@@ -91,9 +91,9 @@
- directories:
- 	@chmod +x support/install-sh
- 	for D in $(INSTDIRS) ; do \
--	    support/install-sh $(OWNER) -m 0755 -d $(D)$$D ; \
-+	    support/install-sh -m 0755 -d $(D)$$D ; \
- 	done
--	support/install-sh $(OWNER) -m 0750 -d $(D)$(PATHRUN)
-+	support/install-sh -m 0750 -d $(D)$(PATHRUN)
- 
- update: 
- 	@chmod +x support/install-sh
 --- inn-2.5.3/Makefile.global.in.orig	2013-06-11 17:54:53.957357808 +0200
 +++ inn-2.5.3/Makefile.global.in	2013-06-11 17:57:11.437354942 +0200
 @@ -250,7 +250,7 @@

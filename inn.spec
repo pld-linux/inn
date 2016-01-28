@@ -1,6 +1,7 @@
-#
+
 # Conditional build:
 %bcond_with	largefiles	# enable largefiles (disables tagged hash)
+%bcond_without	python		# embedded Python module support
 
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
@@ -11,12 +12,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.5.4
-Release:	4
+Version:	2.6.0
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	ad9f77a1c84c668ccd268792721a2215
+# Source0-md5:	e904c2a4d2f917d79b9cfdc94b17e275
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -38,14 +39,17 @@ URL:		https://www.isc.org/software/inn/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake
 BuildRequires:	bison
+BuildRequires:	cyrus-sasl-devel >= 2
 BuildRequires:	db-devel >= 4.4
 BuildRequires:	flex >= 2.5.37
 BuildRequires:	heimdal-devel
 BuildRequires:	libtool >= 2:2
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
+%{?with_python:BuildRequires:	python-devel >= 2.2}
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.663
+BuildRequires:	zlib-devel
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
 Requires(post):	/usr/sbin/usermod
@@ -269,22 +273,20 @@ cp -f /usr/share/automake/config.* support
 	--with-control-dir=%{_datadir}/news/control \
 	--with-db-dir=/var/lib/news \
 	--with-filter-dir=%{_datadir}/news/filter \
-	--with-http-dir=%{_datadir}/news/http \
+	--with-http-dir=/var/lib/news/http \
 	--with-innlib-dir=%{_datadir}/news \
 	--with-libperl-dir=%{perl_vendorlib} \
 	--with-log-dir=/var/log/news \
 	--with-run-dir=/var/run/news \
 	--with-spool-dir=/var/spool/news \
 	--with-tmp-dir=/var/spool/news/incoming/tmp \
-	--with-berkeleydb=%{_prefix} \
+	--with-bdb=%{_prefix} \
 	--with-openssl=%{_prefix} \
 	--with-perl \
+	%{?with_python:--with-python} \
 	--with-sendmail=/usr/lib/sendmail \
-	--enable-ipv6 \
 	%{?with_largefiles:--enable-largefiles} \
-	--enable-libtool \
-	--enable-shared \
-	--enable-static \
+	--enable-reduced-depends \
 	%{!?with_largefiles:--enable-tagged-hash}
 
 %{__make} all \
@@ -412,11 +414,14 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(664,news,news) %ghost /var/lib/news/history
 
 # LOGS
-%{systemdtmpfilesdir}/%{name}.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/inn
 # note: innd (and maybe others) creates files in this directory
 %attr(771,root,news) %dir /var/log/news
 %attr(770,news,news) %dir /var/run/news
+%{systemdtmpfilesdir}/%{name}.conf
+# http status pages
+%attr(775,root,news) %dir /var/lib/news/http
+/var/lib/news/http/innreport.css
 
 # SPOOL
 %attr(771,root,news) %dir /var/spool/news
@@ -479,8 +484,6 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,news) %dir %{_datadir}/news
 %dir %{_datadir}/news/control
 %dir %{_datadir}/news/filter
-%dir %{_datadir}/news/http
-%{_datadir}/news/http/innreport.css
 
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innreport_inn.pm
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars
@@ -646,6 +649,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man8/actsync.8*
 %{_mandir}/man8/actsyncd.8*
 %{_mandir}/man8/archive.8*
+%{_mandir}/man8/auth_krb5.8*
 %{_mandir}/man8/batcher.8*
 %{_mandir}/man8/buffchan.8*
 %{_mandir}/man8/ckpasswd.8*
@@ -705,11 +709,11 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libinn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libinn.so.2
+%attr(755,root,root) %ghost %{_libdir}/libinn.so.3
 %attr(755,root,root) %{_libdir}/libinnhist.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libinnhist.so.2
+%attr(755,root,root) %ghost %{_libdir}/libinnhist.so.3
 %attr(755,root,root) %{_libdir}/libstorage.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libstorage.so.2
+%attr(755,root,root) %ghost %{_libdir}/libstorage.so.3
 
 %files devel
 %defattr(644,root,root,755)
