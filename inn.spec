@@ -1,6 +1,6 @@
 
 # Conditional build:
-%bcond_with	largefiles	# enable largefiles (disables tagged hash)
+%bcond_with	lfs		# enable largefiles (disables tagged hash)
 %bcond_without	python		# embedded Python module support
 
 %include	/usr/lib/rpm/macros.perl
@@ -12,12 +12,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.6.0
-Release:	4
+Version:	2.6.1
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	e904c2a4d2f917d79b9cfdc94b17e275
+# Source0-md5:	0db916b0be0b4a2dd7a87409a8bc7558
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -36,7 +36,7 @@ Patch5:		%{name}-asneeded.patch
 Patch6:		%{name}-nnrpd_no_trace.patch
 Patch8:		%{name}-libdir.patch
 URL:		https://www.isc.org/software/inn/
-BuildRequires:	autoconf >= 2.61
+BuildRequires:	autoconf >= 2.64
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	cyrus-sasl-devel >= 2
@@ -285,9 +285,9 @@ cp -f /usr/share/automake/config.* support
 	--with-perl \
 	%{?with_python:--with-python} \
 	--with-sendmail=/usr/lib/sendmail \
-	%{?with_largefiles:--enable-largefiles} \
+	%{?with_lfs:--enable-largefiles} \
 	--enable-reduced-depends \
-	%{!?with_largefiles:--enable-tagged-hash}
+	%{!?with_lfs:--enable-tagged-hash}
 
 %{__make} all \
 	PATHFILTER=%{_datadir}/news/filter \
@@ -709,7 +709,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libinn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libinn.so.3
+%attr(755,root,root) %ghost %{_libdir}/libinn.so.4
 %attr(755,root,root) %{_libdir}/libinnhist.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libinnhist.so.3
 %attr(755,root,root) %{_libdir}/libstorage.so.*.*.*
