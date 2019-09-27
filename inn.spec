@@ -1,7 +1,8 @@
-
+#
 # Conditional build:
 %bcond_with	lfs		# enable largefiles (disables tagged hash)
 %bcond_without	python		# embedded Python module support
+%bcond_with	python3		# Python 3.x instead of 2.x
 
 %include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
@@ -12,12 +13,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.6.1
-Release:	3
+Version:	2.6.3
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	0db916b0be0b4a2dd7a87409a8bc7558
+# Source0-md5:	cbbebf4c984cd54871b25f6c649d6ad2
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -46,7 +47,10 @@ BuildRequires:	heimdal-devel
 BuildRequires:	libtool >= 2:2
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
-%{?with_python:BuildRequires:	python-devel >= 2.2}
+%if %{with python}
+%{!?with_python3:BuildRequires:	python-devel >= 1:2.3}
+%{?with_python3:BuildRequires:	python3-devel >= 1:3.3}
+%endif
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.663
 BuildRequires:	zlib-devel
@@ -266,7 +270,8 @@ cp -f /usr/share/automake/config.* support
 %{__autoconf}
 %{__autoheader} -I include
 %configure \
-	CPPFLAGS="-D_GNU_SOURCE" \
+	CPPFLAGS="%{rpmcppflags} -D_GNU_SOURCE" \
+	%{?with_python3:PYTHON=%{__python3}} \
 	--with-news-group=news \
 	--with-news-master=news \
 	--with-news-user=news \
@@ -709,7 +714,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libinn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libinn.so.4
+%attr(755,root,root) %ghost %{_libdir}/libinn.so.6
 %attr(755,root,root) %{_libdir}/libinnhist.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libinnhist.so.3
 %attr(755,root,root) %{_libdir}/libstorage.so.*.*.*
