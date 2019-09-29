@@ -14,7 +14,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.6.3
-Release:	1
+Release:	2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -78,7 +78,6 @@ Conflicts:	logrotate < 3.7-4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
-%define		_includedir	%{_prefix}/include/inn
 
 %define		skip_post_check_so	libstorage.so.*
 # /usr/bin/pullnews doesn't provide perl(Net::NNTP) - perl-libnet does.
@@ -300,12 +299,13 @@ cp -f /usr/share/automake/config.* support
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{news/pgp,rc.d/init.d,cron.d,logrotate.d} \
-	$RPM_BUILD_ROOT{%{_libdir}/news/{rnews,auth/generic},%{_includedir}} \
-	$RPM_BUILD_ROOT{%{_bindir},%{_datadir}/news/{control,filter,auth}} \
-	$RPM_BUILD_ROOT%{_mandir}/{man{1,3,5,8},pl/man{1,8}} \
-	$RPM_BUILD_ROOT/var/{run/news,lib/news/backoff,log/{news,archive/news}} \
-	$RPM_BUILD_ROOT/var/spool/news/{articles,overview,incoming/{tmp,bad},outgoing,archive,uniover,innfeed,cycbuffs} \
+install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,news/pgp,rc.d/init.d} \
+	$RPM_BUILD_ROOT%{_libdir}/news/auth/generic \
+	$RPM_BUILD_ROOT%{_datadir}/news/auth \
+	$RPM_BUILD_ROOT%{_mandir}/pl/man{1,8} \
+	$RPM_BUILD_ROOT/var/lib/news/backoff \
+	$RPM_BUILD_ROOT/var/log/archive/news \
+	$RPM_BUILD_ROOT/var/spool/news/{cycbuffs,uniover} \
 	$RPM_BUILD_ROOT/home/services/news \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
@@ -728,7 +728,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_libdir}/libinn.la
 %{_libdir}/libinnhist.la
 %{_libdir}/libstorage.la
-%{_includedir}
+%{_includedir}/inn
 %{_mandir}/man3/clientlib.3*
 %{_mandir}/man3/dbz.3*
 %{_mandir}/man3/inndcomm.3*
