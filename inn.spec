@@ -4,7 +4,6 @@
 %bcond_without	python		# embedded Python module support
 %bcond_with	python3		# Python 3.x instead of 2.x
 
-%include	/usr/lib/rpm/macros.perl
 Summary:	INN, the InterNet News System (news server)
 Summary(de.UTF-8):	das InterNet News System (News-Server)
 Summary(es.UTF-8):	INN, InterNet News System (servidor news)
