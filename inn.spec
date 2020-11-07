@@ -13,7 +13,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.6.3
-Release:	3
+Release:	4
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -316,6 +316,9 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,news/pgp,rc.d/init.d} \
 	PATHRNEWS=%{_libdir}/news/rnews \
 	PATHAUTHPASSWD=%{_libdir}/news/auth/passwd \
 	PATHAUTHRESOLV=%{_libdir}/news/auth/resolv
+
+# avoid conflict with glibc (synced with man-pages >= 5.09)
+%{__mv} $RPM_BUILD_ROOT%{_mandir}/man3/list.{3,3inn}
 
 cp -p samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
 touch $RPM_BUILD_ROOT%{_sysconfdir}/motd.{innd,nnrpd}
@@ -735,8 +738,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man3/libinn.3*
 %{_mandir}/man3/libinnhist.3*
 %{_mandir}/man3/libstorage.3*
-# XXX: too generic name?
-%{_mandir}/man3/list.3*
+%{_mandir}/man3/list.3inn*
 %{_mandir}/man3/qio.3*
 # XXX: too generic name?
 %{_mandir}/man3/tst.3*
