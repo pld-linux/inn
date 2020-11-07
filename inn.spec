@@ -13,7 +13,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.6.3
-Release:	4
+Release:	5
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -30,6 +30,7 @@ Source9:	%{name}d.8.pl
 Source10:	%{name}.tmpfiles
 Patch0:		%{name}-PLD.patch
 Patch1:		%{name}-install.patch
+Patch2:		%{name}-no-common.patch
 Patch3:		%{name}-setgid.patch
 Patch4:		%{name}-config.patch
 Patch5:		%{name}-asneeded.patch
@@ -251,6 +252,7 @@ sunucuya makaleyi yollar.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1

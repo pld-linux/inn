@@ -1,6 +1,6 @@
---- inn-2.5.3/Makefile.global.in.orig	2013-06-11 18:02:09.360682066 +0200
-+++ inn-2.5.3/Makefile.global.in	2013-06-11 18:04:16.297346087 +0200
-@@ -305,7 +305,7 @@
+--- inn-2.6.3/Makefile.global.in.orig	2020-11-07 17:33:18.128984967 +0100
++++ inn-2.6.3/Makefile.global.in	2020-11-07 18:30:28.819400995 +0100
+@@ -337,7 +337,7 @@
  
  BACKUP_OPTION	= -B .OLD
  
@@ -8,4 +8,4 @@
 +LI_SPRI		= $(LIBTOOLINST) $(INSTALL) -m 4550 $(BACKUP_OPTION)
  LI_XPRI		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0550 $(BACKUP_OPTION)
  LI_XPUB		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0555 $(BACKUP_OPTION)
- 
+ LI_LPUB		= $(LIBTOOLINST) $(INSTALL) $(OWNER) -m 0555

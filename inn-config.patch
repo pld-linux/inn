@@ -1,9 +1,8 @@
-diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
---- old/samples/cycbuff.conf	2004-01-07 22:47:19.000000000 +0000
-+++ new/samples/cycbuff.conf	2004-08-06 12:33:41.000000000 +0000
-@@ -10,9 +10,9 @@
- # "cycbuff" (literally) : symbolic buffer name : path to buffer file : 
- #       length of symbolic buffer in kilobytes in decimal (1KB = 1024 bytes)
+--- inn-2.6.3/samples/cycbuff.conf.orig	2019-02-07 16:02:22.000000000 +0100
++++ inn-2.6.3/samples/cycbuff.conf	2020-11-07 18:34:28.741795625 +0100
+@@ -28,9 +28,9 @@
+ ##
+ ##  If you're trying to stay under 2 GB, keep your sizes below 2097152.
  
 -cycbuff:ONE:/export/cycbuffs/one:512000
 -cycbuff:TWO:/export/cycbuffs/two:512000
@@ -12,8 +11,8 @@ diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
 +cycbuff:TWO:/var/spool/news/cycbuffs/two:512000
 +cycbuff:THREE:/var/spool/news/cycbuffs/three:512000
  
- # 2. Meta-cyclic buffers
- # Format:
+ ##  2. Meta-cyclic buffers
+ ##  Format:
 --- inn-2.5.3/samples/inn.conf.in.orig	2013-06-13 15:49:58.887245670 +0200
 +++ inn-2.5.3/samples/inn.conf.in	2013-06-13 16:20:45.710540510 +0200
 @@ -17,11 +17,11 @@
@@ -59,14 +58,14 @@ diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
  verifygroups:                false
  wanttrash:                   false
  wipcheck:                    5
-@@ -71,6 +71,7 @@
+@@ -72,6 +72,7 @@
  nfswriter:                   false
- overcachesize:               64
+ overcachesize:               128
  #ovgrouppat:
 +# note: must not be changed to false if using tradspool
  storeonxref:                 true
  useoverchan:                 false
- wireformat:                  false
+ wireformat:                  true
 @@ -78,7 +79,7 @@
  
  # Reading
@@ -76,9 +75,9 @@ diff -Nur old/samples/cycbuff.conf new/samples/cycbuff.conf
  articlemmap:                 true
  clienttimeout:               1800
  initialtimeout:              10
-@@ -109,8 +110,8 @@
- addnntppostingdate:          true
- addnntppostinghost:          true
+@@ -111,8 +112,8 @@
+ addinjectionpostingaccount:  false
+ addinjectionpostinghost:     true
  checkincludedtext:           false
 -#complaints:
 -#fromhost:

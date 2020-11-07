@@ -1,8 +1,8 @@
---- inn-2.5.3/lib/newsuser.c.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/lib/newsuser.c	2013-06-13 15:36:33.750595785 +0200
-@@ -93,6 +93,8 @@
-     if (getegid() != gid || getgid() != gid) {
-         die ("must be run as %s group", innconf->runasgroup);
+--- inn-2.6.3/lib/newsuser.c.orig	2019-02-07 16:02:22.000000000 +0100
++++ inn-2.6.3/lib/newsuser.c	2020-11-07 18:31:54.357153294 +0100
+@@ -100,6 +100,8 @@
+         die ("must be run as %s group",
+              innconf != NULL ? innconf->runasgroup : RUNASGROUP);
      }
 +    const char *runasuser = innconf != NULL ? innconf->runasuser : RUNASUSER;
 +    initgroups(runasuser, gid);
