@@ -1,14 +1,23 @@
---- inn-2.5.3/doc/man/rnews.1.orig	2013-06-11 17:19:04.427402611 +0200
-+++ inn-2.5.3/doc/man/rnews.1	2013-06-11 17:41:12.624041596 +0200
-@@ -181,7 +181,7 @@
+--- inn-2.6.4/doc/man/rnews.1.orig	2021-05-16 18:02:27.608638493 +0200
++++ inn-2.6.4/doc/man/rnews.1	2021-05-16 18:06:02.730806409 +0200
+@@ -191,7 +191,7 @@
  .PP
- Otherwise, if the command is any other word, then \fBrnews\fR will try to
- execute a program with that name, looking for it in the directory
--\&\fIpathbin\fR/rnews.libexec.  The rest of the batch will be fed to that
-+/usr/lib*/news/rnews .  The rest of the batch will be fed to that
- program's standard input, and the standard output from the program will be
- treated as if it were the original input to \fBrnews\fR.  \s-1INN\s0 comes with three
- such standard batch processors:
+ Otherwise, if the command is any other word and the \fB\-a\fR flag is not
+ given, \fBrnews\fR will try to execute a program with that name, looking
+-for it in the directory \fIpathbin\fR/rnews.libexec.  The rest of the
++for it in the directory /usr/lib*/news/rnews .  The rest of the
+ batch will be fed to that program's standard input, and the standard
+ output from the program will be treated as if it were the original
+ input to \fBrnews\fR.  \s-1INN\s0 comes with three such standard batch processors:
+@@ -210,7 +210,7 @@
+ .IP "\fB\-a\fR" 4
+ .IX Item "-a"
+ By default, \fBrnews\fR looks for additional unpackers in the
+-\&\fIrnews.libexec\fR sub-directory of \fIpathbin\fR (as set in \fIinn.conf\fR).
++/usr/lib*/news/rnews directory (as set in \fIinn.conf\fR).
+ If \fB\-a\fR is given, no additional batch processor will be used; only
+ \&\f(CW\*(C`rnews\*(C'\fR and \f(CW\*(C`cunbatch\*(C'\fR will be recognized as valid batch commands.
+ .IP "\fB\-b\fR" 4
 --- inn-2.5.3/include/inn/paths.h.in.orig	2013-06-11 17:42:12.677373675 +0200
 +++ inn-2.5.3/include/inn/paths.h.in	2013-06-11 17:49:38.687364380 +0200
 @@ -22,12 +22,12 @@

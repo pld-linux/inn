@@ -1,24 +1,24 @@
---- inn-2.5.3/backends/Makefile.orig	2013-06-13 17:45:04.427101736 +0200
-+++ inn-2.5.3/backends/Makefile	2013-06-13 17:51:35.673760252 +0200
-@@ -84,16 +84,16 @@
+--- inn-2.6.4/backends/Makefile.orig	2021-05-16 18:32:25.802230175 +0200
++++ inn-2.6.4/backends/Makefile	2021-05-16 18:36:01.467728481 +0200
+@@ -81,16 +81,16 @@
  	@exit 1
  
  actsync:	actsync.o    $(LIBINN)	; $(LINK) actsync.o    $(INNLIBS)
--archive:	archive.o    $(BOTH)	; $(LINK) archive.o    $(STORELIBS)
--batcher:	batcher.o    $(BOTH)	; $(LINK) batcher.o    $(STORELIBS)
--cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINK) cvtbatch.o   $(STORELIBS)
-+archive:	archive.o    $(BOTH)	; $(LINK) archive.o    -Wl,-no-as-needed $(STORELIBS)
-+batcher:	batcher.o    $(BOTH)	; $(LINK) batcher.o    -Wl,-no-as-needed $(STORELIBS)
-+cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINK) cvtbatch.o   -Wl,-no-as-needed $(STORELIBS)
+-archive:	archive.o    $(BOTH)	; $(LINKDEPS) archive.o  $(STORELIBS)
+-batcher:	batcher.o    $(BOTH)	; $(LINKDEPS) batcher.o  $(STORELIBS)
+-cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINKDEPS) cvtbatch.o $(STORELIBS)
++archive:	archive.o    $(BOTH)	; $(LINKDEPS) archive.o  -Wl,-no-as-needed $(STORELIBS)
++batcher:	batcher.o    $(BOTH)	; $(LINKDEPS) batcher.o  -Wl,-no-as-needed $(STORELIBS)
++cvtbatch:	cvtbatch.o   $(BOTH)	; $(LINKDEPS) cvtbatch.o -Wl,-no-as-needed $(STORELIBS)
  innbind:	innbind.o    $(LIBINN)	; $(LINK) innbind.o    $(INNLIBS)
--inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      $(STORELIBS)
-+inndf:		inndf.o      $(BOTH)	; $(LINK) inndf.o      -Wl,-no-as-needed $(STORELIBS)
+-inndf:		inndf.o      $(BOTH)	; $(LINKDEPS) inndf.o  $(STORELIBS)
++inndf:		inndf.o      $(BOTH)	; $(LINKDEPS) inndf.o  -Wl,-no-as-needed $(STORELIBS)
  innxbatch:	innxbatch.o  $(LIBINN)	; $(LINK) innxbatch.o  $(INNLIBS)
  innxmit:	innxmit.o    $(BOTH)	; $(LINK) innxmit.o    $(STORELIBS)
  ninpaths:	ninpaths.o		; $(LINK) ninpaths.o
  nntpget:	nntpget.o    $(BOTH)	; $(LINK) nntpget.o    $(STORELIBS)
--overchan:	overchan.o   $(BOTH)	; $(LINK) overchan.o   $(STORELIBS)
-+overchan:	overchan.o   $(BOTH)	; $(LINK) overchan.o   -Wl,-no-as-needed $(STORELIBS)
+-overchan:	overchan.o   $(BOTH)	; $(LINKDEPS) overchan.o $(STORELIBS)
++overchan:	overchan.o   $(BOTH)	; $(LINKDEPS) overchan.o -Wl,-no-as-needed $(STORELIBS)
  shlock:		shlock.o     $(LIBINN)	; $(LINK) shlock.o     $(INNLIBS)
  shrinkfile:	shrinkfile.o $(LIBINN)	; $(LINK) shrinkfile.o $(INNLIBS)
  
@@ -33,24 +33,28 @@
  grephistory:	grephistory.o  $(BOTH)   ; $(LINK) grephistory.o  $(STORELIBS)
  makedbz:	makedbz.o      $(LIBINN) ; $(LINK) makedbz.o      $(INNLIBS)
  makehistory:	makehistory.o  $(BOTH)   ; $(LINK) makehistory.o  $(STORELIBS)
---- inn-2.6.0/frontends/Makefile.orig	2016-01-27 17:55:05.173836912 +0100
-+++ inn-2.6.0/frontends/Makefile	2016-01-27 18:37:03.467064565 +0100
-@@ -75,12 +75,12 @@
- getlist:	getlist.o      $(LIBINN) ; $(LINK) getlist.o      $(INNLIBS)
+--- inn-2.6.4/frontends/Makefile.orig	2021-05-16 18:38:55.630118296 +0200
++++ inn-2.6.4/frontends/Makefile	2021-05-16 18:39:40.139877166 +0200
+@@ -81,16 +81,16 @@
  inews:		inews.o        $(LIBINN) ; $(LINK) inews.o        $(INNLIBS)
  innconfval:	innconfval.o   $(LIBINN) ; $(LINK) innconfval.o   $(INNLIBS)
--ovdb_init:	ovdb_init.o    $(BOTH)   ; $(LINK) ovdb_init.o    $(STORELIBS)
--ovdb_monitor:	ovdb_monitor.o $(BOTH)   ; $(LINK) ovdb_monitor.o $(STORELIBS)
--ovdb_server:	ovdb_server.o  $(BOTH)   ; $(LINK) ovdb_server.o  $(STORELIBS)
--ovdb_stat:	ovdb_stat.o    $(BOTH)   ; $(LINK) ovdb_stat.o    $(STORELIBS)
+ ovdb_init:	ovdb_init.o    $(BOTH)
+-	$(LINKDEPS) ovdb_init.o    $(STORELIBS)
++	$(LINKDEPS) ovdb_init.o    -Wl,-no-as-needed $(STORELIBS)
+ ovdb_monitor:	ovdb_monitor.o $(BOTH)
+-	$(LINKDEPS) ovdb_monitor.o $(STORELIBS)
++	$(LINKDEPS) ovdb_monitor.o -Wl,-no-as-needed $(STORELIBS)
+ ovdb_server:	ovdb_server.o  $(BOTH)
+-	$(LINKDEPS) ovdb_server.o  $(STORELIBS)
++	$(LINKDEPS) ovdb_server.o  -Wl,-no-as-needed $(STORELIBS)
+ ovdb_stat:	ovdb_stat.o    $(BOTH)
+-	$(LINKDEPS) ovdb_stat.o    $(STORELIBS)
 -rnews:		rnews.o        $(BOTH)   ; $(LINK) rnews.o        $(STORELIBS)
--sm:		sm.o           $(BOTH)   ; $(LINK) sm.o           $(STORELIBS)
-+ovdb_init:	ovdb_init.o    $(BOTH)   ; $(LINK) ovdb_init.o    -Wl,-no-as-needed $(STORELIBS)
-+ovdb_monitor:	ovdb_monitor.o $(BOTH)   ; $(LINK) ovdb_monitor.o -Wl,-no-as-needed $(STORELIBS)
-+ovdb_server:	ovdb_server.o  $(BOTH)   ; $(LINK) ovdb_server.o  -Wl,-no-as-needed $(STORELIBS)
-+ovdb_stat:	ovdb_stat.o    $(BOTH)   ; $(LINK) ovdb_stat.o    -Wl,-no-as-needed $(STORELIBS)
++	$(LINKDEPS) ovdb_stat.o    -Wl,-no-as-needed $(STORELIBS)
 +rnews:		rnews.o        $(BOTH)   ; $(LINK) rnews.o        -Wl,-no-as-needed $(STORELIBS)
-+sm:		sm.o           $(BOTH)   ; $(LINK) sm.o           -Wl,-no-as-needed $(STORELIBS)
+ sm:		sm.o           $(BOTH)
+-	$(LINKDEPS) sm.o           $(STORELIBS)
++	$(LINKDEPS) sm.o           -Wl,-no-as-needed $(STORELIBS)
  
  ovdb_init.o: ovdb_init.c
  	$(CC) $(CFLAGS) $(BDB_CPPFLAGS) -c $<
@@ -65,11 +69,11 @@
  
  config_y.c config_y.h: configfile.y
  	$(YACC) -d configfile.y
---- inn-2.6.0/storage/buffindexed/ovmethod.mk.orig	2016-01-27 17:55:05.177170246 +0100
-+++ inn-2.6.0/storage/buffindexed/ovmethod.mk	2016-01-27 18:38:18.517061418 +0100
+--- inn-2.6.4/storage/buffindexed/ovmethod.mk.orig	2021-05-16 18:41:59.082457783 +0200
++++ inn-2.6.4/storage/buffindexed/ovmethod.mk	2021-05-16 18:42:25.558981014 +0200
 @@ -5,4 +5,4 @@
  
  buffindexed/buffindexed_d: buffindexed/buffindexed_d.$(EXTOBJ) libstorage.$(EXTLIB) $(LIBHIST)
- 	$(LIBLD) $(LDFLAGS) -o $@ buffindexed/buffindexed_d.$(EXTOBJ) \
+ 	$(LIBLDDEPS) $(LDFLAGS) -o $@ buffindexed/buffindexed_d.$(EXTOBJ) \
 -	    $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
 +	    -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
