@@ -1,43 +1,7 @@
---- inn-2.6.4/doc/man/rnews.1.orig	2021-05-16 18:02:27.608638493 +0200
-+++ inn-2.6.4/doc/man/rnews.1	2021-05-16 18:06:02.730806409 +0200
-@@ -191,7 +191,7 @@
- .PP
- Otherwise, if the command is any other word and the \fB\-a\fR flag is not
- given, \fBrnews\fR will try to execute a program with that name, looking
--for it in the directory \fIpathbin\fR/rnews.libexec.  The rest of the
-+for it in the directory /usr/lib*/news/rnews .  The rest of the
- batch will be fed to that program's standard input, and the standard
- output from the program will be treated as if it were the original
- input to \fBrnews\fR.  \s-1INN\s0 comes with three such standard batch processors:
-@@ -210,7 +210,7 @@
- .IP "\fB\-a\fR" 4
- .IX Item "-a"
- By default, \fBrnews\fR looks for additional unpackers in the
--\&\fIrnews.libexec\fR sub-directory of \fIpathbin\fR (as set in \fIinn.conf\fR).
-+/usr/lib*/news/rnews directory (as set in \fIinn.conf\fR).
- If \fB\-a\fR is given, no additional batch processor will be used; only
- \&\f(CW\*(C`rnews\*(C'\fR and \f(CW\*(C`cunbatch\*(C'\fR will be recognized as valid batch commands.
- .IP "\fB\-b\fR" 4
---- inn-2.5.3/include/inn/paths.h.in.orig	2013-06-11 17:42:12.677373675 +0200
-+++ inn-2.5.3/include/inn/paths.h.in	2013-06-11 17:49:38.687364380 +0200
-@@ -22,12 +22,12 @@
- /* Default prefix path is pathbin. */
- #define INN_PATH_NNRPD                  "nnrpd"
- #define INN_PATH_NNTPD                  "nnrpd"
--#define INN_PATH_AUTHDIR                "auth"
-+#define INN_PATH_AUTHDIR                "@libdir@/news/auth"
- #define INN_PATH_AUTHDIR_GENERIC        "generic"
- #define INN_PATH_AUTHDIR_NOPASS         "resolv"
- #define INN_PATH_AUTHDIR_PASSWD         "passwd"
- #define INN_PATH_CTLINND                "ctlinnd"
--#define INN_PATH_RNEWSPROGS             "rnews.libexec"
-+#define INN_PATH_RNEWSPROGS             "@libdir@/news/rnews"
- 
- /* Default prefix path is pathfilter. */
- #define INN_PATH_PERL_STARTUP_INND      "startup_innd.pl"
---- inn-2.5.3/Makefile.global.in.orig	2013-06-11 17:54:53.957357808 +0200
-+++ inn-2.5.3/Makefile.global.in	2013-06-11 17:57:11.437354942 +0200
-@@ -250,7 +250,7 @@
+diff -urNp -x '*.orig' inn-2.6.4.org/Makefile.global.in inn-2.6.4/Makefile.global.in
+--- inn-2.6.4.org/Makefile.global.in	2021-01-21 22:53:07.000000000 +0100
++++ inn-2.6.4/Makefile.global.in	2021-09-02 23:41:48.986139529 +0200
+@@ -284,7 +284,7 @@ PATHTMP		= $(tmpdir)
  PATHAUTH	= $(PATHBIN)/auth
  PATHAUTHRESOLV	= $(PATHAUTH)/resolv
  PATHAUTHPASSWD	= $(PATHAUTH)/passwd
@@ -46,7 +10,7 @@
  PATHARCHIVE	= $(PATHSPOOL)/archive
  PATHARTICLES	= $(PATHSPOOL)/articles
  PATHINCOMING	= $(PATHSPOOL)/incoming
-@@ -282,8 +282,8 @@
+@@ -316,8 +316,8 @@ INEWSMODE	= @INEWSMODE@
  RNEWSMODE	= @RNEWSMODE@
  FILEMODE	= @FILEMODE@
  
@@ -55,33 +19,33 @@
 +OWNER		=
 +ROWNER		=
  
- INSTALL		= $(top)/support/install-sh -c
+ INSTALL		= $(top)/support/install-sh -p
  
---- inn-2.5.3/scripts/scanlogs.in.orig	2013-06-11 17:57:46.774020873 +0200
-+++ inn-2.5.3/scripts/scanlogs.in	2013-06-11 17:59:15.287352361 +0200
-@@ -10,7 +10,7 @@
- ##	norotate	Do not rotate logfiles.
- 
- ##  Directory where old log files are kept.
--OLD=${MOST_LOGS}/OLD
-+OLD=/var/log/archive/news
- 
- ##  Files defined in innshellvars.  We repeat them for clarity.
- ERRLOG=${MOST_LOGS}/errlog
---- inn-2.5.3/scripts/inncheck.in.orig	2013-06-11 17:59:47.974018346 +0200
-+++ inn-2.5.3/scripts/inncheck.in	2013-06-11 18:00:16.837351078 +0200
-@@ -44,7 +44,7 @@
-     'passwd.nntp',	"$INN::Config::pathetc/passwd.nntp",
-     'readers.conf',	"$INN::Config::pathetc/readers.conf",
-     'rnews',		"$INN::Config::rnews",
--    'rnewsprogs',	"$INN::Config::pathbin/rnews.libexec",
-+    'rnewsprogs',	"@libdir@/news/rnews",
-     'spooltemp',	"$INN::Config::pathtmp",
-     'spool',		"$INN::Config::patharticles",
-     'spoolnews',	"$INN::Config::pathincoming",
---- inn-2.5.3/frontends/Makefile.orig	2013-06-11 17:59:47.977351680 +0200
-+++ inn-2.5.3/frontends/Makefile	2013-06-11 18:01:39.537349354 +0200
-@@ -36,11 +36,11 @@
+diff -urNp -x '*.orig' inn-2.6.4.org/doc/man/rnews.1 inn-2.6.4/doc/man/rnews.1
+--- inn-2.6.4.org/doc/man/rnews.1	2021-01-21 22:53:07.000000000 +0100
++++ inn-2.6.4/doc/man/rnews.1	2021-09-02 23:41:48.986139529 +0200
+@@ -191,7 +191,7 @@ is more widely available, due to old pat
+ .PP
+ Otherwise, if the command is any other word and the \fB\-a\fR flag is not
+ given, \fBrnews\fR will try to execute a program with that name, looking
+-for it in the directory \fIpathbin\fR/rnews.libexec.  The rest of the
++for it in the directory /usr/lib*/news/rnews .  The rest of the
+ batch will be fed to that program's standard input, and the standard
+ output from the program will be treated as if it were the original
+ input to \fBrnews\fR.  \s-1INN\s0 comes with three such standard batch processors:
+@@ -210,7 +210,7 @@ It invokes \fBgzip\fR and should be used
+ .IP "\fB\-a\fR" 4
+ .IX Item "-a"
+ By default, \fBrnews\fR looks for additional unpackers in the
+-\&\fIrnews.libexec\fR sub-directory of \fIpathbin\fR (as set in \fIinn.conf\fR).
++/usr/lib*/news/rnews directory (as set in \fIinn.conf\fR).
+ If \fB\-a\fR is given, no additional batch processor will be used; only
+ \&\f(CW\*(C`rnews\*(C'\fR and \f(CW\*(C`cunbatch\*(C'\fR will be recognized as valid batch commands.
+ .IP "\fB\-b\fR" 4
+diff -urNp -x '*.orig' inn-2.6.4.org/frontends/Makefile inn-2.6.4/frontends/Makefile
+--- inn-2.6.4.org/frontends/Makefile	2021-01-21 22:53:07.000000000 +0100
++++ inn-2.6.4/frontends/Makefile	2021-09-02 23:41:48.986139529 +0200
+@@ -38,11 +38,11 @@ install: all
  	for F in getlist innconfval sm ; do \
  	    $(LI_XPUB) $$F $D$(PATHBIN)/$$F ; \
  	done
@@ -98,3 +62,45 @@
  
  bootstrap: $(MAN)
  
+diff -urNp -x '*.orig' inn-2.6.4.org/include/inn/paths.h.in inn-2.6.4/include/inn/paths.h.in
+--- inn-2.6.4.org/include/inn/paths.h.in	2021-01-21 22:53:07.000000000 +0100
++++ inn-2.6.4/include/inn/paths.h.in	2021-09-02 23:41:48.986139529 +0200
+@@ -22,12 +22,12 @@
+ /* Default prefix path is pathbin. */
+ #define INN_PATH_NNRPD                  "nnrpd"
+ #define INN_PATH_NNTPD                  "nnrpd"
+-#define INN_PATH_AUTHDIR                "auth"
++#define INN_PATH_AUTHDIR                "@libdir@/news/auth"
+ #define INN_PATH_AUTHDIR_GENERIC        "generic"
+ #define INN_PATH_AUTHDIR_NOPASS         "resolv"
+ #define INN_PATH_AUTHDIR_PASSWD         "passwd"
+ #define INN_PATH_CTLINND                "ctlinnd"
+-#define INN_PATH_RNEWSPROGS             "rnews.libexec"
++#define INN_PATH_RNEWSPROGS             "@libdir@/news/rnews"
+ 
+ /* Default prefix path is pathfilter. */
+ #define INN_PATH_PERL_STARTUP_INND      "startup_innd.pl"
+diff -urNp -x '*.orig' inn-2.6.4.org/scripts/inncheck.in inn-2.6.4/scripts/inncheck.in
+--- inn-2.6.4.org/scripts/inncheck.in	2021-01-21 22:53:07.000000000 +0100
++++ inn-2.6.4/scripts/inncheck.in	2021-09-02 23:41:48.986139529 +0200
+@@ -44,7 +44,7 @@ my %paths = (
+     'passwd.nntp',	"$INN::Config::pathetc/passwd.nntp",
+     'readers.conf',	"$INN::Config::pathetc/readers.conf",
+     'rnews',		"$INN::Config::rnews",
+-    'rnewsprogs',	"$INN::Config::pathbin/rnews.libexec",
++    'rnewsprogs',	"@libdir@/news/rnews",
+     'spooltemp',	"$INN::Config::pathtmp",
+     'spool',		"$INN::Config::patharticles",
+     'spoolnews',	"$INN::Config::pathincoming",
+diff -urNp -x '*.orig' inn-2.6.4.org/scripts/scanlogs.in inn-2.6.4/scripts/scanlogs.in
+--- inn-2.6.4.org/scripts/scanlogs.in	2021-01-21 22:53:07.000000000 +0100
++++ inn-2.6.4/scripts/scanlogs.in	2021-09-02 23:41:48.986139529 +0200
+@@ -10,7 +10,7 @@
+ ##	norotate	Do not rotate logfiles.
+ 
+ ##  Directory where old log files are kept.
+-OLD=${MOST_LOGS}/OLD
++OLD=/var/log/archive/news
+ 
+ ##  Files defined in innshellvars.  We repeat them for clarity.
+ ERRLOG=${MOST_LOGS}/errlog

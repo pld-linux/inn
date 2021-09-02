@@ -1,8 +1,9 @@
---- inn-2.6.3/Makefile.global.in.orig	2020-11-07 17:33:18.128984967 +0100
-+++ inn-2.6.3/Makefile.global.in	2020-11-07 18:30:28.819400995 +0100
-@@ -337,7 +337,7 @@
+diff -urNp -x '*.orig' inn-2.6.4.org/Makefile.global.in inn-2.6.4/Makefile.global.in
+--- inn-2.6.4.org/Makefile.global.in	2021-09-02 23:41:49.119470657 +0200
++++ inn-2.6.4/Makefile.global.in	2021-09-02 23:41:49.199469335 +0200
+@@ -344,7 +344,7 @@ INSTALL		= $(top)/support/install-sh -p
  
- BACKUP_OPTION	= -B .OLD
+ BACKUP_OPTION	= -S .OLD
  
 -LI_SPRI		= $(LIBTOOLINST) $(INSTALL) -o root -g $(RUNASGROUP) -m 4550 $(BACKUP_OPTION)
 +LI_SPRI		= $(LIBTOOLINST) $(INSTALL) -m 4550 $(BACKUP_OPTION)
