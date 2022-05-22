@@ -12,12 +12,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.6.4
-Release:	3
+Version:	2.6.5
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	720aafc4c1b6c22f37356685d7e4747c
+# Source0-md5:	25aa0b6d88f941846463e27b20d8de43
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -320,9 +320,6 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,news/pgp,rc.d/init.d} \
 	PATHAUTHPASSWD=%{_libdir}/news/auth/passwd \
 	PATHAUTHRESOLV=%{_libdir}/news/auth/resolv
 
-# avoid conflict with glibc (synced with man-pages >= 5.09)
-%{__mv} $RPM_BUILD_ROOT%{_mandir}/man3/list.{3,3inn}
-
 cp -p samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
 touch $RPM_BUILD_ROOT%{_sysconfdir}/motd.{innd,nnrpd}
 
@@ -410,7 +407,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 
 %files
 %defattr(644,root,root,755)
-%doc CONTRIBUTORS ChangeLog INSTALL LICENSE NEWS README TODO doc/[Icehs]*
+%doc CONTRIBUTORS INSTALL LICENSE NEWS README TODO doc/[Icehs]*
 %attr(700,news,news) %dir /home/services/news
 
 # DB
@@ -639,6 +636,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man5/inn.conf.5*
 %{_mandir}/man5/inn-radius.conf.5*
 %{_mandir}/man5/innfeed.conf.5*
+%{_mandir}/man5/innreport.conf.5*
 %{_mandir}/man5/innwatch.ctl.5*
 %{_mandir}/man5/localgroups.5*
 %{_mandir}/man5/moderators.5*
@@ -706,9 +704,11 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man8/rc.news.8*
 %{_mandir}/man8/scanlogs.8*
 %{_mandir}/man8/scanspool.8*
+%{_mandir}/man8/send-ihave.8*
 %{_mandir}/man8/send-nntp.8*
 %{_mandir}/man8/send-uucp.8*
 %{_mandir}/man8/sendinpaths.8*
+%{_mandir}/man8/sendxbatches.8*
 %{_mandir}/man8/tally.control.8*
 %{_mandir}/man8/tdx-util.8*
 %{_mandir}/man8/tinyleaf.8*
@@ -734,18 +734,11 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_libdir}/libinnhist.la
 %{_libdir}/libstorage.la
 %{_includedir}/inn
-%{_mandir}/man3/clientlib.3*
-%{_mandir}/man3/dbz.3*
-%{_mandir}/man3/inndcomm.3*
 %{_mandir}/man3/libauth.3*
 %{_mandir}/man3/libinn.3*
+%{_mandir}/man3/libinn_*.3*
 %{_mandir}/man3/libinnhist.3*
 %{_mandir}/man3/libstorage.3*
-%{_mandir}/man3/list.3inn*
-%{_mandir}/man3/qio.3*
-# XXX: too generic name?
-%{_mandir}/man3/tst.3*
-%{_mandir}/man3/uwildmat.3*
 
 %files static
 %defattr(644,root,root,755)

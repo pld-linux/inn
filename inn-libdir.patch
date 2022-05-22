@@ -1,6 +1,6 @@
---- inn-2.5.3/samples/innreport.conf.in.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/samples/innreport.conf.in	2013-06-14 19:59:36.165132651 +0200
-@@ -10,7 +10,7 @@
+--- inn-2.6.5/samples/innreport.conf.in.orig	2022-05-22 20:09:19.176053815 +0200
++++ inn-2.6.5/samples/innreport.conf.in	2022-05-22 20:10:45.795584557 +0200
+@@ -9,7 +9,7 @@
  
  # Default parameters
  section default {
@@ -8,7 +8,7 @@
 +	libpath         "@innlibdir@";
  	logpath		"@LOGDIR@";
  	unknown		true;        # want unknown entries.
-         html-unknown    true;        # want unknown entries in HTML reports. 
+         html-unknown    true;        # want unknown entries in HTML reports.
 --- inn-2.5.3/scripts/innshellvars.tcl.in.orig	2012-06-15 20:25:36.000000000 +0200
 +++ inn-2.5.3/scripts/innshellvars.tcl.in	2013-06-14 20:10:44.008452064 +0200
 @@ -23,7 +23,7 @@
