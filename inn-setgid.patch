@@ -1,8 +1,8 @@
---- inn-2.6.3/lib/newsuser.c.orig	2019-02-07 16:02:22.000000000 +0100
-+++ inn-2.6.3/lib/newsuser.c	2020-11-07 18:31:54.357153294 +0100
-@@ -100,6 +100,8 @@
-         die ("must be run as %s group",
-              innconf != NULL ? innconf->runasgroup : RUNASGROUP);
+--- inn-2.7.0/lib/newsuser.c.orig	2022-10-10 20:51:16.558836420 +0200
++++ inn-2.7.0/lib/newsuser.c	2022-10-10 20:57:21.660191829 +0200
+@@ -101,6 +101,8 @@ ensure_news_grp(bool may_setgid)
+         die("must be run as %s group",
+             innconf != NULL ? innconf->runasgroup : RUNASGROUP);
      }
 +    const char *runasuser = innconf != NULL ? innconf->runasuser : RUNASUSER;
 +    initgroups(runasuser, gid);

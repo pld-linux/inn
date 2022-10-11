@@ -69,11 +69,11 @@
  
  config_y.c config_y.h: configfile.y
  	$(YACC) -d configfile.y
---- inn-2.6.4/storage/buffindexed/ovmethod.mk.orig	2021-05-16 18:41:59.082457783 +0200
-+++ inn-2.6.4/storage/buffindexed/ovmethod.mk	2021-05-16 18:42:25.558981014 +0200
-@@ -5,4 +5,4 @@
+--- inn-2.7.0/storage/buffindexed/ovmethod.mk.orig	2022-10-10 21:10:50.399143848 +0200
++++ inn-2.7.0/storage/buffindexed/ovmethod.mk	2022-10-10 21:11:54.148798486 +0200
+@@ -5,4 +5,4 @@ buffindexed/buffindexed_d.$(EXTOBJ): buf
  
- buffindexed/buffindexed_d: buffindexed/buffindexed_d.$(EXTOBJ) libstorage.$(EXTLIB) $(LIBHIST)
+ buffindexed/buffindexed_d: buffindexed/buffindexed_d.$(EXTOBJ) libinnstorage.$(EXTLIB) $(LIBHIST)
  	$(LIBLDDEPS) $(LDFLAGS) -o $@ buffindexed/buffindexed_d.$(EXTOBJ) \
 -	    $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)
 +	    -Wl,-no-as-needed $(LIBSTORAGE) $(LIBHIST) $(LIBINN) $(STORAGE_LIBS) $(LIBS)

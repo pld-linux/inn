@@ -1,14 +1,14 @@
---- inn-2.6.5/samples/innreport.conf.in.orig	2022-05-22 20:09:19.176053815 +0200
-+++ inn-2.6.5/samples/innreport.conf.in	2022-05-22 20:10:45.795584557 +0200
-@@ -9,7 +9,7 @@
+--- inn-2.7.0/samples/innreport.conf.in.orig	2022-10-10 21:12:12.735364461 +0200
++++ inn-2.7.0/samples/innreport.conf.in	2022-10-10 21:13:59.404786583 +0200
+@@ -5,7 +5,7 @@
+ ##  See the innreport.conf man page for more information.
  
- # Default parameters
  section default {
--	libpath         "@libdir@";
-+	libpath         "@innlibdir@";
- 	logpath		"@LOGDIR@";
- 	unknown		true;        # want unknown entries.
-         html-unknown    true;        # want unknown entries in HTML reports.
+-    libpath            "@libdir@";
++    libpath            "@innlibdir@";
+     logpath            "@LOGDIR@";
+     unknown            true;        # want unknown entries.
+     html-unknown       true;        # want unknown entries in HTML reports.
 --- inn-2.5.3/scripts/innshellvars.tcl.in.orig	2012-06-15 20:25:36.000000000 +0200
 +++ inn-2.5.3/scripts/innshellvars.tcl.in	2013-06-14 20:10:44.008452064 +0200
 @@ -23,7 +23,7 @@
@@ -60,10 +60,10 @@
  PATHLIBPERL	= @LIBPERLDIR@
  PATHCONTROL	= @CONTROLDIR@
  PATHFILTER	= @FILTERDIR@
---- inn-2.5.3/perl/INN/Config.pm.in.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/perl/INN/Config.pm.in	2013-06-14 21:06:40.531715437 +0200
-@@ -37,7 +37,7 @@
- $spooltemp $path);
+--- inn-2.7.0/perl/INN/Config.pm.in.orig	2022-10-10 21:12:12.742031092 +0200
++++ inn-2.7.0/perl/INN/Config.pm.in	2022-10-10 21:19:48.819560307 +0200
+@@ -31,7 +31,7 @@ my @DIRVAR = qw($prefix $exec_prefix $ne
+   $spooltemp $path);
  our $newshome = $pathnews;
  our $home = $pathnews;
 -our $newslib = "@libdir@";
@@ -71,9 +71,9 @@
  our $newsbin = $pathbin;
  our $controlprogs = $pathcontrol;
  our $newslbin = "$pathnews/local";
---- inn-2.5.3/support/fixscript.in.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/support/fixscript.in	2013-06-14 21:08:38.721712975 +0200
-@@ -25,6 +25,7 @@
+--- inn-2.7.0/support/fixscript.in.orig	2022-07-10 15:00:35.000000000 +0200
++++ inn-2.7.0/support/fixscript.in	2022-10-10 21:51:37.475886895 +0200
+@@ -23,6 +23,7 @@ PERLPATH='@PERL@'
  prefix="@prefix@"
  exec_prefix="@exec_prefix@"
  libdir="@libdir@"
@@ -81,18 +81,18 @@
  libperldir="@LIBPERLDIR@"
  
  # We can probably just assume sed is on the path, but since we have it, we may
-@@ -60,7 +61,7 @@
+@@ -58,7 +59,7 @@ interpreter=$(head -n 1 "$input")
  case "$interpreter" in
- */sh|*SH*)
+ */sh | *SH*)
      path="@SHELL@"
 -    lib=". $libdir/innshellvars"
 +    lib=". $innlibdir/innshellvars"
      ;;
- */perl*|*PERL*)
-     path=`echo "$interpreter" | sed 's%^#! *[^ ][^ ]*%'"$PERLPATH%"`
---- inn-2.5.3/support/fixconfig.in.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/support/fixconfig.in	2013-06-14 21:09:38.871711720 +0200
-@@ -17,6 +17,7 @@
+ */perl* | *PERL*)
+     path=$(echo "$interpreter" | sed 's%^#! *[^ ][^ ]*%'"$PERLPATH%")
+--- inn-2.7.0/support/fixconfig.in.orig	2022-07-10 15:00:35.000000000 +0200
++++ inn-2.7.0/support/fixconfig.in	2022-10-10 21:52:24.828963695 +0200
+@@ -15,6 +15,7 @@ exec_prefix=@exec_prefix@
  bindir=@bindir@
  libexecdir=@libexecdir@
  libdir=@libdir@
@@ -100,14 +100,14 @@
  sbindir=@sbindir@
  sysconfdir=@sysconfdir@
  
-@@ -59,6 +60,7 @@
-      -e "s,@bindir[@],$bindir,g" \
-      -e "s,@libexecdir[@],$libexecdir,g" \
-      -e "s,@libdir[@],$libdir,g" \
-+     -e "s,@innlibdir[@],$innlibdir,g" \
-      -e "s,@sbindir[@],$sbindir,g" \
-      -e "s,@sysconfdir[@],$sysconfdir,g" \
-      -e "s,@CONTROLDIR[@],$CONTROLDIR,g" \
+@@ -57,6 +58,7 @@ $SED -e "s,@prefix[@],$prefix,g" \
+     -e "s,@bindir[@],$bindir,g" \
+     -e "s,@libexecdir[@],$libexecdir,g" \
+     -e "s,@libdir[@],$libdir,g" \
++    -e "s,@innlibdir[@],$innlibdir,g" \
+     -e "s,@sbindir[@],$sbindir,g" \
+     -e "s,@sysconfdir[@],$sysconfdir,g" \
+     -e "s,@CONTROLDIR[@],$CONTROLDIR,g" \
 --- inn-2.5.3/m4/paths.m4.orig	2012-06-15 20:25:36.000000000 +0200
 +++ inn-2.5.3/m4/paths.m4	2013-06-14 21:13:15.238373880 +0200
 @@ -47,6 +47,9 @@
@@ -120,12 +120,12 @@
  
  dnl Some additional paths used by inn/paths.h.
  eval PATH_CONFIG="$sysconfdir"
---- inn-2.5.3/scripts/Makefile.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/scripts/Makefile	2013-06-14 21:14:08.268372773 +0200
-@@ -27,7 +27,7 @@
+--- inn-2.7.0/scripts/Makefile.orig	2022-10-10 21:53:03.162089360 +0200
++++ inn-2.7.0/scripts/Makefile	2022-10-10 21:53:27.915288594 +0200
+@@ -25,7 +25,7 @@ install: all
  	done
- 	for F in innreport_inn.pm innshellvars innshellvars.pl \
- 	         innshellvars.tcl ; do \
+ 	for F in innreport-display.conf innreport_inn.pm \
+ 	         innshellvars innshellvars.pl innshellvars.tcl ; do \
 -	    $(CP_RPUB) $$F $D$(PATHLIB)/$$F ; \
 +	    $(CP_RPUB) $$F $D$(PATHINNLIB)/$$F ; \
  	done

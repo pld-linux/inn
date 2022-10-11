@@ -6,7 +6,7 @@ diff -urNp -x '*.orig' inn-2.6.4.org/Makefile.global.in inn-2.6.4/Makefile.globa
  PATHAUTHRESOLV	= $(PATHAUTH)/resolv
  PATHAUTHPASSWD	= $(PATHAUTH)/passwd
 -PATHRNEWS	= $(PATHBIN)/rnews.libexec
-+PATHRNEWS	= @libdir@/news/rnews
++PATHRNEWS	= @libexecdir@/news/rnews
  PATHARCHIVE	= $(PATHSPOOL)/archive
  PATHARTICLES	= $(PATHSPOOL)/articles
  PATHINCOMING	= $(PATHSPOOL)/incoming
@@ -62,41 +62,38 @@ diff -urNp -x '*.orig' inn-2.6.4.org/frontends/Makefile inn-2.6.4/frontends/Make
  
  bootstrap: $(MAN)
  
-diff -urNp -x '*.orig' inn-2.6.4.org/include/inn/paths.h.in inn-2.6.4/include/inn/paths.h.in
---- inn-2.6.4.org/include/inn/paths.h.in	2021-01-21 22:53:07.000000000 +0100
-+++ inn-2.6.4/include/inn/paths.h.in	2021-09-02 23:41:48.986139529 +0200
+--- inn-2.7.0/include/inn/paths.h.in.orig	2022-10-10 08:15:44.051090361 +0200
++++ inn-2.7.0/include/inn/paths.h.in	2022-10-10 20:40:27.209020917 +0200
 @@ -22,12 +22,12 @@
  /* Default prefix path is pathbin. */
- #define INN_PATH_NNRPD                  "nnrpd"
- #define INN_PATH_NNTPD                  "nnrpd"
--#define INN_PATH_AUTHDIR                "auth"
-+#define INN_PATH_AUTHDIR                "@libdir@/news/auth"
- #define INN_PATH_AUTHDIR_GENERIC        "generic"
- #define INN_PATH_AUTHDIR_NOPASS         "resolv"
- #define INN_PATH_AUTHDIR_PASSWD         "passwd"
- #define INN_PATH_CTLINND                "ctlinnd"
--#define INN_PATH_RNEWSPROGS             "rnews.libexec"
-+#define INN_PATH_RNEWSPROGS             "@libdir@/news/rnews"
+ #define INN_PATH_NNRPD             "nnrpd"
+ #define INN_PATH_NNTPD             "nnrpd"
+-#define INN_PATH_AUTHDIR           "auth"
++#define INN_PATH_AUTHDIR           "@libexecdir@/news/auth"
+ #define INN_PATH_AUTHDIR_GENERIC   "generic"
+ #define INN_PATH_AUTHDIR_NOPASS    "resolv"
+ #define INN_PATH_AUTHDIR_PASSWD    "passwd"
+ #define INN_PATH_CTLINND           "ctlinnd"
+-#define INN_PATH_RNEWSPROGS        "rnews.libexec"
++#define INN_PATH_RNEWSPROGS        "@libexecdir@/news/rnews"
  
  /* Default prefix path is pathfilter. */
- #define INN_PATH_PERL_STARTUP_INND      "startup_innd.pl"
-diff -urNp -x '*.orig' inn-2.6.4.org/scripts/inncheck.in inn-2.6.4/scripts/inncheck.in
---- inn-2.6.4.org/scripts/inncheck.in	2021-01-21 22:53:07.000000000 +0100
-+++ inn-2.6.4/scripts/inncheck.in	2021-09-02 23:41:48.986139529 +0200
-@@ -44,7 +44,7 @@ my %paths = (
-     'passwd.nntp',	"$INN::Config::pathetc/passwd.nntp",
-     'readers.conf',	"$INN::Config::pathetc/readers.conf",
-     'rnews',		"$INN::Config::rnews",
--    'rnewsprogs',	"$INN::Config::pathbin/rnews.libexec",
-+    'rnewsprogs',	"@libdir@/news/rnews",
-     'spooltemp',	"$INN::Config::pathtmp",
-     'spool',		"$INN::Config::patharticles",
-     'spoolnews',	"$INN::Config::pathincoming",
-diff -urNp -x '*.orig' inn-2.6.4.org/scripts/scanlogs.in inn-2.6.4/scripts/scanlogs.in
---- inn-2.6.4.org/scripts/scanlogs.in	2021-01-21 22:53:07.000000000 +0100
-+++ inn-2.6.4/scripts/scanlogs.in	2021-09-02 23:41:48.986139529 +0200
-@@ -10,7 +10,7 @@
- ##	norotate	Do not rotate logfiles.
+ #define INN_PATH_PERL_STARTUP_INND "startup_innd.pl"
+--- inn-2.7.0/scripts/inncheck.in.orig	2022-10-10 20:48:52.692949142 +0200
++++ inn-2.7.0/scripts/inncheck.in	2022-10-10 20:50:16.755827068 +0200
+@@ -45,7 +45,7 @@ my %paths = (
+     'passwd.nntp'       => "$INN::Config::pathetc/passwd.nntp",
+     'readers.conf'      => "$INN::Config::pathetc/readers.conf",
+     'rnews'             => "$INN::Config::rnews",
+-    'rnewsprogs'        => "$INN::Config::pathbin/rnews.libexec",
++    'rnewsprogs'        => "@libexecdir@/news/rnews",
+     'spooltemp'         => "$INN::Config::pathtmp",
+     'spool'             => "$INN::Config::patharticles",
+     'spoolnews'         => "$INN::Config::pathincoming",
+--- inn-2.7.0/scripts/scanlogs.in.orig	2022-10-10 20:48:52.692949142 +0200
++++ inn-2.7.0/scripts/scanlogs.in	2022-10-10 20:51:03.085576078 +0200
+@@ -8,7 +8,7 @@
+ ##      norotate      Do not rotate logfiles.
  
  ##  Directory where old log files are kept.
 -OLD=${MOST_LOGS}/OLD

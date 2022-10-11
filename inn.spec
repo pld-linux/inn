@@ -12,12 +12,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.6.5
-Release:	2
+Version:	2.7.0
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	25aa0b6d88f941846463e27b20d8de43
+# Source0-md5:	a052b6efda2457a9078f330b5134b63e
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -42,16 +42,22 @@ BuildRequires:	bison
 BuildRequires:	cyrus-sasl-devel >= 2
 BuildRequires:	db-devel >= 4.4
 BuildRequires:	flex >= 2.5.37
+# or MIT krb5-devel >= 1.6.1
 BuildRequires:	heimdal-devel
+BuildRequires:	libcanlock-devel >= 3.3.0
 BuildRequires:	libtool >= 2:2
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	pam-devel
 BuildRequires:	perl-devel >= 1:5.8.0
+BuildRequires:	pkgconfig
 %if %{with python}
 %{!?with_python3:BuildRequires:	python-devel >= 1:2.3}
 %{?with_python3:BuildRequires:	python3-devel >= 1:3.3}
 %endif
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.663
+BuildRequires:	sqlite3-devel >= 3.8.2
+BuildRequires:	systemd-devel
 BuildRequires:	zlib-devel
 Requires(post):	/bin/kill
 Requires(post):	/usr/bin/getent
@@ -64,6 +70,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	awk
 Requires:	cleanfeed >= 0.95.7b-4
 Requires:	crondaemon
+Requires:	libcanlock >= 3.3.0
 Requires:	procps
 Requires:	psmisc >= 20.1
 Requires:	rc-scripts >= 0.4.1.23
@@ -78,7 +85,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/news
 
-%define		skip_post_check_so	libstorage.so.*
+%define		skip_post_check_so	libinnstorage.so.*
 # /usr/bin/pullnews doesn't provide perl(Net::NNTP) - perl-libnet does.
 %define		_noautoprov_perl	Net::NNTP
 # it's necessary only for sample nnrpd_auth.pl hook
@@ -302,7 +309,7 @@ cp -f /usr/share/automake/config.* support
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,news/pgp,rc.d/init.d} \
-	$RPM_BUILD_ROOT%{_libdir}/news/auth/generic \
+	$RPM_BUILD_ROOT%{_libexecdir}/news/auth/generic \
 	$RPM_BUILD_ROOT%{_datadir}/news/auth \
 	$RPM_BUILD_ROOT%{_mandir}/pl/man{1,8} \
 	$RPM_BUILD_ROOT/var/lib/news/backoff \
@@ -316,9 +323,9 @@ install -d $RPM_BUILD_ROOT/etc/{cron.d,logrotate.d,news/pgp,rc.d/init.d} \
 	BACKUP_OPTION= \
 	PATHFILTER=%{_datadir}/news/filter \
 	PATHCONTROL=%{_datadir}/news/control \
-	PATHRNEWS=%{_libdir}/news/rnews \
-	PATHAUTHPASSWD=%{_libdir}/news/auth/passwd \
-	PATHAUTHRESOLV=%{_libdir}/news/auth/resolv
+	PATHRNEWS=%{_libexecdir}/news/rnews \
+	PATHAUTHPASSWD=%{_libexecdir}/news/auth/passwd \
+	PATHAUTHRESOLV=%{_libexecdir}/news/auth/resolv
 
 cp -p samples/readers.conf $RPM_BUILD_ROOT%{_sysconfdir}/readers.conf
 touch $RPM_BUILD_ROOT%{_sysconfdir}/motd.{innd,nnrpd}
@@ -463,6 +470,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/incoming.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inn.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inn-radius.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/inn-secrets.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innfeed.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innreport.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/innshellvars.local
@@ -481,6 +489,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nntpsend.ctl
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nocem.ctl
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ovdb.conf
+%attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ovsqlite.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/passwd.nntp
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/readers.conf
 %attr(640,root,news) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/send-uucp.cf
@@ -489,14 +498,14 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,news) %dir %{_sysconfdir}/pgp
 
 %attr(755,root,news) %dir %{_datadir}/news
-%dir %{_datadir}/news/control
-%dir %{_datadir}/news/filter
 
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innreport-display.conf
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innreport_inn.pm
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars.pl
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/innshellvars.tcl
 
+%dir %{_datadir}/news/filter
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/INN.py
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/filter_nnrpd.pl
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/nnrpd.py
@@ -507,30 +516,34 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/nnrpd_dynamic.py
 %config(noreplace) %verify(not md5 mtime size) %{_datadir}/news/filter/startup_innd.pl
 
+%dir %{_datadir}/news/control
 %attr(755,root,root) %{_datadir}/news/control/checkgroups.pl
 %attr(755,root,root) %{_datadir}/news/control/ihave.pl
 %attr(755,root,root) %{_datadir}/news/control/newgroup.pl
 %attr(755,root,root) %{_datadir}/news/control/rmgroup.pl
 %attr(755,root,root) %{_datadir}/news/control/sendme.pl
-%attr(755,root,root) %{_datadir}/news/control/sendsys.pl
-%attr(755,root,root) %{_datadir}/news/control/senduuname.pl
-%attr(755,root,root) %{_datadir}/news/control/version.pl
 
 %dir %{perl_vendorlib}/INN
 %{perl_vendorlib}/INN/Config.pm
 %dir %{perl_vendorlib}/INN/Utils
 %{perl_vendorlib}/INN/Utils/Shlock.pm
 
-%attr(755,root,news) %dir %{_libdir}/news
-%dir %{_libdir}/news/auth
-%dir %{_libdir}/news/auth/generic
-%dir %{_libdir}/news/auth/passwd
-%dir %{_libdir}/news/auth/resolv
-%dir %{_libdir}/news/rnews
-
-%attr(755,root,root) %{_libdir}/news/auth/passwd/*
-%attr(755,root,root) %{_libdir}/news/auth/resolv/*
-%attr(755,root,root) %{_libdir}/news/rnews/*
+%attr(755,root,news) %dir %{_libexecdir}/news
+%dir %{_libexecdir}/news/auth
+%dir %{_libexecdir}/news/auth/generic
+%dir %{_libexecdir}/news/auth/passwd
+%attr(755,root,root) %{_libexecdir}/news/auth/passwd/auth_krb5
+%attr(755,root,root) %{_libexecdir}/news/auth/passwd/ckpasswd
+%attr(755,root,root) %{_libexecdir}/news/auth/passwd/radius
+%dir %{_libexecdir}/news/auth/resolv
+%attr(755,root,root) %{_libexecdir}/news/auth/resolv/domain
+%attr(755,root,root) %{_libexecdir}/news/auth/resolv/ident
+%dir %{_libexecdir}/news/rnews
+%attr(755,root,root) %{_libexecdir}/news/rnews/bunbatch
+%attr(755,root,root) %{_libexecdir}/news/rnews/c7unbatch
+%attr(755,root,root) %{_libexecdir}/news/rnews/decode
+%attr(755,root,root) %{_libexecdir}/news/rnews/encode
+%attr(755,root,root) %{_libexecdir}/news/rnews/gunbatch
 
 # BINARIES
 %attr(755,root,root) %{_bindir}/actmerge
@@ -553,7 +566,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/expireover
 %attr(755,root,root) %{_bindir}/expirerm
 %attr(755,root,root) %{_bindir}/fastrm
-%attr(755,root,root) %{_bindir}/filechan
+%attr(755,root,root) %{_bindir}/gencancel
 %attr(755,root,root) %{_bindir}/getlist
 %attr(755,root,root) %{_bindir}/grephistory
 %attr(755,root,root) %{_bindir}/imapfeed
@@ -583,6 +596,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/nntpsend
 %attr(755,root,root) %{_bindir}/ovdb_*
 %attr(755,root,root) %{_bindir}/overchan
+%attr(755,root,root) %{_bindir}/ovsqlite-server
 %attr(755,root,root) %{_bindir}/perl-nocem
 %attr(755,root,root) %{_bindir}/pgpverify
 %attr(755,root,root) %{_bindir}/procbatch
@@ -592,13 +606,11 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/scanlogs
 %attr(755,root,root) %{_bindir}/scanspool
 %attr(755,root,root) %{_bindir}/send-ihave
-%attr(755,root,root) %{_bindir}/send-nntp
 %attr(755,root,root) %{_bindir}/send-uucp
 %attr(755,root,root) %{_bindir}/sendinpaths
 %attr(755,root,root) %{_bindir}/sendxbatches
 %attr(755,root,root) %{_bindir}/shlock
 %attr(755,root,root) %{_bindir}/shrinkfile
-%attr(755,root,root) %{_bindir}/signcontrol
 %attr(755,root,root) %{_bindir}/simpleftp
 %attr(755,root,root) %{_bindir}/sm
 %attr(755,root,root) %{_bindir}/tally.control
@@ -609,6 +621,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 # MAN
 %{_mandir}/man1/convdate.1*
 %{_mandir}/man1/fastrm.1*
+%{_mandir}/man1/gencancel.1*
 %{_mandir}/man1/getlist.1*
 %{_mandir}/man1/grephistory.1*
 %{_mandir}/man1/innconfval.1*
@@ -635,6 +648,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man5/incoming.conf.5*
 %{_mandir}/man5/inn.conf.5*
 %{_mandir}/man5/inn-radius.conf.5*
+%{_mandir}/man5/inn-secrets.conf.5*
 %{_mandir}/man5/innfeed.conf.5*
 %{_mandir}/man5/innreport.conf.5*
 %{_mandir}/man5/innwatch.ctl.5*
@@ -650,6 +664,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man5/nntpsend.ctl.5*
 %{_mandir}/man5/nocem.ctl.5*
 %{_mandir}/man5/ovdb.5*
+%{_mandir}/man5/ovsqlite.5*
 %{_mandir}/man5/passwd.nntp.5*
 %{_mandir}/man5/readers.conf.5*
 %{_mandir}/man5/storage.conf.5*
@@ -671,7 +686,6 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man8/expire.8*
 %{_mandir}/man8/expireover.8*
 %{_mandir}/man8/expirerm.8*
-%{_mandir}/man8/filechan.8*
 %{_mandir}/man8/ident.8*
 %{_mandir}/man8/imapfeed.8*
 %{_mandir}/man8/innbind.8*
@@ -697,6 +711,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man8/nntpsend.8*
 %{_mandir}/man8/ovdb_*.8*
 %{_mandir}/man8/overchan.8*
+%{_mandir}/man8/ovsqlite-server.8*
 %{_mandir}/man8/perl-nocem.8*
 %{_mandir}/man8/procbatch.8*
 %{_mandir}/man8/prunehistory.8*
@@ -705,7 +720,6 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man8/scanlogs.8*
 %{_mandir}/man8/scanspool.8*
 %{_mandir}/man8/send-ihave.8*
-%{_mandir}/man8/send-nntp.8*
 %{_mandir}/man8/send-uucp.8*
 %{_mandir}/man8/sendinpaths.8*
 %{_mandir}/man8/sendxbatches.8*
@@ -719,32 +733,32 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libinn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libinn.so.6
+%attr(755,root,root) %ghost %{_libdir}/libinn.so.8
 %attr(755,root,root) %{_libdir}/libinnhist.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libinnhist.so.3
-%attr(755,root,root) %{_libdir}/libstorage.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libstorage.so.3
+%attr(755,root,root) %{_libdir}/libinnstorage.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libinnstorage.so.3
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libinn.so
 %attr(755,root,root) %{_libdir}/libinnhist.so
-%attr(755,root,root) %{_libdir}/libstorage.so
+%attr(755,root,root) %{_libdir}/libinnstorage.so
 %{_libdir}/libinn.la
 %{_libdir}/libinnhist.la
-%{_libdir}/libstorage.la
+%{_libdir}/libinnstorage.la
 %{_includedir}/inn
-%{_mandir}/man3/libauth.3*
 %{_mandir}/man3/libinn.3*
 %{_mandir}/man3/libinn_*.3*
+%{_mandir}/man3/libinnauth.3*
 %{_mandir}/man3/libinnhist.3*
-%{_mandir}/man3/libstorage.3*
+%{_mandir}/man3/libinnstorage.3*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libinn.a
 %{_libdir}/libinnhist.a
-%{_libdir}/libstorage.a
+%{_libdir}/libinnstorage.a
 
 %files -n inews
 %defattr(644,root,root,755)
