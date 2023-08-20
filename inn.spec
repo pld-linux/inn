@@ -12,12 +12,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.7.0
-Release:	3
+Version:	2.7.1
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	a052b6efda2457a9078f330b5134b63e
+# Source0-md5:	987b35e6d42cc2b94159a57f6a394c68
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -597,6 +597,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/ovdb_*
 %attr(755,root,root) %{_bindir}/overchan
 %attr(755,root,root) %{_bindir}/ovsqlite-server
+%attr(755,root,root) %{_bindir}/ovsqlite-util
 %attr(755,root,root) %{_bindir}/perl-nocem
 %attr(755,root,root) %{_bindir}/pgpverify
 %attr(755,root,root) %{_bindir}/procbatch
@@ -712,6 +713,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man8/ovdb_*.8*
 %{_mandir}/man8/overchan.8*
 %{_mandir}/man8/ovsqlite-server.8*
+%{_mandir}/man8/ovsqlite-util.8*
 %{_mandir}/man8/perl-nocem.8*
 %{_mandir}/man8/procbatch.8*
 %{_mandir}/man8/prunehistory.8*
@@ -733,7 +735,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libinn.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libinn.so.8
+%attr(755,root,root) %ghost %{_libdir}/libinn.so.9
 %attr(755,root,root) %{_libdir}/libinnhist.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libinnhist.so.3
 %attr(755,root,root) %{_libdir}/libinnstorage.so.*.*.*

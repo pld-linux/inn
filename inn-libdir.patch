@@ -108,18 +108,18 @@
      -e "s,@sbindir[@],$sbindir,g" \
      -e "s,@sysconfdir[@],$sysconfdir,g" \
      -e "s,@CONTROLDIR[@],$CONTROLDIR,g" \
---- inn-2.5.3/m4/paths.m4.orig	2012-06-15 20:25:36.000000000 +0200
-+++ inn-2.5.3/m4/paths.m4	2013-06-14 21:13:15.238373880 +0200
-@@ -47,6 +47,9 @@
- _INN_ARG_DIR([tmp], ['${prefix}/tmp'], [tmpdir],
+--- inn-2.7.1/m4/paths.m4.orig	2023-08-20 20:06:06.032530283 +0200
++++ inn-2.7.1/m4/paths.m4	2023-08-20 20:07:20.302127930 +0200
+@@ -46,6 +46,9 @@ AC_DEFUN([INN_ARG_PATHS],
+  _INN_ARG_DIR([tmp], ['${prefix}/tmp'], [tmpdir],
      [AS_HELP_STRING([--with-tmp-dir=PATH],
-         [Path for temporary files [PREFIX/tmp]])])
+         [Path for temporary files @<:@PREFIX/tmp@:>@])])
 +_INN_ARG_DIR([innlib], ['${datadir}/news'], [innlibdir],
 +    [AS_HELP_STRING([--with-innlib-dir=PATH],
 +        [Path to inn library scripts [DATADIR/news]])])
  
- dnl Some additional paths used by inn/paths.h.
- eval PATH_CONFIG="$sysconfdir"
+  dnl Some additional paths used by inn/paths.h.
+  eval PATH_CONFIG="$sysconfdir"
 --- inn-2.7.0/scripts/Makefile.orig	2022-10-10 21:53:03.162089360 +0200
 +++ inn-2.7.0/scripts/Makefile	2022-10-10 21:53:27.915288594 +0200
 @@ -25,7 +25,7 @@ install: all
