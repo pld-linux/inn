@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_with	lfs		# enable largefiles (disables tagged hash)
 %bcond_without	python		# embedded Python module support
-%bcond_with	python3		# Python 3.x instead of 2.x
+%bcond_without	python3		# Python 3.x instead of 2.x
 
 Summary:	INN, the InterNet News System (news server)
 Summary(de.UTF-8):	das InterNet News System (News-Server)
@@ -13,7 +13,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.7.1
-Release:	1
+Release:	2
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -35,7 +35,7 @@ Patch4:		%{name}-config.patch
 Patch5:		%{name}-asneeded.patch
 Patch6:		%{name}-nnrpd_no_trace.patch
 Patch8:		%{name}-libdir.patch
-URL:		https://www.isc.org/software/inn/
+URL:		https://www.eyrie.org/~eagle/software/inn/
 BuildRequires:	autoconf >= 2.64
 BuildRequires:	automake
 BuildRequires:	bison
