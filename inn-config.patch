@@ -13,8 +13,8 @@
  
  ##  2. Meta-cyclic buffers
  ##  Format:
---- inn-2.7.1/samples/inn.conf.in.orig	2023-04-16 21:50:54.000000000 +0200
-+++ inn-2.7.1/samples/inn.conf.in	2023-08-20 19:51:47.703846915 +0200
+--- inn-2.7.2/samples/inn.conf.in.orig	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/samples/inn.conf.in	2024-06-29 20:02:26.912898263 +0200
 @@ -17,11 +17,11 @@
  # See the description of the mta parameter in inn.conf(5) for useful options
  # that may be worthwhile adding to the default sendmail command.
@@ -55,15 +55,15 @@
  verifygroups:                false
  wanttrash:                   false
  wipcheck:                    5
-@@ -71,6 +71,7 @@ mergetogroups:               false
- nfswriter:                   false
+@@ -72,6 +72,7 @@ nfswriter:                   false
  overcachesize:               128
+ ovflushcount:                50
  #ovgrouppat:
 +# note: must not be changed to false if using tradspool
  storeonxref:                 true
  useoverchan:                 false
  wireformat:                  true
-@@ -78,7 +79,7 @@ xrefslave:                   false
+@@ -79,7 +80,7 @@ xrefslave:                   false
  
  # Reading
  
@@ -72,7 +72,7 @@
  articlemmap:                 true
  clienttimeout:               1800
  initialtimeout:              10
-@@ -110,8 +111,8 @@ addinjectiondate:            true
+@@ -111,8 +112,8 @@ addinjectiondate:            true
  addinjectionpostingaccount:  false
  addinjectionpostinghost:     true
  checkincludedtext:           false
@@ -83,7 +83,7 @@
  localmaxartsize:             1000000
  #moderatormailer:
  nnrpdauthsender:             false
-@@ -123,7 +124,7 @@ strippostcc:                 false
+@@ -124,7 +125,7 @@ strippostcc:                 false
  # Posting -- Exponential Backoff
  
  backoffauth:                 false
@@ -92,7 +92,7 @@
  backoffk:                    1
  backoffpostfast:             0
  backoffpostslow:             1
-@@ -160,7 +161,7 @@ innwatchspoolspace:          25000
+@@ -161,7 +162,7 @@ innwatchspoolspace:          25000
  
  # Logging
  
@@ -101,7 +101,7 @@
  htmlstatus:                  true
  incominglogfrequency:        200
  logartsize:                  true
-@@ -188,7 +189,7 @@ keepmmappedthreshold:        1024
+@@ -189,7 +190,7 @@ keepmmappedthreshold:        1024
  #maxcmdreadsize:
  maxforks:                    10
  maxlisten:                   128

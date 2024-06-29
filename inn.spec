@@ -12,12 +12,12 @@ Summary(pl.UTF-8):	INN, serwer nowinek
 Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
-Version:	2.7.1
-Release:	2
+Version:	2.7.2
+Release:	1
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
-# Source0-md5:	987b35e6d42cc2b94159a57f6a394c68
+# Source0-md5:	e6c5809d92870726dc0f11199adfc911
 Source1:	%{name}-default-active
 Source2:	%{name}-default-distributions
 Source3:	%{name}-default-newsgroups
@@ -525,6 +525,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 
 %dir %{perl_vendorlib}/INN
 %{perl_vendorlib}/INN/Config.pm
+%{perl_vendorlib}/INN/ovsqlite_client.pm
 %dir %{perl_vendorlib}/INN/Utils
 %{perl_vendorlib}/INN/Utils/Shlock.pm
 
@@ -561,6 +562,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %attr(755,root,root) %{_bindir}/convdate
 %attr(755,root,root) %{_bindir}/ctlinnd
 %attr(755,root,root) %{_bindir}/cvtbatch
+%attr(755,root,root) %{_bindir}/delayer
 %attr(755,root,root) %{_bindir}/docheckgroups
 %attr(755,root,root) %{_bindir}/expire
 %attr(755,root,root) %{_bindir}/expireover
@@ -621,6 +623,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 
 # MAN
 %{_mandir}/man1/convdate.1*
+%{_mandir}/man1/delayer.1*
 %{_mandir}/man1/fastrm.1*
 %{_mandir}/man1/gencancel.1*
 %{_mandir}/man1/getlist.1*
@@ -637,6 +640,7 @@ sed -e 's/^\(listenonipv6\)/#\1/;s/^bindipv6address/bindaddress6/;s/^sourceipv6a
 %{_mandir}/man1/sm.1*
 %{_mandir}/man3/INN::Config.3pm*
 %{_mandir}/man3/INN::Utils::Shlock.3pm*
+%{_mandir}/man3/INN::ovsqlite_client.3pm*
 %{_mandir}/man5/active.5*
 %{_mandir}/man5/active.times.5*
 %{_mandir}/man5/buffindexed.conf.5*
