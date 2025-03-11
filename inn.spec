@@ -256,13 +256,13 @@ sunucuya makaleyi yollar.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch8 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
+%patch -P 3 -p1
+%patch -P 4 -p1
+%patch -P 5 -p1
+%patch -P 6 -p1
+%patch -P 8 -p1
 
 touch innfeed/*.[ly]
 
