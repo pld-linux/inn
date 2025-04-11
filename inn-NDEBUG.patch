@@ -1,0 +1,11 @@
+--- inn-2.7.2/innfeed/article.c.orig	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/innfeed/article.c	2025-04-11 18:43:55.916225746 +0200
+@@ -36,7 +36,7 @@
+ #include "endpoint.h"
+ 
+ #if defined(NDEBUG)
+-#    define VALIDATE_HASH_TABLE() (void(0))
++#    define VALIDATE_HASH_TABLE() ((void)0)
+ #else
+ #    define VALIDATE_HASH_TABLE() hashValidateTable()
+ #endif

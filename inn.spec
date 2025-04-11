@@ -13,7 +13,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.7.2
-Release:	4
+Release:	5
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -34,6 +34,7 @@ Patch3:		%{name}-setgid.patch
 Patch4:		%{name}-config.patch
 Patch5:		%{name}-asneeded.patch
 Patch6:		%{name}-nnrpd_no_trace.patch
+Patch7:		%{name}-NDEBUG.patch
 Patch8:		%{name}-libdir.patch
 URL:		https://www.eyrie.org/~eagle/software/inn/
 BuildRequires:	autoconf >= 2.64
@@ -262,6 +263,7 @@ sunucuya makaleyi yollar.
 %patch -P 4 -p1
 %patch -P 5 -p1
 %patch -P 6 -p1
+%patch -P 7 -p1
 %patch -P 8 -p1
 
 touch innfeed/*.[ly]
