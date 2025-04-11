@@ -13,7 +13,7 @@ Summary(pt_BR.UTF-8):	INN, InterNet News System (servidor news)
 Summary(tr.UTF-8):	INN, InterNet Haber Sistemi (haber sunucu)
 Name:		inn
 Version:	2.7.2
-Release:	3
+Release:	4
 License:	distributable
 Group:		Networking/Daemons
 Source0:	ftp://ftp.isc.org/isc/inn/%{name}-%{version}.tar.gz
@@ -55,7 +55,7 @@ BuildRequires:	pkgconfig
 %{?with_python3:BuildRequires:	python3-devel >= 1:3.3}
 %endif
 BuildRequires:	rpm-perlprov
-BuildRequires:	rpmbuild(macros) >= 1.663
+BuildRequires:	rpmbuild(macros) >= 1.745
 BuildRequires:	sqlite3-devel >= 3.8.2
 BuildRequires:	systemd-devel
 BuildRequires:	zlib-devel
